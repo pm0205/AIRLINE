@@ -1,0 +1,256 @@
+MDScreen:
+    name: "main screen"
+    MDBottomNavigation:
+        panel_color: 0,0.5,0.5,0.4
+        text_color_active: 1, 0, 0, 1
+        text_color_inactive: 1, 0, 0, 0.4
+
+        # Home Tab
+        MDBottomNavigationItem:
+            name: 'home'
+            text: 'Home'
+            icon: 'home'
+            # on_tab_press: app.show()
+
+            ScreenManager:
+                id: homescreen_manager
+
+                # Home screen
+                # MDScreen:
+                #     name: 'home screen'
+                #     id: home_screen
+                #     text: 'Home screen'
+
+                #     MDScrollView:
+                #         do_scroll_y : True
+                #         do_scroll_x : False
+                #         bar_width : 5
+                #         bar_color : 'blue'
+
+                #         MDBoxLayout:
+                #             adaptive_height : True
+                #             orientation : 'vertical'
+                #             spacing: 10
+                #             padding: 10
+                #             # Top box
+                #             MDFloatLayout:
+                #                 adaptive_height: True
+                #                 # md_bg_color : 'lightgrey'
+
+                #                 # Top right box
+                #                 MDBoxLayout:
+                #                     id: home_top_right_box
+                #                     md_bg_color: 'white'
+                #                     adaptive_size: True
+                #                     padding: 10
+                #                     spacing: 10
+                #                     pos_hint : {'right':.98, 'top':.8}
+                #                     MDFlatButton:
+                #                         id: loginbtn
+                #                         text:"Login"
+                #                         ripple_scale: 0.8
+                #                         md_bg_color: 'lightblue'
+                #                         on_release: 
+                #                             homescreen_manager.current = 'login screen'         
+                #                             homescreen_manager.transition.direction = 'down' 
+                #                     MDRectangleFlatButton:
+                #                         id: signupbtn 
+                #                         text : "SignUp"
+                #                         text_color : 'black'
+                #                         ripple_scale: 0.8
+                #                         line_color: 'blue'
+                #                         text_color: 'blue'
+                                
+                #                 # Logo box
+                #                 MDBoxLayout:
+                #                     pos_hint : {'x':.05, 'top':.8}
+                #                     adaptive_height: True
+                #                     size_hint_x : .3
+                #                     padding: 30
+                #                     orientation: 'vertical'
+                #                     md_bg_color : 'lightblue'
+                #                     MDLabel:
+                #                         text: 'Logo'
+                #                         pos_hint: {'center_x':.5}
+                #                         halign: 'center'
+                #                         adaptive_size: True
+                #                         # md_bg_color: 'white'
+                            
+                #             #Center Box
+                #             MDBoxLayout:
+                #                 adaptive_height: True
+                #                 # md_bg_color: 'lightgrey'
+                #                 orientation: 'vertical'
+                #                 spacing: 20
+                #                 padding: 20
+                #                 MDLabel:
+                #                     text: "Welcome to the Airline App"
+                #                     adaptive_size: True
+                #                     halign: 'center'
+                #                     pos_hint: {'center_x':.5}
+                #                 MDRoundFlatIconButton:
+                #                     id: showpnrbtn
+                #                     padding: 20
+                #                     line_width: 3
+                #                     icon: './pnr.png'
+                #                     icon_size: '25sp'
+                #                     font_size: self.icon_size - 5
+                #                     text: "     Check PNR"
+                #                     radius: [10,]
+                #                     ripple_scale: 0.8
+                #                     line_color: '#BE00FF'
+                #                     text_color: '#BE00FF'
+                #                     pos_hint: {'center_x': 0.5}
+                #                     halign: 'right'
+                #                     on_release: app.checkpnr()
+                #                     adaptive_size: True
+                #                 MDLabel:
+                #                     text: 'lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt' *30
+                #                     adaptive_height: True
+                #                     size_hint_x: 1
+                #                     pos_hint: {'center_x': 0.5}
+                #                 MDBoxLayout:
+                #                     pos_hint: {'center_x':.5}
+                #                     orientation: 'vertical'
+                #                     md_bg_color: 'orange'
+                #                     adaptive_size: True
+                #                     padding: 10
+                #                     spacing: 10
+                #                     MDLabel:
+                #                         text: 'Your latest booking'
+                #                         adaptive_size: True
+                #                         halign: 'center'
+                #                     MDLabel:
+                #                         text: 'Flight : 2241HC - Indigo'
+                #                         adaptive_size: True
+                #                         halign: 'center'
+                #                     MDLabel:
+                #                         text: 'Your latest booking'
+                #                         adaptive_size: True
+                #                         halign: 'center'
+                                    
+                            
+                #             # End box
+                #             MDBoxLayout: 
+                #                 orientation: 'horizontal'
+                #                 pos_hint: {'center_x':.5}
+                #                 adaptive_size: True
+                #                 # md_bg_color: 'lightgrey'
+                #                 padding: 20
+                #                 spacing: 20
+                #                 MDFlatButton:
+                #                     text: 'My details'
+                #                     md_bg_color: 'lightblue'
+                #                     ripple_scale: .8
+                #                 MDFlatButton:
+                #                     text: 'My bookings'
+                #                     md_bg_color: 'lightblue'
+                #                     ripple_scale: .8
+                #                 MDFlatButton:
+                #                     text: 'Need support?'
+                #                     md_bg_color: 'lightblue'
+                #                     ripple_scale: .8
+
+        #         # Check PNR Screen
+        #         MDScreen:
+        #             name: 'pnr screen'
+        #             MDBoxLayout: 
+        #                 orientation: 'vertical'
+        #                 elevation: 5
+        #                 pos_hint: {'center_x':.5, 'center_y':.5}
+        #                 adaptive_height: True
+        #                 size_hint_x: .6
+        #                 # md_bg_color: 'lightgrey'
+        #                 line_color: 'black'
+        #                 radius: [10,]
+        #                 padding: 20
+        #                 spacing: 20
+        #                 MDTextField:
+        #                     hint_text: 'Enter your PNR number'
+        #                     mode: 'rectangle'
+        #                     line_color_normal: 'lightblue'
+        #                     line_color_focus: 'blue'
+        #                     pos_hint: {'center_x': 0.5}
+        #                     adaptive_height: True
+        #                     size_hint_x: .8
+        #                     padding: 10, 0
+        #                     text_color_focus: 'black'
+        #                 MDFlatButton:
+        #                     text: 'Check'
+        #                     md_bg_color: 'lightblue'
+        #                     ripple_scale: .8
+        #                     pos_hint: {'center_x': 0.5}
+        #             MDRectangleFlatButton:
+        #                 text: 'Go back to Home'
+        #                 ripple_scale: .8
+        #                 line_color: 'grey'
+        #                 text_color: 'grey'
+        #                 pos_hint: {'top':.9, 'x':.1}
+        #                 on_release: 
+        #                     homescreen_manager.current = 'home screen'         
+        #                     homescreen_manager.transition.direction = 'right'         
+
+        #         # Login screen 
+        #         MDScreen:
+        #             name: 'login screen'
+        #             spacing: 20
+        #             # adaptive_height: T7rue
+        #             MDBoxLayout: 
+        #                 orientation: 'vertical'
+        #                 elevation: 5
+        #                 pos_hint: {'center_x':.5, 'center_y':.5}
+        #                 adaptive_height: True
+        #                 size_hint_x: .6
+        #                 # md_bg_color: 'lightgrey'
+        #                 line_color: 'black'
+        #                 radius: [10,]
+        #                 padding: 20
+        #                 spacing: 20
+        #                 MDTextField:
+        #                     id: loginusername
+        #                     hint_text: 'Enter your username'
+        #                     mode: 'rectangle'
+        #                     line_color_normal: 'lightblue'
+        #                     line_color_focus: 'blue'
+        #                     pos_hint: {'center_x': 0.5}
+        #                     adaptive_height: True
+        #                     size_hint_x: .8
+        #                     padding: 10, 0
+        #                     text_color_focus: 'black'
+        #                 MDTextField:
+        #                     id: loginpassword
+        #                     hint_text: 'Enter your password'
+        #                     password: True
+        #                     mode: 'rectangle'
+        #                     line_color_normal: 'lightblue'
+        #                     line_color_focus: 'blue'
+        #                     pos_hint: {'center_x': 0.5}
+        #                     adaptive_height: True
+        #                     size_hint_x: .8
+        #                     padding: 10, 0
+        #                     text_color_focus: 'black'
+        #                 MDFlatButton:
+        #                     text: 'Login'
+        #                     md_bg_color: 'lightblue'
+        #                     ripple_scale: .8
+        #                     pos_hint: {'center_x': 0.5}
+        #                     on_release: app.loginvalidate(loginusername, loginpassword)
+        #             MDRectangleFlatButton:
+        #                 text: 'Go back to Home'
+        #                 ripple_scale: .8
+        #                 line_color: 'grey'
+        #                 text_color: 'grey'
+        #                 pos_hint: {'center_x': .5}
+        #                 on_release: 
+        #                     homescreen_manager.current = 'home screen'         
+        #                     homescreen_manager.transition.direction = 'up' 
+
+        # # Account Tab
+        # MDBottomNavigationItem:
+        #     name: 'account'
+        #     text: 'Account'
+        #     icon: 'account'
+            
+        #     ScreenManager:
+        #         MDScreen:
+        #             # name: 'home screen'
