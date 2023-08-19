@@ -50,8 +50,10 @@ class LoginApp():
         else:
             return False
 
-    # Starting of validation
+    # Starting of validation for login
     def validateLogin(self, username, password):
+        username.required = True
+        password.required = True
         if (self.validatetext(username, password)==True):
             return self.checkCredentials(username.text.strip(), password.text)
         else:
@@ -62,6 +64,8 @@ class LoginApp():
         special_char = re.compile('[@_!#$%^&*()<>?/\|}{~:]')
         username_text = username.text.strip()
         flag = True
+
+        # For username
         if(len(username_text)==0):
             username.error = True
             username.helper_text = 'Required'
@@ -74,16 +78,18 @@ class LoginApp():
             username.error = True
             username.helper_text = 'Username can only contain alphanumeric characters'
             x = False
-        elif(len(username_text) < 4):
+        elif(len(username_text) < 4 and len(username_text)>0):
             username.error = True
             username.helper_text = 'Atleast 4 characters required'
             x = False
         else:
             username.error = False
             x = True
+
+        # For password 
         if(len(password.text)==0):
             password.error = True
-            password.helper_text = 'Required'
+            # password.helper_text = 'Required'
             x = False
         return x
 

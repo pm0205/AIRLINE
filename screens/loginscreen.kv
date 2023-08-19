@@ -17,7 +17,7 @@ MDScreen:
         MDTextField:
             id: loginusername
             hint_text: 'Enter your username'
-            hint_text_mode: 'on_error'
+            helper_text_mode: 'on_error'
             mode: 'rectangle'
             line_color_normal: 'lightblue'
             line_color_focus: 'blue'
@@ -31,7 +31,8 @@ MDScreen:
             id: loginpassword
             hint_text: 'Enter your password'
             password: True
-            hint_text_mode: 'on_error'
+            helper_text_mode: 'on_error'
+            helper_text: 'Required'
             mode: 'rectangle'
             line_color_normal: 'lightblue'
             line_color_focus: 'blue'
