@@ -61,7 +61,7 @@ class LoginApp():
 
     # String validation
     def validatetext(self, username, password):
-        special_char = re.compile('[@_!#$%^&*()<>?/\|}{~:]')
+        special_char = re.compile('[^a-zA-Z\d\s:]')
         username_text = username.text.strip()
         flag = True
 
