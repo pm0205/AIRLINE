@@ -2,9 +2,19 @@ from kivy.app import App
 from kivy.lang import Builder
 from kivy.core.window import Window
 import sqlite3, re
+import json
 
 Window.size = (900, 600)
 
+def update_userdata(username):
+    x = {
+        "username": username,
+        "saved": True
+        }
+    f = open('./userdata.json', 'w')
+    data = json.dumps(x)
+    f.write(data)
+    f.close()
 
 class LoginApp():
 
@@ -51,11 +61,14 @@ class LoginApp():
             return False
 
     # Starting of validation for login
-    def validateLogin(self, username, password):
+    def validateLogin(self, username, password, checkbox):
         username.required = True
         password.required = True
         if (self.validatetext(username, password)==True):
-            return self.checkCredentials(username.text.strip(), password.text)
+            x = self.checkCredentials(username.text.strip(), password.text)
+            if x==True and checkbox.active == True:
+                update_userdata(username.text.strip())
+            return x
         else:
             return None
 

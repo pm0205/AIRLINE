@@ -23,10 +23,12 @@ MDScreen:
                 # Top right box
                 MDBoxLayout:
                     id: home_top_right_box
+                    orientation: 'horizontal'
                     md_bg_color: 'white'
-                    adaptive_size: True
+                    adaptive_height: True
                     padding: 10
                     spacing: 10
+                    size_hint_x: .2
                     pos_hint : {'right':.98, 'top':.8}
                     MDFlatButton:
                         id: loginbtn
