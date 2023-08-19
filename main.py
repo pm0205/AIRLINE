@@ -70,9 +70,9 @@ class MainApp(MDApp):
                 else:
                     pass
     
-    def strvalidator(self, form, fields):
+    def strvalidator(self, form, type, field):
         if form == 'login':
-            Login.LoginApp().validatetext(fields[0], fields[1])
+            Login.LoginApp().validatetext(type, field)
 
     def closedialog(self, obj):
         self.dialog.dismiss()

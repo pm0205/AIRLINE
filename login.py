@@ -64,7 +64,8 @@ class LoginApp():
     def validateLogin(self, username, password, checkbox):
         username.required = True
         password.required = True
-        if (self.validatetext(username, password)==True):
+        strvalidator = self.validatetext('username', username) and self.validatetext('password', password)
+        if ( strvalidator == True ):
             x = self.checkCredentials(username.text.strip(), password.text)
             if x==True and checkbox.active == True:
                 update_userdata(username.text.strip())
@@ -73,37 +74,45 @@ class LoginApp():
             return None
 
     # String validation
-    def validatetext(self, username, password):
+    def validatetext(self, type, obj):
         special_char = re.compile('[^a-zA-Z\d\s:]')
-        username_text = username.text.strip()
-        flag = True
-
-        # For username
-        if(len(username_text)==0):
-            username.error = True
-            username.helper_text = 'Required'
-            x = False
-        elif(username_text[0].isdigit()==True):
-            username.error = True
-            username.helper_text = 'Username cannot start with a digit'
-            x = False
-        elif (special_char.search(username_text)!=None):
-            username.error = True
-            username.helper_text = 'Username can only contain alphanumeric characters'
-            x = False
-        elif(len(username_text) < 4 and len(username_text)>0):
-            username.error = True
-            username.helper_text = 'Atleast 4 characters required'
-            x = False
-        else:
-            username.error = False
-            x = True
-
-        # For password 
-        if(len(password.text)==0):
-            password.error = True
-            # password.helper_text = 'Required'
-            x = False
+        x = True
+        match type:
+            # For username
+            case 'username':
+                username_text = obj.text.strip()
+                if(len(username_text)==0):
+                    obj.error = True
+                    obj.helper_text = 'Required'
+                    x = False
+                elif(username_text[0].isdigit()==True):
+                    obj.error = True
+                    obj.helper_text = 'Username cannot start with a digit'
+                    x = False
+                elif (special_char.search(username_text)!=None):
+                    obj.error = True
+                    obj.helper_text = 'Username can only contain alphanumeric characters'
+                    x = False
+                elif(len(username_text) < 4 and len(username_text)>0):
+                    obj.error = True
+                    obj.helper_text = 'Atleast 4 characters required'
+                    x = False
+                else:
+                    obj.error = False
+                    x = True
+            # For password 
+            case 'password':
+                if(len(obj.text)==0):
+                    obj.error = True
+                    obj.helper_text = 'Required'
+                    x = False
+                elif (len(obj.text)<8 and len(obj.text)>0):
+                    obj.error = True
+                    obj.helper_text = 'Minimum 8 characters length'
+                    x = False
+                else: 
+                    obj.error = False
+                    x = True
         return x
 
 if __name__ == "__main__":

@@ -3,100 +3,105 @@ MDScreen:
     name: 'login screen'
     spacing: 20
     # adaptive_height: True
-    MDBoxLayout: 
-        orientation: 'vertical'
-        elevation: 5
-        pos_hint: {'center_x':.5, 'top': .8}
-        adaptive_height: True
-        size_hint_x: .6
-        # md_bg_color: 'lightgrey'
-        line_color: 'black'
-        radius: [10,]
-        padding: 20
-        spacing: 40
-        MDTextField:
-            id: loginusername
-            icon_left: 'account'
-            hint_text: 'Enter your username'
-            helper_text_mode: 'on_error'
-            mode: 'rectangle'
-            line_color_normal: 'lightblue'
-            line_color_focus: 'blue'
-            pos_hint: {'x': .1}
-            adaptive_height: True
-            size_hint_x: .6
-            padding: 10, 0
-            text_color_focus: 'black'
-            on_text: app.strvalidator('login', [loginusername, loginpassword])
+    MDScrollView:
         MDBoxLayout:
+            orientation: 'vertical'
             adaptive_height: True
-            pos_hint: {'x': .1}
-            size_hint_x: .72
-            height: loginpassword.height
-            orientation: 'horizontal'
-            spacing: 10
-            MDTextField:
-                id: loginpassword
-                icon_left: 'key'
-                hint_text: 'Enter your password'
-                password: True
-                helper_text_mode: 'on_error'
-                helper_text: 'Required'
-                mode: 'rectangle'
-                line_color_normal: 'lightblue'
-                line_color_focus: 'blue'
-                pos_hint: {'center_y': 0.5}
+            padding: 0, 30
+            spacing: 30
+            MDRectangleFlatButton:
+                text: 'Go back to Home'
+                ripple_scale: .8
+                line_color: 'grey'
+                text_color: 'grey'
+                pos_hint: {'x': .15}
+                on_release: app.homescreenchanger('home screen') 
+            MDBoxLayout: 
+                orientation: 'vertical'
+                elevation: 5
+                pos_hint: {'center_x':.5}
                 adaptive_height: True
-                size_hint_x: .7
-                padding: 10, 0
-                text_color_focus: 'black'
-                on_text: 
-                    app.strvalidator('login', [loginusername, loginpassword])
-                    passwordicon.icon = 'eye-off'
-                    self.password = True
-            MDIconButton:
-                id: passwordicon
-                icon: "eye-off"
-                pos_hint: {"center_y": .5}
-                adaptive_size: True
-                on_release:
-                    self.icon = "eye" if self.icon == "eye-off" else "eye-off"
-                    loginpassword.password = False if loginpassword.password == True else True
-                    loginpassword.focus = True
-        # Remember details
-        MDBoxLayout:
-            orientation: 'horizontal'
-            pos_hint: {'center_x': .5}
-            md_bg_color: 'lightgrey'
-            # size_hint_x: .6
-            spacing: 10
-            padding: 10, 0
-            adaptive_size: True
-            MDCheckbox:
-                id: logincheckbox
-                active: True
-                size_hint: None, None
-                size: "48dp", "48dp"
-                pos_hint: {'center_y': .5}
-            MDLabel:
-                text: 'Remember details'
-                pos_hint: {'center_y': .5}
-                # size_hint_x: .8
-                adaptive_size: True
-        # Login button
-        MDFlatButton:
-            text: 'Login'
-            md_bg_color: 'lightblue'
-            ripple_scale: .8
-            pos_hint: {'center_x': 0.5}
-            on_release: app.validate('login', [loginusername, loginpassword, logincheckbox])
-        
+                size_hint_x: .6
+                # md_bg_color: 'lightgrey'
+                line_color: 'black'
+                radius: [10,]
+                padding: 20
+                spacing: 40
+                MDTextField:
+                    id: loginusername
+                    icon_left: 'account'
+                    hint_text: 'Enter your username'
+                    helper_text_mode: 'on_error'
+                    mode: 'rectangle'
+                    line_color_normal: 'lightblue'
+                    line_color_focus: 'blue'
+                    pos_hint: {'x': .1}
+                    adaptive_height: True
+                    size_hint_x: .6
+                    padding: 10, 0
+                    text_color_focus: 'black'
+                    on_text: app.strvalidator('login', 'username', self)
+                MDBoxLayout:
+                    adaptive_height: True
+                    pos_hint: {'x': .1}
+                    size_hint_x: .72
+                    height: loginpassword.height
+                    orientation: 'horizontal'
+                    spacing: 10
+                    MDTextField:
+                        id: loginpassword
+                        icon_left: 'key'
+                        hint_text: 'Enter your password'
+                        password: True
+                        helper_text_mode: 'on_error'
+                        helper_text: 'Required'
+                        mode: 'rectangle'
+                        line_color_normal: 'lightblue'
+                        line_color_focus: 'blue'
+                        pos_hint: {'center_y': 0.5}
+                        adaptive_height: True
+                        size_hint_x: .7
+                        padding: 10, 0
+                        text_color_focus: 'black'
+                        on_text: 
+                            app.strvalidator('login', 'password', self)
+                            passwordicon.icon = 'eye-off'
+                            self.password = True
+                    MDIconButton:
+                        id: passwordicon
+                        icon: "eye-off"
+                        pos_hint: {"center_y": .5}
+                        adaptive_size: True
+                        on_release:
+                            self.icon = "eye" if self.icon == "eye-off" else "eye-off"
+                            loginpassword.password = False if loginpassword.password == True else True
+                            loginpassword.focus = True
+                # Remember details
+                MDBoxLayout:
+                    orientation: 'horizontal'
+                    pos_hint: {'center_x': .5}
+                    md_bg_color: 'lightgrey'
+                    # size_hint_x: .6
+                    spacing: 10
+                    padding: 10, 0
+                    adaptive_size: True
+                    MDCheckbox:
+                        id: logincheckbox
+                        active: True
+                        size_hint: None, None
+                        size: "48dp", "48dp"
+                        pos_hint: {'center_y': .5}
+                    MDLabel:
+                        text: 'Remember details'
+                        pos_hint: {'center_y': .5}
+                        # size_hint_x: .8
+                        adaptive_size: True
+                # Login button
+                MDFlatButton:
+                    text: 'Login'
+                    md_bg_color: 'lightblue'
+                    ripple_scale: .8
+                    pos_hint: {'center_x': 0.5}
+                    on_release: app.validate('login', [loginusername, loginpassword, logincheckbox])
 
-    MDRectangleFlatButton:
-        text: 'Go back to Home'
-        ripple_scale: .8
-        line_color: 'grey'
-        text_color: 'grey'
-        pos_hint: {'center_x': .5, 'top': .9}
-        on_release: app.homescreenchanger('home screen') 
 
