@@ -48,16 +48,13 @@ MDScreen:
                 MDBoxLayout:
                     pos_hint : {'x':.05, 'top':.8}
                     adaptive_height: True
-                    size_hint_x : .3
-                    padding: 30
-                    orientation: 'vertical'
-                    md_bg_color : 'lightblue'
-                    MDLabel:
-                        text: 'Logo'
-                        pos_hint: {'center_x':.5}
-                        halign: 'center'
-                        adaptive_size: True
-                        # md_bg_color: 'white'
+                    size_hint_x : .2
+                    height: 80
+                    orientation: 'horizontal'
+                    # md_bg_color : 'lightblue'
+                    Image:
+                        source: 'logo.png'
+                        fit_mode: 'contain'
             
             #Center Box
             MDBoxLayout:
