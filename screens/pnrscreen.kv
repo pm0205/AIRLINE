@@ -26,13 +26,17 @@ MDScreen:
             size_hint_x: .8
             padding: 10, 0
             text_color_focus: 'black'
-            on_text: app.strvalidator('pnr', 'pnr', self)
+            on_text: app.strvalidator('pnr', 'pnr', [self, False])
         MDFlatButton:
             text: 'Check'
             md_bg_color: 'lightblue'
             ripple_scale: .8
             pos_hint: {'center_x': 0.5}
-            on_release: app.validate('pnr', [pnr_number])
+            on_release: app.validate('pnr', [pnr_number, True, pnr_status])
+        MDLabel:
+            id: pnr_status
+            text: ''
+            pos_hint: {'center_x': 0.5}
     MDRectangleFlatButton:
         text: 'Go back to Home'
         ripple_scale: .8

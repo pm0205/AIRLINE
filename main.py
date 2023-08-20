@@ -71,7 +71,7 @@ class MainApp(MDApp):
                 else:
                     pass
             case 'pnr':
-                x = PnrChecker.PnrChecker().validatePnr(obj[0])
+                x = PnrChecker.PnrChecker().validatePnr(obj)
     
     def strvalidator(self, form, type, field):
         if form == 'login':
