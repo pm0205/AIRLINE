@@ -3,6 +3,7 @@ MDScreen:
     name: 'login screen'
     spacing: 20
     # adaptive_height: True
+
     MDScrollView:
         MDBoxLayout:
             orientation: 'vertical'
@@ -103,5 +104,3 @@ MDScreen:
                     ripple_scale: .8
                     pos_hint: {'center_x': 0.5}
                     on_release: app.validate('login', [loginusername, loginpassword, logincheckbox])
-
-

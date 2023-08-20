@@ -4,8 +4,6 @@ from kivy.core.window import Window
 import sqlite3, re
 import json
 
-Window.size = (900, 600)
-
 def update_userdata(username):
     x = {
         "username": username,
