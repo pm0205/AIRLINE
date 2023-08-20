@@ -12,21 +12,27 @@ MDScreen:
         radius: [10,]
         padding: 20
         spacing: 20
+        
         MDTextField:
+            id: pnr_number
+            icon_left: 'ticket-confirmation-outline'
             hint_text: 'Enter your PNR number'
+            helper_text_mode: 'on_error'
             mode: 'rectangle'
-            line_color_normal: 'lightblue'
+            line_color_normal: 'skyblue'
             line_color_focus: 'blue'
             pos_hint: {'center_x': 0.5}
             adaptive_height: True
             size_hint_x: .8
             padding: 10, 0
             text_color_focus: 'black'
+            on_text: app.strvalidator('pnr', 'pnr', self)
         MDFlatButton:
             text: 'Check'
             md_bg_color: 'lightblue'
             ripple_scale: .8
             pos_hint: {'center_x': 0.5}
+            on_release: app.validate('pnr', [pnr_number])
     MDRectangleFlatButton:
         text: 'Go back to Home'
         ripple_scale: .8

@@ -5,6 +5,7 @@ from kivymd.uix.button import MDRectangleFlatButton, MDFlatButton, MDRaisedButto
 from kivy.uix.screenmanager import ScreenManager
 from kivy.lang import Builder
 import login as Login
+import pnrChecker as PnrChecker
 import json
 
 def check_saved_data():
@@ -69,10 +70,14 @@ class MainApp(MDApp):
                     self.show_alert_dialog(x)
                 else:
                     pass
+            case 'pnr':
+                x = PnrChecker.PnrChecker().validatePnr(obj[0])
     
     def strvalidator(self, form, type, field):
         if form == 'login':
             Login.LoginApp().validatetext(type, field)
+        elif form == 'pnr':
+            PnrChecker.PnrChecker().validatePnr(field)
 
     def closedialog(self, obj):
         self.dialog.dismiss()
@@ -93,4 +98,3 @@ class MainApp(MDApp):
 
 if __name__ == '__main__':
     MainApp().run()
-    
