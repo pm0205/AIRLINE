@@ -1,10 +1,19 @@
 # PNR Screen
 MDScreen:
     name: 'pnr screen'
+
+    MDRectangleFlatButton:
+        text: 'Go back to Home'
+        ripple_scale: .8
+        line_color: 'grey'
+        text_color: 'grey'
+        pos_hint: {'x':.1, 'top': .8}
+        on_release: app.homescreenchanger('home screen')
+
     MDBoxLayout: 
         orientation: 'vertical'
         elevation: 5
-        pos_hint: {'center_x':.5, 'center_y':.5}
+        pos_hint: {'center_x':.5, 'top': .6}
         adaptive_height: True
         size_hint_x: .6
         # md_bg_color: 'lightgrey'
@@ -32,15 +41,6 @@ MDScreen:
             md_bg_color: 'lightblue'
             ripple_scale: .8
             pos_hint: {'center_x': 0.5}
-            on_release: app.validate('pnr', [pnr_number, True, pnr_status])
-        MDLabel:
-            id: pnr_status
-            text: ''
-            pos_hint: {'center_x': 0.5}
-    MDRectangleFlatButton:
-        text: 'Go back to Home'
-        ripple_scale: .8
-        line_color: 'grey'
-        text_color: 'grey'
-        pos_hint: {'top':.9, 'x':.1}
-        on_release: app.homescreenchanger('home screen')
+            on_release: app.validate('pnr', [pnr_number, True])
+            
+

@@ -8,32 +8,36 @@ class PnrChecker:
         inputBox = obj[0]
         pnr_number = inputBox.text
         special_char = re.compile('[^a-zA-Z\d\s:]')
-
+        x = False
         # check user_input PNR
         if(len(pnr_number)==0):
             inputBox.error = True
             inputBox.helper_text = 'Required'
+            # x = False
         elif (special_char.search(pnr_number)!=None):
             inputBox.error = True
             inputBox.helper_text = 'PNR can only contain alphanumeric characters'
+            # x = False
         elif not re.match("^[a-zA-Z0-9]+$", pnr_number):
             inputBox.error = True
             inputBox.helper_text = 'PNR contains spaces in between'
+            # x = False
         elif(len(pnr_number) != 6):
             inputBox.error = True
             inputBox.helper_text = 'PNR must be 6 characters only'
+            # x = False
         else:
             if obj[1]:
                 data = self.check_database_for_pnr(pnr_number)
                 if data != []:
                     data = data[0]
-                    obj[2].text = f"PNR Number: {data[0]} \nSeat No.: {data[1]} \nFlight Status: {data[2]}"
+                    x = data
                 else:
-                    obj[2].text = "Invalid PNR number, Please check again."
+                    x = []
+                    inputBox.error = True
+                    inputBox.helper_text = 'No such PNR exists please add correct PNR'
 
-            return True
-
-        return False
+        return x
 
     def check_database_for_pnr(self, pnr_number):
         conn = sqlite3.connect("credential.db")
@@ -43,7 +47,7 @@ class PnrChecker:
 
         # execute cmd for credentials table
         c.execute("SELECT * FROM ticketsInfo WHERE PNR = (:pnr)", {
-            "pnr": pnr_number
+            "pnr": pnr_number.upper()
         })
         record = c.fetchall()
 

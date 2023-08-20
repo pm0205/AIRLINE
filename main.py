@@ -65,13 +65,15 @@ class MainApp(MDApp):
             case 'login':
                 x = Login.LoginApp().validateLogin(obj[0], obj[1], obj[2])
                 if x == True:
-                    self.show_alert_dialog(x)
+                    self.show_alert_dialog('login', x)
                 elif x == False:
-                    self.show_alert_dialog(x)
+                    self.show_alert_dialog('login', x)
                 else:
                     pass
             case 'pnr':
                 x = PnrChecker.PnrChecker().validatePnr(obj)
+                if x != False:
+                    self.show_alert_dialog('pnr', x)
     
     def strvalidator(self, form, type, field):
         if form == 'login':
@@ -82,18 +84,33 @@ class MainApp(MDApp):
     def closedialog(self, obj):
         self.dialog.dismiss()
     
-    def show_alert_dialog(self, status):
-        if status == True:
-            dialogtitle = 'Success'
-            self.dialog = MDDialog(title = dialogtitle, buttons=[MDRaisedButton(text="OK", on_release = self.closedialog),],)
-            userdata = load_user_data()
-            remove_children(self.screen_manager.get_screen('main screen').ids.homescreen_manager.get_screen('home screen').ids.home_top_right_box)
-            self.screen_manager.get_screen('main screen').ids.homescreen_manager.get_screen('home screen').ids.home_top_right_box.add_widget(MDIcon(icon='account', size_hint_x = .1))
-            self.screen_manager.get_screen('main screen').ids.homescreen_manager.get_screen('home screen').ids.home_top_right_box.add_widget(MDLabel(text=userdata['username'], adaptive_height=True))
-            self.homescreenchanger('home screen')
-        else:
-            dialogtitle = 'Error'
-            self.dialog = MDDialog(title = dialogtitle, text = 'Data not found.....Please retry', buttons=[MDRaisedButton(text="OK", on_release = self.closedialog),],)
+    def show_alert_dialog(self, type, arg):
+        match type:
+            case 'login':
+                if arg == True:
+                    dialogtitle = 'Success'
+                    self.dialog = MDDialog(title = dialogtitle, buttons=[MDRaisedButton(text="OK", on_release = self.closedialog),],)
+                    userdata = load_user_data()
+                    remove_children(self.screen_manager.get_screen('main screen').ids.homescreen_manager.get_screen('home screen').ids.home_top_right_box)
+                    self.screen_manager.get_screen('main screen').ids.homescreen_manager.get_screen('home screen').ids.home_top_right_box.add_widget(MDIcon(icon='account', size_hint_x = .1))
+                    self.screen_manager.get_screen('main screen').ids.homescreen_manager.get_screen('home screen').ids.home_top_right_box.add_widget(MDLabel(text=userdata['username'], adaptive_height=True))
+                    self.homescreenchanger('home screen')
+                else:
+                    dialogtitle = 'Error'
+                    self.dialog = MDDialog(title = dialogtitle, text = 'Data not found.....Please retry', buttons=[MDRaisedButton(text="OK", on_release = self.closedialog),],)
+
+            case 'pnr': 
+                if arg != []:
+                    dialogtitle = 'Booking Details'
+                    self.dialog = MDDialog(title = dialogtitle, text=f'     PNR : {arg[0]}\n\n     SEAT : {arg[1]}\n\n     FLIGHT STATUS : {arg[2]}', buttons=[MDRaisedButton(text="OK", on_release = self.closedialog),],)
+                else:
+                    dialogtitle = 'No Booking Found'
+                    self.dialog = MDDialog(title = dialogtitle, text=f'Please retry', buttons=[MDRaisedButton(text="OK", on_release = self.closedialog),],)
+
+
+
+
+
         self.dialog.open()
 
 if __name__ == '__main__':
