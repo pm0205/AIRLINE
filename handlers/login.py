@@ -9,43 +9,22 @@ def update_userdata(username):
         "username": username,
         "saved": True
         }
-    f = open('./userdata.json', 'w')
+    f = open('./data/userdata.json', 'w')
     data = json.dumps(x)
     f.write(data)
     f.close()
 
 class LoginApp():
 
-    # on App start create/check for database file
-    def connectdb(self):
-        # create connection
-        conn = sqlite3.connect("credential.db")
-
-        # create cursor for cmds
-        c = conn.cursor()
-
-        # execute cmd for credentials table
-        c.execute("""
-                        CREATE TABLE IF NOT EXISTS credentials(
-                            UID NUMBER,
-                            USERNAME VARCHAR2,
-                            PASSWORD VARCHAR2
-                        )
-                  """)
-
-        # commit and close
-        conn.commit()
-        conn.close()
-
     def checkCredentials(self, username, password):
         # connect with database
-        conn = sqlite3.connect("credential.db")
+        conn = sqlite3.connect("./data/database.db")
 
         # create a cursor
         c = conn.cursor()
 
         # check details existence
-        c.execute("SELECT UID FROM credentials WHERE USERNAME = (:admin_user) AND PASSWORD = (:admin_pass)", {
+        c.execute("SELECT * FROM admins WHERE username = (:admin_user) AND password = (:admin_pass)", {
             "admin_user": username,
             "admin_pass": password
         })

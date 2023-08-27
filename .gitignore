@@ -1,3 +1,7 @@
 # Log Files
 __pycache__/
 */__pycache__/
+# Database runner
+database.py
+# VS
+.vscode/
