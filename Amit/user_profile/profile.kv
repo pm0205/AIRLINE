@@ -1,0 +1,112 @@
+MDScreen:
+    name: "profile"
+    MDFloatLayout :
+        orientation: 'vertical'
+        size_hint: None,None
+        # size: 480,600
+        width:'300sp'
+        height:'900sp'
+        pos_hint: {"x":0} # pos_hint use for div
+        md_bg_color: 50/255, 80/255, 200/255 ,1
+        eveliation: 15
+        padding: 10
+        spacing: 15
+
+        MDBoxLayout:
+            mode: 'rectangle'
+            theme_text_color:1,0,0,1
+            size_hint: None,None
+            width: '180sp'
+            height: '180sp'
+            radius: 100
+            md_bg_color: 0/255, 185/255, 0/255 ,1
+            pos_hint:{'top':.96,'x':.20}
+            
+        MDLabel:
+            text:"User Name"
+            size_hint: None,None
+            size_hint: 1,0.5 # set width,height for customizing
+            font_size: 20
+            halign: 'center'
+            pos_hint:{'top':.99}
+            # set text color
+            theme_text_color:"Custom"
+            text_color:(205/255.0,100/255.0,200/255.0,1)
+        # line after user photo
+        MDLabel:
+            size_hint: None,None
+            size_hint: 1,.001
+            md_bg_color: 1,0,0,1
+            pos_hint:{'top':.71}
+        
+        MDTextButton:
+            # mode:'rectangle'
+            text:'Profile'
+            font_size: 20
+            pos_hint:{'top':.70,'x':.35}
+            halign: 'center'
+            line_color_normal: self.parent.md_bg_color
+
+        MDTextButton:
+            # mode:'rectangle'
+            text:'Booking'
+            font_size: 20
+            pos_hint:{'top':.65,'x':.35}
+            halign: 'center'
+            line_color_normal: self.parent.md_bg_color
+
+        MDTextButton:
+            # mode:'rectangle'
+            text:'Transaction'
+            font_size: 20
+            pos_hint:{'top':.60,'x':.35}
+            halign: 'center'
+            line_color_normal: self.parent.md_bg_color
+
+        MDTextButton:
+            # mode:'rectangle'
+            text:'Offers'
+            font_size: 20
+            pos_hint:{'top':.55,'x':.35}
+            halign: 'center'
+            line_color_normal: self.parent.md_bg_color
+
+        MDTextButton:
+            # mode:'rectangle'
+            text:'Setting'
+            font_size: 20
+            pos_hint:{'top':.50,'x':.35}
+            halign: 'center'
+            line_color_normal: self.parent.md_bg_color
+
+        MDTextButton:
+            # mode:'rectangle'
+            text:'Contact us'
+            font_size: 20
+            pos_hint:{'top':.45,'x':.35}
+            halign: 'center'
+            line_color_normal: self.parent.md_bg_color
+
+        MDTextButton:
+            # mode:'rectangle'
+            text:'Terms & Condition'
+            font_size: 20
+            pos_hint:{'top':.40,'x':.35}
+            halign: 'center'
+            line_color_normal: self.parent.md_bg_color
+
+        MDTextButton:
+            # mode:'rectangle'
+            text:'Version'
+            font_size: 20
+            pos_hint:{'top':.35,'x':.35}
+            halign: 'center'
+            line_color_normal: self.parent.md_bg_color
+
+        MDTextButton:
+            # mode:'rectangle'
+            text:'App logo here'
+            font_size: 20
+            pos_hint:{'top':.20,'x':.35}
+            halign: 'center'
+            line_color_normal: self.parent.md_bg_color
