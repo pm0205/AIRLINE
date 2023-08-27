@@ -9,7 +9,7 @@ def update_userdata(username):
         "username": username,
         "saved": True
         }
-    f = open('./userdata.json', 'w')
+    f = open('./data/userdata.json', 'w')
     data = json.dumps(x)
     f.write(data)
     f.close()
@@ -19,7 +19,7 @@ class LoginApp():
     # on App start create/check for database file
     def connectdb(self):
         # create connection
-        conn = sqlite3.connect("credential.db")
+        conn = sqlite3.connect("./data/credential.db")
 
         # create cursor for cmds
         c = conn.cursor()
@@ -39,7 +39,7 @@ class LoginApp():
 
     def checkCredentials(self, username, password):
         # connect with database
-        conn = sqlite3.connect("credential.db")
+        conn = sqlite3.connect("./data/credential.db")
 
         # create a cursor
         c = conn.cursor()

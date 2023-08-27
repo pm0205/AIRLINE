@@ -1,21 +1,21 @@
 from kivymd.app import MDApp
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.label import MDLabel, MDIcon
-from kivymd.uix.button import MDRectangleFlatButton, MDFlatButton, MDRaisedButton
+from kivymd.uix.button import MDRaisedButton
 from kivy.uix.screenmanager import ScreenManager
 from kivy.lang import Builder
-import login as Login
-import pnrChecker as PnrChecker
+import scripts.login as Login
+import scripts.pnrChecker as PnrChecker
 import json
 
 def check_saved_data():
-    f = open('./userdata.json')
+    f = open('./data/userdata.json')
     data = json.load(f)
     f.close()
     return data['saved']
 
 def load_user_data():
-    f = open('./userdata.json')
+    f = open('./data/userdata.json')
     data = json.load(f)
     f.close()
     return data
@@ -44,7 +44,7 @@ class MainApp(MDApp):
         self.theme_cls.primary_palette = 'Blue'
         
         self.screen_manager = ScreenManager()
-        self.screen_manager.add_widget(Builder.load_file('windowscreen.kv'))
+        self.screen_manager.add_widget(Builder.load_file('main_screen.kv'))
         self.load_all_files()
         return self.screen_manager
     

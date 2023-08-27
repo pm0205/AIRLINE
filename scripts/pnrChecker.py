@@ -40,7 +40,7 @@ class PnrChecker:
         return x
 
     def check_database_for_pnr(self, pnr_number):
-        conn = sqlite3.connect("credential.db")
+        conn = sqlite3.connect("./data/credential.db")
         
         # create cursor for cmds
         c = conn.cursor()
