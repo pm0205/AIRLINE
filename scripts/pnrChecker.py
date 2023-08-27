@@ -40,14 +40,14 @@ class PnrChecker:
         return x
 
     def check_database_for_pnr(self, pnr_number):
-        conn = sqlite3.connect("./data/credential.db")
+        conn = sqlite3.connect("./data/database.db")
         
         # create cursor for cmds
         c = conn.cursor()
 
         # execute cmd for credentials table
-        c.execute("SELECT * FROM ticketsInfo WHERE PNR = (:pnr)", {
-            "pnr": pnr_number.upper()
+        c.execute("SELECT * FROM tickets WHERE pnr_id = (:pnr)", {
+            "pnr": pnr_number
         })
         record = c.fetchall()
 
