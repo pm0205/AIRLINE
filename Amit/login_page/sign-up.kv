@@ -1,0 +1,164 @@
+MDScreen:
+    name: "sign-up"
+    md_bg_color: 223/255,25/255,58/255,1
+    MDBoxLayout :
+        orientation: 'vertical'
+        size_hint: None,None
+        size: 480,600
+        pos_hint: {"center_x":.35,"center_y":.5} # pos_hint use for div
+        md_bg_color: 94/255, 185/255, 242/255 ,1
+        eveliation: 15
+        padding: 10
+        spacing: 15
+        MDLabel:
+            mode:"rectangle"
+            text:"Hello,Friend!"
+            size_hint: 1,0.5 # set width,height for customizing
+            font_size: 40
+            text_size: self.size
+            valign: 'bottom'
+            halign: 'center'
+            # set text color
+            theme_text_color:"Custom"
+            text_color:(205/255.0,100/255.0,200/255.0,1)
+        MDLabel:
+            mode:"rectangle"
+            text:"Enter your personal details and start \n journey with us"
+            font_size: 20
+            text_size: self.size
+            valign: 'top'
+            halign: 'center'
+            theme_text_color:"Custom"
+
+    MDRectangleFlatButton:
+        text: 'Go back to Home'
+        md_bg_color: 1,1,1,1
+        ripple_scale: .8
+        line_color: 'grey'
+        text_color: 'grey'
+        pos_hint: {'center_x':.1,"top":.90}
+        on_release: 
+            homescreen_manager.transition.direction = 'up'
+            homescreen_manager.current = 'home screen'
+
+# sign_up code 
+    MDBoxLayout :
+        orientation: 'vertical'
+        size_hint: None,None
+        size: 480,600
+        pos_hint: {"center_x":.65,"center_y":.5} # pos_hint use for div
+        md_bg_color: 0/255, 204/255, 102/255 ,1
+        eveliation: 15
+        padding: 5
+        spacing: 5
+
+        MDLabel :
+            mode:'rectangle'
+            text: "Register"
+            font_style:"Button" # font convert to uppercase
+            font_size: 40
+            halign: "center" # use for content on div
+            adaptive_height: True
+            width:'300sp'
+            height:'100sp'
+            pos_hint:{"top":1,"middle":1}
+            # set text color
+            theme_text_color:"Custom"
+            text_color:(205/255.0,100/255.0,200/255.0,1)
+
+        MDTextField : # input box
+            mode:"rectangle" # border radius auto fix rounded
+            hint_text: "username" # just like place-holder
+            icon_left:"account"
+            pos_hint: {"center_x":.5}
+            size_hint_x: None
+            width:300
+            font_size: 20
+            
+        MDTextField :
+            id: user_email
+            mode:"rectangle" # border radius auto fix rounded
+            hint_text: "email" # just like place-holder
+            icon_left:"email"
+            helper_text_mode: 'on_error'
+            size_hint_x: None
+            width:300
+            pos_hint: {"center_x":.5}
+            font_size: 20
+
+            # on_text: app.send_mail(username_input)
+
+        MDFloatLayout :
+            MDTextField:
+                id: 'otp'
+                mode:"rectangle" # border radius auto fix rounded
+                hint_text: "Enter otp" # just like place-holder
+                icon_left:"lock"
+                size_hint_x: None
+                width: 180
+                pos_hint: {"center_x":.375,"center_y":.51}
+                font_size: 20
+            MDFillRoundFlatButton:
+                text: "  send  "
+                text_color: "blue"
+                size_hint_x: None              
+                adaptive_height: True
+                pos_hint: {"center_x":.70,"center_y":.40}
+
+                on_release: send_email(user_email)
+
+
+        MDTextField :
+            mode:"rectangle" # border radius auto fix rounded
+            hint_text: "Phone number" # just like place-holder
+            icon_left:"phone"
+            size_hint_x: None
+            width:300
+            pos_hint: {"center_x":.5}
+            font_size: 20
+
+        MDTextField :
+            mode:"rectangle" # border radius auto fix rounded
+            hint_text: "password" # just like place-holder
+            icon_left:"eye-off"
+            password: True
+            size_hint_x: None
+            width:300
+            pos_hint: {"center_x":.5}
+            font_size: 20
+
+        MDTextField :
+            mode:"rectangle" # border radius auto fix rounded
+            hint_text: "confirm password" # just like place-holder
+            icon_left:"eye-off"
+            password: True
+            size_hint_x: None
+            width:300
+            pos_hint: {"center_x":.5}
+            font_size: 20
+
+        MDFloatLayout:
+            MDFillRoundFlatButton:
+                text: "        Sign Up        "
+                text_color: "blue"
+                halign: 'center'
+                size_hint_x: None
+                pos_hint: {"center_x":.52,"center_y":.40}
+
+
+        MDFloatLayout:
+            MDLabel:
+                text:'Alredy have an account?'
+                font_size:'20sp'
+                pos_hint:{"center_x":.68,"center_y":.60}
+                theme_text_color:"Custom"
+                text_color:(205/255.0,100/255.0,200/255.0,1)
+
+            MDTextButton:
+                text:'Sign In'
+                font_size:'20sp'
+                pos_hint:{"center_x":.74,"center_y":.60}
+                on_release:
+                    root.manager.transition.direction = "right"
+                    root.manager.current = 'sign-in'
+ 
