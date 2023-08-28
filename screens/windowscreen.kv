@@ -1,0 +1,47 @@
+MDScreen:
+    name: "main screen"
+
+
+    MDBottomNavigation:
+        panel_color: 0,0.5,0.5,0.4
+        text_color_active: 1, 0, 0, 1
+        text_color_inactive: 1, 0, 0, 0.4
+
+        # Home Tab
+        MDBottomNavigationItem:
+            name: 'home'
+            text: 'Home'
+            icon: 'home'
+            # on_tab_press: app.show()
+
+            MDBoxLayout:
+                id: notification_box
+                orientation: 'horizontal'
+                adaptive_height: True
+                size_hint_x: .2
+                pos_hint: {'center_x':.5, 'y':1.5}
+                radius: [10,]
+                md_bg_color: 'black'
+                padding: 10
+                elevation: 100
+                opacity: 0
+                MDLabel:
+                    id: notification_text
+                    text: 'Error invalid data....... Please try again'
+                    color: 'white'
+                    halign: 'center'
+                    adaptive_height: True
+                    opacity: 1
+
+            ScreenManager:
+                id: homescreen_manager
+
+        # # Account Tab
+        # MDBottomNavigationItem:
+        #     name: 'account'
+        #     text: 'Account'
+        #     icon: 'account'
+            
+        #     ScreenManager:
+        #         MDScreen:
+        #             # name: 'home screen'

@@ -1,8 +1,8 @@
 # Home screen
 MDScreen:
     name: 'home screen'
-    id: home_screen
-    text: 'Home screen'
+    # id: home_screen
+    # text: 'Home screen'
 
     MDScrollView:
         do_scroll_y : True
@@ -43,6 +43,7 @@ MDScreen:
                         ripple_scale: 0.8
                         line_color: 'blue'
                         text_color: 'blue'
+                        on_release: app.homescreenchanger('signup screen')
                 
                 # Logo box
                 MDBoxLayout:
@@ -53,7 +54,7 @@ MDScreen:
                     orientation: 'horizontal'
                     # md_bg_color : 'lightblue'
                     Image:
-                        source: 'logo.png'
+                        source: './assets/logo.png'
                         fit_mode: 'contain'
             
             #Center Box
@@ -68,22 +69,29 @@ MDScreen:
                     adaptive_size: True
                     halign: 'center'
                     pos_hint: {'center_x':.5}
-                MDRoundFlatIconButton:
-                    id: showpnrbtn
-                    padding: 20
-                    line_width: 3
-                    icon: 'search-web'
-                    icon_size: '28sp'
-                    font_size: self.icon_size - 10
-                    text: "Check PNR"
-                    radius: [10,]
-                    ripple_scale: 0.8
-                    line_color: '#BE00FF'
-                    text_color: '#BE00FF'
-                    pos_hint: {'center_x': 0.5}
-                    halign: 'right'
-                    on_release: app.homescreenchanger('pnr screen')
+                MDBoxLayout:
+                    radius: [20]
+                    line_width: 2
+                    line_color: 'BE00FF'
                     adaptive_size: True
+                    orientation: 'horizontal'
+                    pos_hint: {'center_x': .5}
+                    MDRectangleFlatIconButton:
+                        id: showpnrbtn
+                        padding: 20
+                        line_width: 3
+                        icon: 'search-web'
+                        icon_size: '28sp'
+                        font_size: '20sp'
+                        text: "Check PNR"
+                        ripple_scale: 0.8
+                        line_color: 'white'
+                        line_width: 0.1
+                        text_color: '#BE00FF'
+                        pos_hint: {'center_x': 0.5}
+                        halign: 'right'
+                        on_release: app.homescreenchanger('pnr screen')
+                        adaptive_size: True
                 MDLabel:
                     text: 'lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt' *30
                     adaptive_height: True
