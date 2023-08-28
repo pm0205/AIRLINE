@@ -2,23 +2,22 @@ from kivymd.app import MDApp
 from kivy.lang import Builder
 from kivy.core.window import Window
 from kivymd.uix.screenmanager import ScreenManager
+from kivymd.uix.screen import MDScreen
 from kivy.core.text import LabelBase
 from kivymd.uix.label import MDLabel
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDFloatingActionButton
 from kivymd.uix.floatlayout import MDFloatLayout
 
-# import requests
+from kivymd.uix.responsivelayout import MDResponsiveLayout # use for responsive
+from kivymd.uix.list import OneLineAvatarIconListItem
 
 import smtplib # use for sent email
 import random # use for generate any random number
 from email.mime.text import MIMEText # use for send email
-
 # Import smtplib for the actual sending function
-
 # Import the email modules we'll need
 # from email.message import EmailMessage
-
 
 class slope(MDApp):
     def build (self):
