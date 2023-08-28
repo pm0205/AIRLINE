@@ -1,56 +1,18 @@
 MDScreen:
     name: "sign-up"
     md_bg_color: 223/255,25/255,58/255,1
-    MDBoxLayout :
-        orientation: 'vertical'
-        size_hint: None,None
-        size: 480,600
-        pos_hint: {"center_x":.35,"center_y":.5} # pos_hint use for div
-        md_bg_color: 94/255, 185/255, 242/255 ,1
-        eveliation: 15
-        padding: 10
-        spacing: 15
-        MDLabel:
-            mode:"rectangle"
-            text:"Hello,Friend!"
-            size_hint: 1,0.5 # set width,height for customizing
-            font_size: 40
-            text_size: self.size
-            valign: 'bottom'
-            halign: 'center'
-            # set text color
-            theme_text_color:"Custom"
-            text_color:(205/255.0,100/255.0,200/255.0,1)
-        MDLabel:
-            mode:"rectangle"
-            text:"Enter your personal details and start \n journey with us"
-            font_size: 20
-            text_size: self.size
-            valign: 'top'
-            halign: 'center'
-            theme_text_color:"Custom"
-
-    MDRectangleFlatButton:
-        text: 'Go back to Home'
-        md_bg_color: 1,1,1,1
-        ripple_scale: .8
-        line_color: 'grey'
-        text_color: 'grey'
-        pos_hint: {'center_x':.1,"top":.90}
-        on_release: 
-            homescreen_manager.transition.direction = 'up'
-            homescreen_manager.current = 'home screen'
 
 # sign_up code 
     MDBoxLayout :
         orientation: 'vertical'
         size_hint: None,None
         size: 480,600
-        pos_hint: {"center_x":.65,"center_y":.5} # pos_hint use for div
+        pos_hint: {"center_x":.5,"center_y":.5} # pos_hint use for div
         md_bg_color: 0/255, 204/255, 102/255 ,1
         eveliation: 15
         padding: 5
         spacing: 5
+        radius: 10
 
         MDLabel :
             mode:'rectangle'
@@ -80,12 +42,13 @@ MDScreen:
             mode:"rectangle" # border radius auto fix rounded
             hint_text: "email" # just like place-holder
             icon_left:"email"
-            helper_text_mode: 'on_error'
+            # helper_text_mode: 'on_error'
             size_hint_x: None
             width:300
             pos_hint: {"center_x":.5}
             font_size: 20
-
+            # helper_text: "user@gmail.com"
+            validator: "email"
             # on_text: app.send_mail(username_input)
 
         MDFloatLayout :
@@ -157,7 +120,7 @@ MDScreen:
             MDTextButton:
                 text:'Sign In'
                 font_size:'20sp'
-                pos_hint:{"center_x":.74,"center_y":.60}
+                pos_hint:{"center_x":.71,"center_y":.60}
                 on_release:
                     root.manager.transition.direction = "right"
                     root.manager.current = 'sign-in'
