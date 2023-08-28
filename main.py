@@ -4,20 +4,11 @@ from kivy.uix.screenmanager import ScreenManager
 from kivymd.uix.dialog import MDDialog
 from kivy.animation import Animation
 from kivymd.uix.label import MDLabel, MDIcon
-<<<<<<< HEAD
 from kivymd.uix.button import MDRectangleFlatButton, MDFlatButton, MDRaisedButton
 from kivy.lang import Builder
 import handlers.login as Login
 import handlers.pnrChecker as PnrChecker
 import json, time
-=======
-from kivymd.uix.button import MDRaisedButton
-from kivy.uix.screenmanager import ScreenManager
-from kivy.lang import Builder
-import scripts.login as Login
-import scripts.pnrChecker as PnrChecker
-import json
->>>>>>> 3e62f6ea27195eaaa57a5221a5e95f5ceeed09f1
 
 def check_saved_data():
     f = open('./data/userdata.json')
@@ -60,11 +51,7 @@ class MainApp(MDApp):
         self.theme_cls.theme_style = 'Light'  # or 'Dark'
         self.theme_cls.primary_palette = 'Blue'
         self.screen_manager = ScreenManager()
-<<<<<<< HEAD
         self.screen_manager.add_widget(Builder.load_file('./screens/windowscreen.kv'))
-=======
-        self.screen_manager.add_widget(Builder.load_file('main_screen.kv'))
->>>>>>> 3e62f6ea27195eaaa57a5221a5e95f5ceeed09f1
         self.load_all_files()
         self.notification_box = self.screen_manager.get_screen('main screen').ids.notification_box
         self.notification_text = self.screen_manager.get_screen('main screen').ids.notification_text

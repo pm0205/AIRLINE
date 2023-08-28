@@ -47,11 +47,7 @@ class PnrChecker:
 
         # execute cmd for credentials table
         c.execute("SELECT * FROM tickets WHERE pnr_id = (:pnr)", {
-<<<<<<<< HEAD:handlers/pnrChecker.py
             "pnr": pnr_number.upper()
-========
-            "pnr": pnr_number
->>>>>>>> 3e62f6ea27195eaaa57a5221a5e95f5ceeed09f1:scripts/pnrChecker.py
         })
         record = c.fetchall()
 
