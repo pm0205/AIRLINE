@@ -30,7 +30,7 @@ class PnrChecker:
             if obj[1]:
                 data = self.check_database_for_pnr(pnr_number)
                 if data != []:
-                    data = data[0]
+                    # data = data[0]
                     x = data
                 else:
                     x = []

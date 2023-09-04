@@ -12,7 +12,7 @@ from email.mime.text import MIMEText # use for send email
 # from email.message import EmailMessage
 
 
-class slope():    
+class Sender():    
    
     def send_email(self,useremail):
 
@@ -25,9 +25,9 @@ class slope():
 
         # emails = [ "1.gamil" , "2.gmail"]  use for send otp in multiple email
         receiver_email = useremail
-        subject = "Your otp code "
+        subject = f"Your otp code is {otp}"
 
-        email_content = f"<b>Hello</b> {useremail},.. \n This is message is from the airline-app, for security purpose we have send an otp \n your OTP is <b>{otp}</b>" 
+        email_content = f"Hello {useremail},.. \nThis is message is from the AIRLINE-APP.\nFor security purpose, we have send an otp \n your OTP is {otp}. Please validate the otp in the app to validate your process." 
         # f use for merge sting and interger in one message
 
         msg = MIMEText(email_content)
@@ -41,5 +41,5 @@ class slope():
         print("otp sent done!") # confirmation message show you on terminal 
 
         return otp
-
-slope().send_email('sanjiv.samal39@gmail.com')
+    
+# Sender().send_email('krithik.samal3@gmail.com')

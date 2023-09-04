@@ -1,14 +1,23 @@
 from kivymd.app import MDApp
 from kivy.clock import Clock
+from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager
 from kivymd.uix.dialog import MDDialog
 from kivy.animation import Animation
 from kivymd.uix.label import MDLabel, MDIcon
-from kivymd.uix.button import MDRectangleFlatButton, MDFlatButton, MDRaisedButton
-from kivy.lang import Builder
+from kivymd.uix.boxlayout import MDBoxLayout
+from kivymd.uix.floatlayout import MDFloatLayout
+from kivymd.uix.button import MDRectangleFlatButton, MDFlatButton, MDRaisedButton, MDTextButton, MDFillRoundFlatButton
+from kivy.uix.button import Button
+from kivymd.uix.behaviors import (RectangularRippleBehavior,
+    FakeRectangularElevationBehavior,
+    BackgroundColorBehavior)
+from kivy.uix.behaviors import ButtonBehavior
 import handlers.login as Login
 import handlers.pnrChecker as PnrChecker
+import handlers.forgot as Forgot
 import json, time
+from functools import partial
 
 def check_saved_data():
     f = open('./data/userdata.json')
@@ -27,6 +36,20 @@ def remove_children(obj):
     for child in children:
         obj.remove_widget(child)
 
+# Build components
+class DialogContent(MDFloatLayout):
+    pass
+
+class NotificationBox(FakeRectangularElevationBehavior, MDBoxLayout):
+    pass
+
+class Box3d(FakeRectangularElevationBehavior,
+    MDBoxLayout):
+    pass
+
+class ElevButton(FakeRectangularElevationBehavior, MDFillRoundFlatButton):
+    pass
+
 # Main APP code starts here ................
 class MainApp(MDApp):
     dialog = None
@@ -37,7 +60,9 @@ class MainApp(MDApp):
         self.screen_manager.get_screen('main screen').ids.homescreen_manager.add_widget(Builder.load_file('./screens/pnrscreen.kv'))
         self.screen_manager.get_screen('main screen').ids.homescreen_manager.add_widget(Builder.load_file('./screens/loginscreen.kv'))
         self.screen_manager.get_screen('main screen').ids.homescreen_manager.add_widget(Builder.load_file('./screens/signupscreen.kv'))
-        self.screen_manager.get_screen('main screen').ids.homescreen_manager.add_widget(Builder.load_file('./screens/loadingscreen.kv'))
+        # self.screen_manager.get_screen('main screen').ids.homescreen_manager.add_widget(Builder.load_file('./screens/loadingscreen.kv'))
+        self.screen_manager.get_screen('main screen').ids.homescreen_manager.add_widget(Builder.load_file('./screens/forgotpasswordscreen.kv'))
+        self.screen_manager.get_screen('main screen').ids.homescreen_manager.add_widget(Builder.load_file('./screens/newpasswordscreen.kv'))
 
         # Check if login was details were saved to auto-login
         userdata = load_user_data()
@@ -59,6 +84,7 @@ class MainApp(MDApp):
     
     def on_start(self):
         self.show_alert_dialog('loading', '')
+        # self.homescreenchanger('new password screen')
 
     def homescreenchanger(self, screen_name):
         match screen_name:
@@ -68,15 +94,54 @@ class MainApp(MDApp):
             case 'login screen': 
                 self.screen_manager.get_screen('main screen').ids.homescreen_manager.current = 'login screen'
                 self.screen_manager.get_screen('main screen').ids.homescreen_manager.transition.direction = 'down'
+                Clock.schedule_once(partial(self.text_anim, 'login', 'L'), 0.5)
+                Clock.schedule_once(partial(self.text_anim, 'login', 'LO'), 1)
+                Clock.schedule_once(partial(self.text_anim, 'login', 'LOG'), 1.5)
+                Clock.schedule_once(partial(self.text_anim, 'login', 'LOGI'), 2)
+                Clock.schedule_once(partial(self.text_anim, 'login', 'LOGIN'), 2.5)
             case 'signup screen': 
                 self.screen_manager.get_screen('main screen').ids.homescreen_manager.current = 'signup screen'
                 self.screen_manager.get_screen('main screen').ids.homescreen_manager.transition.direction = 'down'
+                Clock.schedule_once(partial(self.text_anim, 'signup', 'S'), 0.5)
+                Clock.schedule_once(partial(self.text_anim, 'signup', 'SI'), 1)
+                Clock.schedule_once(partial(self.text_anim, 'signup', 'SIG'), 1.5)
+                Clock.schedule_once(partial(self.text_anim, 'signup', 'SIGN'), 2)
+                Clock.schedule_once(partial(self.text_anim, 'signup', 'SIGN '), 2.5)
+                Clock.schedule_once(partial(self.text_anim, 'signup', 'SIGN U'), 3)
+                Clock.schedule_once(partial(self.text_anim, 'signup', 'SIGN UP'), 3.5)
             case 'login-signup': 
                 self.screen_manager.get_screen('main screen').ids.homescreen_manager.current = 'signup screen'
                 self.screen_manager.get_screen('main screen').ids.homescreen_manager.transition.direction = 'left'
             case 'home screen': 
                 self.screen_manager.get_screen('main screen').ids.homescreen_manager.current = 'home screen'
                 self.screen_manager.get_screen('main screen').ids.homescreen_manager.transition.direction = 'right'
+            case 'forgot screen': 
+                # reseting all elements
+                self.screen_manager.get_screen('main screen').ids.homescreen_manager.get_screen('forgotpassword screen').ids.forgotusername.disabled = False
+                self.screen_manager.get_screen('main screen').ids.homescreen_manager.get_screen('forgotpassword screen').ids.forgotusername.text = ''
+                self.screen_manager.get_screen('main screen').ids.homescreen_manager.get_screen('forgotpassword screen').ids.code_field.disabled = True
+                self.screen_manager.get_screen('main screen').ids.homescreen_manager.get_screen('forgotpassword screen').ids.code_field.text = ''
+                self.screen_manager.get_screen('main screen').ids.homescreen_manager.get_screen('forgotpassword screen').ids.sendcode_button.disabled = True
+                self.screen_manager.get_screen('main screen').ids.homescreen_manager.get_screen('forgotpassword screen').ids.confirmcode_btn.disabled = True
+                # transition of screen
+                self.screen_manager.get_screen('main screen').ids.homescreen_manager.current = 'forgotpassword screen'
+                self.screen_manager.get_screen('main screen').ids.homescreen_manager.transition.direction = 'up'
+            case 'new password screen':
+                # reset widgets
+                self.screen_manager.get_screen('main screen').ids.homescreen_manager.get_screen('new password screen').ids.new_password1.text = ''
+                self.screen_manager.get_screen('main screen').ids.homescreen_manager.get_screen('new password screen').ids.new_password2.text = ''
+                self.screen_manager.get_screen('main screen').ids.homescreen_manager.get_screen('new password screen').ids.confirmpassword_btn.disabled = True
+                # screen transition
+                self.screen_manager.get_screen('main screen').ids.homescreen_manager.current = 'new password screen'
+                self.screen_manager.get_screen('main screen').ids.homescreen_manager.transition.direction = 'left'
+            case 'new password - home':
+                # reset widgets
+                self.screen_manager.get_screen('main screen').ids.homescreen_manager.get_screen('new password screen').ids.new_password1.text = ''
+                self.screen_manager.get_screen('main screen').ids.homescreen_manager.get_screen('new password screen').ids.new_password2.text = ''
+                self.screen_manager.get_screen('main screen').ids.homescreen_manager.get_screen('new password screen').ids.confirmpassword_btn.disabled = True
+                # screen transition
+                self.screen_manager.get_screen('main screen').ids.homescreen_manager.current = 'home screen'
+                self.screen_manager.get_screen('main screen').ids.homescreen_manager.transition.direction = 'up'
 
     # Input validation when button is clicked
     def validate(self, type, obj):
@@ -92,6 +157,15 @@ class MainApp(MDApp):
                 if x != False:
                     # self.show_alert_dialog('loading', '')
                     self.show_alert_dialog('pnr', x)
+            case 'forgot password':
+                x = Forgot.ForgotPass().validateCode(obj[0], obj[1], self.otp)
+                if (x == True) or (x == False):
+                    self.show_alert_dialog('forgot password', x)
+                else: 
+                    pass
+            case 'confirm password':
+                x = Forgot.ForgotPass().check_password(self.username, obj[1].text)
+                self.show_alert_dialog('new password', x)
     
     # Input text validation
     def strvalidator(self, form, type, field):
@@ -99,6 +173,12 @@ class MainApp(MDApp):
             Login.LoginApp().validatetext(type, field)
         elif form == 'pnr':
             PnrChecker.PnrChecker().validatePnr(field)
+        elif form == 'forgot':
+            if type == 'username':
+                self.username = field[0].text
+            Forgot.ForgotPass().validatetext(type, field)
+        elif form == 'new password':
+            Forgot.ForgotPass().validatetext(type, field)
 
     # Close dialog box
     def closedialog(self, *args, **kwargs):
@@ -137,6 +217,13 @@ class MainApp(MDApp):
                 else:
                     self.show_notification('Error, No such data not found.....Please retry')
 
+            case 'forgot password':
+                if arg == True:
+                    self.show_notification('Confirmed code')
+                    self.homescreenchanger('new password screen')
+                else:
+                    self.show_notification('Error, Please enter correct code')
+
             case 'pnr': 
                 pnr_details_box = self.screen_manager.get_screen('main screen').ids.homescreen_manager.get_screen('pnr screen').ids.pnr_details_box
                 remove_children(pnr_details_box)
@@ -144,14 +231,22 @@ class MainApp(MDApp):
                 if arg != []:
                     pnr_details_box.line_color = 'black'
                     pnr_details_box.add_widget(MDLabel(text = 'Booking Details', halign = 'center', adaptive_height = True))
-                    pnr_details_box.add_widget(MDLabel(text = f'PNR : {arg[0]}', halign = 'center', adaptive_height = True))
-                    pnr_details_box.add_widget(MDLabel(text = f'SEAT : {arg[1]}', halign = 'center', adaptive_height = True))
-                    pnr_details_box.add_widget(MDLabel(text = f'FLIGHT STATUS : {arg[2]}', halign = 'center', adaptive_height = True))
+                    for x in arg:
+                        box = MDBoxLayout(MDLabel(text = f'PNR : {x[1]}', halign = 'center', adaptive_height = True), MDLabel(text = f'PASSENGER NAME : {x[3]}', halign = 'center', adaptive_height = True), MDLabel(text = f'SEAT : {x[4]}', halign = 'center', adaptive_height = True), MDLabel(text = f'PRICE : Rs.{int(x[5])}', halign = 'center', adaptive_height = True),MDLabel(text = f'BOOKING DATE  : {x[6]}', halign = 'center', adaptive_height = True), orientation = 'vertical', elevation= 5, pos_hint = {'center_x':.5, 'top': .6}, adaptive_height = True, size_hint_x = 1 ,md_bg_color =  'lightgrey', radius = [10,], padding = 10, spacing = 10,)
+                        pnr_details_box.add_widget(box)
+
                     self.show_notification('Details Found')
                 else:
                     pnr_details_box.line_color = 'white'
                     self.show_notification('No such booking found, please retry')
             
+            case 'new password':
+                if arg == False:
+                    self.show_notification('New password updated successfully\nPlease login')
+                    self.homescreenchanger('new password - home')
+                else:
+                    self.show_notification('Password already exists')
+
             case 'loading':
                 pass
        
@@ -165,6 +260,36 @@ class MainApp(MDApp):
         anim += Animation(duration=2)
         anim += Animation(duration=.5, pos_hint = {'center_x':.5, 'y': 2}, opacity = 0)
         anim.start(self.notification_box)
+
+    # Header-text animation for screens
+    def text_anim(self, type, string, *args, **kwargs):
+        match type:
+            case 'login':
+                self.screen_manager.get_screen('main screen').ids.homescreen_manager.get_screen('login screen').ids.login_head.text = string
+            case 'signup':
+                self.screen_manager.get_screen('main screen').ids.homescreen_manager.get_screen('signup screen').ids.signup_head.text = string
+    
+    # Send code button
+    def codebutton(self, btn, objs):
+        objs[0].disabled = True
+        # stores username in the class so as to use it to push the new password created to the particular record
+        self.username = objs[0].text.strip()
+        self.otp = Forgot.ForgotPass().send_email(objs)
+        revrange = list(range(0, 11))
+        revrange.reverse()
+        # print(revrange)
+        for i in revrange:
+            Clock.schedule_once(partial(self.codebutton_timer, btn, i), float(10 - i + .5))
+
+    def codebutton_timer(self, obj, time, *args, **kwargs):
+        if time == 0:
+            obj.text = 'Send code'
+            obj.disabled = False
+        else: 
+            obj.disabled = True
+            obj.text = f'Wait {time}s'
+
+            
 
 if __name__ == '__main__':
     MainApp().run()

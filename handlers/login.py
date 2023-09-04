@@ -4,10 +4,10 @@ from kivy.core.window import Window
 import sqlite3, re
 import json
 
-def update_userdata(username):
+def update_userdata(username, saved):
     x = {
         "username": username,
-        "saved": True
+        "saved": saved
         }
     f = open('./data/userdata.json', 'w')
     data = json.dumps(x)
@@ -24,9 +24,9 @@ class LoginApp():
         c = conn.cursor()
 
         # check details existence
-        c.execute("SELECT * FROM admins WHERE username = (:admin_user) AND password = (:admin_pass)", {
-            "admin_user": username,
-            "admin_pass": password
+        c.execute("SELECT * FROM users WHERE username = (:username) AND password = (:password)", {
+            "username": username,
+            "password": password
         })
 
         # fetch records
@@ -45,7 +45,9 @@ class LoginApp():
         if ( strvalidator == True ):
             x = self.checkCredentials(username.text.strip(), password.text)
             if x==True and checkbox.active == True:
-                update_userdata(username.text.strip())
+                update_userdata(username.text.strip(), True)
+            elif x==True and checkbox.active == False:
+                update_userdata(username.text.strip(), False)
             return x
         else:
             return None

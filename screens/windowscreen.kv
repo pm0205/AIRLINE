@@ -1,6 +1,16 @@
+<Box3d>:
+    elevation: 3
+    shadow_pos: 5
+    shadow_color: 'lightgrey'
+    md_bg_color: 'white'
+    line_color: 'white'
+    radius: [10,]
+<DialogContent>:
+    md_bg_color: 'white'
+    size_hint: (.5, None)
+
 MDScreen:
     name: "main screen"
-
 
     MDBottomNavigation:
         panel_color: 0,0.5,0.5,0.4
@@ -12,18 +22,25 @@ MDScreen:
             name: 'home'
             text: 'Home'
             icon: 'home'
+            FitImage:
+                id: home_gradient
+                source: 'blue-grad.jpg'
+                elevation: 10
             # on_tab_press: app.show()
 
-            MDBoxLayout:
+            # Notification Box
+            NotificationBox:
                 id: notification_box
                 orientation: 'horizontal'
                 adaptive_height: True
                 size_hint_x: .2
                 pos_hint: {'center_x':.5, 'y':1.5}
                 radius: [10,]
+                elevation: 3
+                shadow_pos: 5
+                shadow_color: 'lightgrey'
                 md_bg_color: 'black'
                 padding: 10
-                elevation: 100
                 opacity: 0
                 MDLabel:
                     id: notification_text
@@ -32,6 +49,8 @@ MDScreen:
                     halign: 'center'
                     adaptive_height: True
                     opacity: 1
+                    elevation: 100
+
 
             ScreenManager:
                 id: homescreen_manager
