@@ -132,7 +132,10 @@ class ForgotPass():
             # If the username exists in database, send code button is enabled
             if y == True:
                 objs[1].disabled = False
-                # obj.disabled = True
+            else:
+                objs[1].disabled = True
+        else:
+            objs[1].disabled = True
         
         # if the new password and confirm new password matches create new password button is enabled
         if type == 'password' and x == True and objs[0].text == objs[1].text:
