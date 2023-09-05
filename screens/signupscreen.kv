@@ -2,8 +2,6 @@
 MDScreen:
     name: 'signup screen'
     spacing: 20
-    FitImage:
-        source: 'blue-grad.jpg'
 
     MDScrollView:
         MDBoxLayout:
@@ -20,15 +18,9 @@ MDScreen:
                 on_release: app.homescreenchanger('home screen') 
             Box3d: 
                 orientation: 'vertical'
-                # elevation: 3
-                # shadow_pos: 5
-                # shadow_color: 'lightgrey'
                 pos_hint: {'center_x':.5}
                 adaptive_height: True
                 size_hint_x: .6
-                # md_bg_color: 'white'
-                # line_color: 'black'
-                # radius: [10,]
                 padding: 20
                 spacing: 40
                 MDLabel:
@@ -36,6 +28,41 @@ MDScreen:
                     text: 'SIGN UP'
                     adaptive_height: True
                     halign: 'center'
+                
+                # name
+                MDTextField:
+                    id: signup_fname
+                    icon_left: 'alphabetical-variant'
+                    hint_text: 'Enter your first name'
+                    helper_text_mode: 'on_error'
+                    mode: 'rectangle'
+                    line_color_normal: 'lightblue'
+                    line_color_focus: 'blue'
+                    pos_hint: {'x': .2}
+                    adaptive_height: True
+                    size_hint_x: .6
+                    padding: 10, 0
+                    text_color_focus: 'black'
+                    on_text: 
+                        app.strvalidator('signup', 'fname', [self, signup_button, signup_username, signup_password, confirm_signup_password, signup_email, signup_number, signup_fname, signup_lname])
+
+                MDTextField:
+                    id: signup_lname
+                    icon_left: 'alphabetical-variant'
+                    hint_text: 'Enter your last name'
+                    helper_text_mode: 'on_error'
+                    mode: 'rectangle'
+                    line_color_normal: 'lightblue'
+                    line_color_focus: 'blue'
+                    pos_hint: {'x': .2}
+                    adaptive_height: True
+                    size_hint_x: .6
+                    padding: 10, 0
+                    text_color_focus: 'black'
+                    on_text: 
+                        app.strvalidator('signup', 'lname', [self, signup_button, signup_username, signup_password, confirm_signup_password, signup_email, signup_number, signup_fname, signup_lname])
+
+                # username
                 MDTextField:
                     id: signup_username
                     icon_left: 'account'
@@ -49,9 +76,13 @@ MDScreen:
                     size_hint_x: .6
                     padding: 10, 0
                     text_color_focus: 'black'
-                    on_text: app.strvalidator('signup', 'username', self)
+                    on_text: 
+                        app.strvalidator('signup', 'username', [self, signup_button, signup_username, signup_password, confirm_signup_password, signup_email, signup_number, signup_fname, signup_lname])
+
+                # Email
                 MDTextField:
                     id: signup_email
+                    email: True
                     icon_left: 'email'
                     hint_text: 'Enter your email'
                     helper_text_mode: 'on_error'
@@ -63,7 +94,9 @@ MDScreen:
                     size_hint_x: .6
                     padding: 10, 0
                     text_color_focus: 'black'
-                    on_text: app.strvalidator('signup', 'email', self)
+                    on_text: app.strvalidator('signup', 'email', [self, signup_button, signup_username, signup_password, confirm_signup_password, signup_email, signup_number, signup_fname, signup_lname])
+
+                # Phone number
                 MDTextField:
                     id: signup_number
                     icon_left: 'phone'
@@ -77,7 +110,7 @@ MDScreen:
                     size_hint_x: .6
                     padding: 10, 0
                     text_color_focus: 'black'
-                    on_text: app.strvalidator('signup', 'number', self)
+                    on_text: app.strvalidator('signup', 'phone', [self, signup_button, signup_username, signup_password, confirm_signup_password, signup_email, signup_number, signup_fname, signup_lname])
                 
                 # password
                 MDBoxLayout:
@@ -103,7 +136,7 @@ MDScreen:
                         padding: 10, 0
                         text_color_focus: 'black'
                         on_text: 
-                            app.strvalidator('login', 'password', self)
+                            app.strvalidator('signup', 'password', [self, signup_button, signup_username, signup_password, confirm_signup_password, signup_email, signup_number, signup_fname, signup_lname])
                             passwordicon1.icon = 'eye-off'
                             self.password = True
                     MDIconButton:
@@ -121,11 +154,11 @@ MDScreen:
                     adaptive_height: True
                     pos_hint: {'x': .2}
                     size_hint_x: .72
-                    height: confirm_password.height
+                    height: confirm_signup_password.height
                     orientation: 'horizontal'
                     spacing: 10
                     MDTextField:
-                        id: confirm_password
+                        id: confirm_signup_password
                         icon_left: 'key'
                         hint_text: 'Confirm your password'
                         password: True
@@ -140,7 +173,7 @@ MDScreen:
                         padding: 10, 0
                         text_color_focus: 'black'
                         on_text: 
-                            app.strvalidator('login', 'password', self)
+                            app.strvalidator('signup', 'password', [self, signup_button, signup_username, signup_password, confirm_signup_password, signup_email, signup_number, signup_fname, signup_lname])
                             passwordicon2.icon = 'eye-off'
                             self.password = True
                     MDIconButton:
@@ -150,13 +183,14 @@ MDScreen:
                         adaptive_size: True
                         on_release:
                             self.icon = "eye" if self.icon == "eye-off" else "eye-off"
-                            confirm_password.password = False if confirm_password.password == True else True
-                            confirm_password.focus = True
+                            confirm_signup_password.password = False if confirm_signup_password.password == True else True
+                            confirm_signup_password.focus = True
 
                 # Signup button
                 MDFillRoundFlatButton:
+                    id: signup_button
                     text: 'Signup'
-                    # radius: [10,]
+                    disabled: True
                     theme_text_color: "Custom"
                     md_bg_color: 'blue'
                     text_color: 'white'
@@ -168,7 +202,7 @@ MDScreen:
                     line_color: 'lightblue'
                     line_width: 1.5
                     shadow_color: 'lightgrey'
-                    # on_release: app.validate('signup', [loginusername, loginpassword, logincheckbox])
+                    on_release: app.validate('signup', [self, signup_username, signup_password, confirm_signup_password, signup_email, signup_number, signup_fname, signup_lname])
                 
                 MDTextButton:
                     text: 'Already A User ? Log in !'

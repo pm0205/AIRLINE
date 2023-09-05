@@ -16,6 +16,7 @@ from kivy.uix.behaviors import ButtonBehavior
 import handlers.login as Login
 import handlers.pnrChecker as PnrChecker
 import handlers.forgot as Forgot
+import handlers.signup as Signup
 import json, time
 from functools import partial
 
@@ -152,6 +153,9 @@ class MainApp(MDApp):
                     self.show_alert_dialog('login', x)
                 else:
                     pass
+            case 'signup':
+                x = Signup.Signup().validateSignup(obj)
+                self.show_alert_dialog('signup', x)
             case 'pnr':
                 x = PnrChecker.PnrChecker().validatePnr(obj)
                 if x != False:
@@ -171,6 +175,9 @@ class MainApp(MDApp):
     def strvalidator(self, form, type, field):
         if form == 'login':
             Login.LoginApp().validatetext(type, field)
+        elif form == 'signup':
+            Signup.Signup().validatetext(type, field[0])
+            Signup.Signup().fields_checker(field[1:])
         elif form == 'pnr':
             PnrChecker.PnrChecker().validatePnr(field)
         elif form == 'forgot':
@@ -216,6 +223,13 @@ class MainApp(MDApp):
                     self.homescreenchanger('home screen')
                 else:
                     self.show_notification('Error, No such data not found.....Please retry')
+                    
+            case 'signup':
+                if arg == True: 
+                    self.show_notification('Success! You have created a new account\nPlease login to your account')
+                    self.homescreenchanger('home screen')
+                else:
+                    self.show_notification('Cannot create account.\n Username or email already exists.\n Please login if you want to access your account')
 
             case 'forgot password':
                 if arg == True:
