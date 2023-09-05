@@ -76,6 +76,7 @@ class MainApp(MDApp):
     def build(self):
         self.theme_cls.theme_style = 'Light'  # or 'Dark'
         self.theme_cls.primary_palette = 'Blue'
+        self.icon = "./assets/icon.ico"
         self.screen_manager = ScreenManager()
         self.screen_manager.add_widget(Builder.load_file('./screens/windowscreen.kv'))
         self.load_all_files()
@@ -84,8 +85,8 @@ class MainApp(MDApp):
         return self.screen_manager
     
     def on_start(self):
+        self.title = "Eagle Airline | Ticket Booking System"
         self.show_alert_dialog('loading', '')
-        # self.homescreenchanger('new password screen')
 
     def homescreenchanger(self, screen_name):
         match screen_name:
@@ -208,7 +209,7 @@ class MainApp(MDApp):
         self.dialog.add_widget(Builder.load_file('./screens/loadingscreen.kv'))
         self.dialog.open()
         self.clock_run()
-        anim = Animation(duration=3)
+        anim = Animation(duration=2)
         anim.start(self.dialog)
         anim.bind(on_complete=self.closedialog)
         match type:
