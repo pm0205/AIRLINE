@@ -12,8 +12,8 @@ MDScreen:
             MDRectangleFlatButton:
                 text: 'Go back to Home'
                 ripple_scale: .8
-                line_color: 'grey'
-                text_color: 'grey'
+                line_color: 'white'
+                text_color: 'white'
                 pos_hint: {'x': .15}
                 on_release: app.homescreenchanger('home screen') 
             Box3d: 
@@ -205,7 +205,7 @@ MDScreen:
                     on_release: app.validate('signup', [self, signup_username, signup_password, confirm_signup_password, signup_email, signup_number, signup_fname, signup_lname])
                 
                 MDTextButton:
-                    text: 'Already A User ? Log in !'
+                    text: "Already have a account? Login"
                     theme_text_color: "Custom"
                     text_color: 'blue'
                     # md_bg_color: 'white'
