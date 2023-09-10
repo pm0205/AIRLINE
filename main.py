@@ -7,6 +7,9 @@ from kivy.animation import Animation
 from kivymd.uix.label import MDLabel, MDIcon
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.floatlayout import MDFloatLayout
+from kivymd.uix.menu import MDDropdownMenu
+from kivymd.uix.pickers import MDDatePicker
+from kivymd.uix.list import OneLineListItem, TwoLineListItem
 from kivymd.uix.button import MDRectangleFlatButton, MDFlatButton, MDRaisedButton, MDTextButton, MDFillRoundFlatButton
 from kivy.uix.button import Button
 from kivymd.uix.behaviors import (RectangularRippleBehavior,
@@ -17,7 +20,8 @@ import handlers.login as Login
 import handlers.pnrChecker as PnrChecker
 import handlers.forgot as Forgot
 import handlers.signup as Signup
-import json, time
+import handlers.searchflight as SearchFlight
+import json, time, datetime
 from functools import partial
 
 def check_saved_data():
@@ -31,7 +35,14 @@ def load_user_data():
     data = json.load(f)
     f.close()
     return data
-    
+
+def load_airports_data():
+    f = open('./data/airports.json')
+    data = json.load(f)
+    data = [x for x in data if x['type'] == 'airport' and x['name'] != None]
+    f.close()
+    return data
+
 def remove_children(obj):
     children = [child for child in obj.children]
     for child in children:
@@ -54,6 +65,7 @@ class ElevButton(FakeRectangularElevationBehavior, MDFillRoundFlatButton):
 # Main APP code starts here ................
 class MainApp(MDApp):
     dialog = None
+    menu = None
 
     # pre-load all screens 
     def load_all_files(self):
@@ -171,6 +183,10 @@ class MainApp(MDApp):
             case 'confirm password':
                 x = Forgot.ForgotPass().check_password(self.username, obj[1].text)
                 self.show_alert_dialog('new password', x)
+            case 'search flights':
+                x = SearchFlight.Search().validate(obj)
+                if x != True:
+                    self.show_notification(x, 'home-tab-home', notifier=[obj[5], obj[6]])
     
     # Input text validation
     def strvalidator(self, form, type, field):
@@ -187,6 +203,11 @@ class MainApp(MDApp):
             Forgot.ForgotPass().validatetext(type, field)
         elif form == 'new password':
             Forgot.ForgotPass().validatetext(type, field)
+    
+    # Text input updater
+    def check_input(self, obj, form):
+        if form == 'search flights':
+            SearchFlight.Search().update_input(obj)
 
     # Close dialog box
     def closedialog(self, *args, **kwargs):
@@ -268,14 +289,116 @@ class MainApp(MDApp):
         self.dialog.open()
     
     # Status message notifier
-    def show_notification(self, text):
-        self.notification_text.text = text
-        anim = Animation(duration=3)
-        anim += Animation(duration=.1, pos_hint = {'center_x':.5, 'y': .8}, opacity = 1)
-        anim += Animation(duration=2)
-        anim += Animation(duration=.5, pos_hint = {'center_x':.5, 'y': 2}, opacity = 0)
-        anim.start(self.notification_box)
+    def show_notification(self, text, screen = '', notifier = None):
+        if screen == '':
+            self.notification_text.text = text
+            anim = Animation(duration=3)
+            anim += Animation(duration=.1, pos_hint = {'center_x':.5, 'y': .8}, opacity = 1)
+            anim += Animation(duration=2)
+            anim += Animation(duration=.5, pos_hint = {'center_x':.5, 'y': 2}, opacity = 0)
+            anim.start(self.notification_box)
+        elif screen == 'home-tab-home':
+            self.notification_box = notifier[0]
+            self.notification_text = notifier[1]
+            self.notification_text.text = text
+            anim = Animation(duration=.2)
+            anim += Animation(duration=.1, pos_hint = {'center_x':.5, 'y': .8}, opacity = 1)
+            anim += Animation(duration=2)
+            anim += Animation(duration=.5, pos_hint = {'center_x':.5, 'y': 2}, opacity = 0)
+            anim.start(self.notification_box)
+    
+    # Date dialog
+    def check_valid_date(self, instance, date, *args, **kwargs):
+        min = datetime.date.today()
+        max = datetime.date(
+            datetime.date.today().year + 1,
+            datetime.date.today().month,
+            datetime.date.today().day,)
+        if date>=min and date<=max:
+            self.save_date(date)
+            self.date_dialog.dismiss()
+        else:
+            self.date_dialog.open()
 
+    def save_date(self, date):
+        string = date.strftime("%d / %m / %y")
+        self.screen_manager.get_screen('main screen').ids.homescreen_manager.get_screen('home screen').ids.search_date_button.text = string
+
+    def open_date_dialog(self, obj):
+        self.date_dialog = MDDatePicker(
+            year = datetime.date.today().year,
+            month = datetime.date.today().month,
+            day = datetime.date.today().day,
+            mode = 'picker',)
+        self.date_dialog.bind(on_save = self.check_valid_date)
+        self.date_dialog.open()
+
+    # Drop-down menu
+    def menu_action(self, action):
+        if self.menu:
+            if action == 'close':
+                self.menu.dismiss()
+            elif action == 'open':
+                self.menu.open()
+
+    def update_menu(self, obj):
+        if obj == 'clicked':
+            self.menu.dismiss()
+        else: 
+            if self.menu!=None:
+                remove_children(self.menu)
+            text = obj.text.strip()
+            menu_items = self.get_menu_items(obj)
+            if text != '' and menu_items != []:
+                self.menu = MDDropdownMenu(
+                    caller=obj,
+                    width_mult=4,
+                    ver_growth = 'down',
+                    hor_growth = 'right',
+                    position = 'center',
+                    items = menu_items,
+                    max_height = 400)
+                self.menu.open()
+    
+    def get_menu_items(self, obj):
+        text = obj.text.strip()
+        airports = load_airports_data()
+        updated_list = []
+        menu_items = []
+        if len(text) > 0 and airports != []:
+            for x in airports:
+                # print(x)
+                if text.lower() in x['name'].lower() or text.lower() in x['iata'].lower():
+                    updated_list.append(x)
+        else:
+            updated_list = airports
+
+        for x in updated_list[0:21]:
+            menu_items.append({
+                    "text": x['iata'],
+                    "secondary_text": x['name'],
+                    "viewclass": "TwoLineListItem",
+                    "height": 80,
+                    "on_release": lambda x = x['iata'] : self.set_input_text(obj, x) ,
+                })
+            
+        print(menu_items)
+        return menu_items
+    
+    def set_input_text(self, obj, text):
+        self.menu.dismiss()
+        obj.text = text
+
+    # Count updater
+    def update_count(self, worker, obj, scaler):
+        if scaler == 'incr':
+            if int(obj.text) < 5:
+                obj.text = f'{int(obj.text)+1}'
+        elif scaler == 'decr':
+            if int(obj.text) > 1:
+                obj.text = f'{int(obj.text)-1}'
+
+    # ------------------------------------------------------------------------------------------------------
     # Header-text animation for screens
     def text_anim(self, type, string, *args, **kwargs):
         match type:

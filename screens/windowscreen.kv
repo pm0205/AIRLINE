@@ -8,6 +8,20 @@
 <DialogContent>:
     md_bg_color: 'white'
     size_hint: (.5, None)
+<Notification>:
+    id: notification_box
+    orientation: 'horizontal'
+    adaptive_height: True
+    size_hint_x: .2
+    pos_hint: {'center_x':.5, 'y':1.5}
+    radius: [10,]
+    elevation: 5
+    shadow_pos: 5
+    shadow_color: 'lightgrey'
+    md_bg_color: 'black'
+    padding: 10
+    opacity: 0
+                
 
 MDScreen:
     name: "main screen"
@@ -55,12 +69,11 @@ MDScreen:
             ScreenManager:
                 id: homescreen_manager
 
-        # # Account Tab
-        # MDBottomNavigationItem:
-        #     name: 'account'
-        #     text: 'Account'
-        #     icon: 'account'
+        # Account Tab
+        MDBottomNavigationItem:
+            name: 'account'
+            text: 'Account'
+            icon: 'account'
             
-        #     ScreenManager:
-        #         MDScreen:
-        #             # name: 'home screen'
+            ScreenManager:
+                id: userscreen_manager

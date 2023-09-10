@@ -4,6 +4,28 @@ MDScreen:
     # id: home_screen
     # text: 'Home screen'
 
+    NotificationBox:
+        id: hometab_notification_box
+        orientation: 'horizontal'
+        adaptive_height: True
+        size_hint_x: .2
+        pos_hint: {'center_x':.5, 'y':1.5}
+        radius: [10,]
+        elevation: 4
+        shadow_pos: 5
+        shadow_color: 'lightgrey'
+        md_bg_color: 'black'
+        padding: 10
+        opacity: 0
+        MDLabel:
+            id: hometab_notification_text
+            text: ''
+            color: 'white'
+            halign: 'center'
+            adaptive_height: True
+            opacity: 1
+            elevation: 100
+
     MDScrollView:
         do_scroll_y : True
         do_scroll_x : False
@@ -73,6 +95,126 @@ MDScreen:
                     adaptive_size: True
                     halign: 'center'
                     pos_hint: {'center_x':.5}
+
+                # Search Flights Box
+                Box3d:
+                    orientation: 'vertical'
+                    adaptive_height: True
+                    size_hint_x: .8
+                    padding: 10
+                    spacing: 20
+                    pos_hint: {'center_x': .5}
+                    # Text fields
+                    MDBoxLayout: 
+                        orientation: 'horizontal'
+                        padding: 5
+                        spacing: 10
+                        adaptive_height: True
+                        MDTextField:
+                            id: search_from
+                            icon_left: 'airplane-takeoff'
+                            hint_text: 'From'
+                            helper_text_mode: 'on_error'
+                            mode: 'rectangle'
+                            line_color_normal: 'skyblue'
+                            line_color_focus: 'skyblue'
+                            pos_hint: {'center_y': 0.5}
+                            adaptive_height: True
+                            size_hint_x: .4
+                            padding: 10, 0
+                            text_color_focus: 'black'
+                            on_text: 
+                                app.update_menu(self)
+                                app.check_input(self, 'search flights')
+                        MDTextField:
+                            id: search_to
+                            icon_left: 'airplane-landing'
+                            hint_text: 'To'
+                            helper_text_mode: 'on_error'
+                            mode: 'rectangle'
+                            line_color_normal: 'skyblue'
+                            line_color_focus: 'skyblue'
+                            pos_hint: {'center_y': 0.5}
+                            adaptive_height: True
+                            size_hint_x: .4
+                            padding: 10, 0
+                            text_color_focus: 'black'
+                            on_text: 
+                                app.update_menu(self)
+                                app.check_input(self, 'search flights')
+                    MDFloatLayout:
+                        padding: 10
+                        # spacing: 30
+                        adaptive_height: True
+                        pos_hint: {'center_x': .5}
+                        MDLabel:
+                            text: 'Departure : '
+                            font_size: 20
+                            adaptive_height: True
+                            pos_hint: {'center_y':.5, 'x': 0}
+                            halign: 'center'
+                            size_hint_x: .5
+                        MDFlatButton:
+                            id: search_date_button
+                            font_size: 20
+                            size_hint_x: .2
+                            text: "Choose Date"
+                            adaptive_height: True
+                            md_bg_color: 'lightblue'
+                            pos_hint: {'center_y':.5, 'x': .6}
+                            on_release: app.open_date_dialog(self)
+                    # Passengers
+                    MDBoxLayout:
+                        orientation: 'horizontal'
+                        adaptive_height: True
+                        pos_hint: {'center_x':.5,}
+                        spacing: 10
+                        MDLabel: 
+                            text: 'Passengers : '
+                            # md_bg_color: 'lightgray'
+                            font_size: 20
+                            adaptive_height: True
+                            pos_hint: {'center_y':.5}
+                            halign: 'center'
+                            size_hint_x: .2
+                        MDIconButton:
+                            icon: 'minus'
+                            height: 50
+                            width: 50
+                            md_bg_color: 'lightgrey'
+                            # adaptive_size: True
+                            on_release: app.update_count(self, search_passengers, 'decr')
+                        MDLabel:
+                            id: search_passengers
+                            md_bg_color: 'lightblue'
+                            text: '1'
+                            halign: 'center'
+                            font_size: 20
+                            padding: 10
+                            size_hint_x: .1
+                            adaptive_height: True
+                        MDIconButton:
+                            icon: 'plus'
+                            height: 50
+                            width: 50
+                            md_bg_color: 'lightgrey'
+                            # adaptive_size: True
+                            on_release: app.update_count(self, search_passengers, 'incr')
+
+                    # Search Button
+                    MDFlatButton:
+                        text: 'Search'
+                        md_bg_color: 'blue'
+                        theme_text_color: "Custom"
+                        text_color: 'white'
+                        font_size: 24
+                        padding: 10
+                        pos_hint: {'center_x':.5,}
+                        adaptive_height: True
+                        size_hint_x: .2
+                        on_release: app.validate('search flights', [self, search_from, search_to, search_date_button, search_passengers, hometab_notification_box, hometab_notification_text])
+                
+                # Pnr Box
                 MDBoxLayout:
                     radius: [20]
                     line_width: 2
