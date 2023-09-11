@@ -30,6 +30,7 @@ MDScreen:
         panel_color: 0,0.5,0.5,0.4
         text_color_active: 1, 0, 0, 1
         text_color_inactive: 1, 0, 0, 0.4
+        id: tab_navigator
 
         # Home Tab
         MDBottomNavigationItem:
@@ -74,6 +75,6 @@ MDScreen:
             name: 'account'
             text: 'Account'
             icon: 'account'
-            
+            on_tab_release: app.tab_changer(self)
             ScreenManager:
                 id: userscreen_manager

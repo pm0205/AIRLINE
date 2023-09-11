@@ -99,6 +99,14 @@ class MainApp(MDApp):
     def on_start(self):
         self.title = "Eagle Airline | Ticket Booking System"
         self.show_alert_dialog('loading', '')
+    
+    def tab_changer(self, obj):
+        user = load_user_data()
+        if user['saved'] == False:
+            self.show_notification('Please login first to access')
+            self.screen_manager.get_screen('main screen').ids.tab_navigator.switch_tab('home')
+        elif user['saved'] == True:
+            self.screen_manager.get_screen('main screen').ids.tab_navigator.switch_tab('account')
 
     def homescreenchanger(self, screen_name):
         match screen_name:
@@ -185,7 +193,9 @@ class MainApp(MDApp):
                 self.show_alert_dialog('new password', x)
             case 'search flights':
                 x = SearchFlight.Search().validate(obj)
-                if x != True:
+                if x == True:
+                    pass
+                elif x != None:
                     self.show_notification(x, 'home-tab-home', notifier=[obj[5], obj[6]])
     
     # Input text validation
@@ -203,6 +213,9 @@ class MainApp(MDApp):
             Forgot.ForgotPass().validatetext(type, field)
         elif form == 'new password':
             Forgot.ForgotPass().validatetext(type, field)
+        elif form == 'search flights':
+            SearchFlight.Search().validate_text(field)
+    
     
     # Text input updater
     def check_input(self, obj, form):
@@ -292,9 +305,9 @@ class MainApp(MDApp):
     def show_notification(self, text, screen = '', notifier = None):
         if screen == '':
             self.notification_text.text = text
-            anim = Animation(duration=3)
+            anim = Animation(duration=.2)
             anim += Animation(duration=.1, pos_hint = {'center_x':.5, 'y': .8}, opacity = 1)
-            anim += Animation(duration=2)
+            anim += Animation(duration=3)
             anim += Animation(duration=.5, pos_hint = {'center_x':.5, 'y': 2}, opacity = 0)
             anim.start(self.notification_box)
         elif screen == 'home-tab-home':
@@ -303,7 +316,7 @@ class MainApp(MDApp):
             self.notification_text.text = text
             anim = Animation(duration=.2)
             anim += Animation(duration=.1, pos_hint = {'center_x':.5, 'y': .8}, opacity = 1)
-            anim += Animation(duration=2)
+            anim += Animation(duration=3)
             anim += Animation(duration=.5, pos_hint = {'center_x':.5, 'y': 2}, opacity = 0)
             anim.start(self.notification_box)
     
