@@ -16,11 +16,13 @@ from kivymd.uix.behaviors import (RectangularRippleBehavior,
     FakeRectangularElevationBehavior,
     BackgroundColorBehavior)
 from kivy.uix.behaviors import ButtonBehavior
+# All handler scripts 
 import handlers.login as Login
 import handlers.pnrChecker as PnrChecker
 import handlers.forgot as Forgot
 import handlers.signup as Signup
 import handlers.searchflight as SearchFlight
+import handlers.userdetails as UserDetails
 import json, time, datetime
 from functools import partial
 
@@ -69,6 +71,7 @@ class MainApp(MDApp):
 
     # pre-load all screens 
     def load_all_files(self):
+        # HOME TAB
         self.screen_manager.get_screen('main screen').ids.homescreen_manager.add_widget(Builder.load_file('./screens/homescreen.kv'))
         self.screen_manager.get_screen('main screen').ids.homescreen_manager.add_widget(Builder.load_file('./screens/pnrscreen.kv'))
         self.screen_manager.get_screen('main screen').ids.homescreen_manager.add_widget(Builder.load_file('./screens/loginscreen.kv'))
@@ -76,6 +79,10 @@ class MainApp(MDApp):
         # self.screen_manager.get_screen('main screen').ids.homescreen_manager.add_widget(Builder.load_file('./screens/loadingscreen.kv'))
         self.screen_manager.get_screen('main screen').ids.homescreen_manager.add_widget(Builder.load_file('./screens/forgotpasswordscreen.kv'))
         self.screen_manager.get_screen('main screen').ids.homescreen_manager.add_widget(Builder.load_file('./screens/newpasswordscreen.kv'))
+
+        # USER TAB
+        self.screen_manager.get_screen('main screen').ids.userscreen_manager.add_widget(Builder.load_file('./screens/userscreen.kv'))
+        self.screen_manager.get_screen('main screen').ids.userscreen_manager.add_widget(Builder.load_file('./screens/userdetailsscreen.kv'))
 
         # Check if login was details were saved to auto-login
         userdata = load_user_data()
@@ -99,14 +106,39 @@ class MainApp(MDApp):
     def on_start(self):
         self.title = "Eagle Airline | Ticket Booking System"
         self.show_alert_dialog('loading', '')
+        # self.homescreenchanger('new password screen')
+        # self.userscreenchanger('home - details')
+
+        # Shortnaming screens 
+        self.userscreen_home = self.screen_manager.get_screen('main screen').ids.userscreen_manager.get_screen('user home screen')
+        self.userscreen_details = self.screen_manager.get_screen('main screen').ids.userscreen_manager.get_screen('user details screen')
+
+        # Pre load user data if available
+        self.fill_user_data()
+    
+    def fill_user_data(self):
+        user_data = load_user_data()
+        data = UserDetails.UserDetails().check_user_details(user_data['username'])
+        UserDetails.UserDetails().fill_details([self.userscreen_details.ids.user_details_fname, self.userscreen_details.ids.user_details_lname, self.userscreen_details.ids.user_details_username, self.userscreen_details.ids.user_details_phone, self.userscreen_details.ids.user_details_gender, self.userscreen_details.ids.user_details_address, self.userscreen_details.ids.user_details_email], data)
+        
     
     def tab_changer(self, obj):
         user = load_user_data()
         if user['saved'] == False:
             self.show_notification('Please login first to access')
-            self.screen_manager.get_screen('main screen').ids.tab_navigator.switch_tab('home')
+            # self.screen_manager.get_screen('main screen').ids.tab_navigator.switch_tab('home')
         elif user['saved'] == True:
             self.screen_manager.get_screen('main screen').ids.tab_navigator.switch_tab('account')
+    
+    # Screen Changers
+    def userscreenchanger(self, screen_name):
+        match screen_name:
+            case 'home - details':
+                self.screen_manager.get_screen('main screen').ids.userscreen_manager.current = 'user details screen'
+                self.screen_manager.get_screen('main screen').ids.userscreen_manager.transition.direction = 'left'
+            case 'details - home':
+                self.screen_manager.get_screen('main screen').ids.userscreen_manager.current = 'user home screen'
+                self.screen_manager.get_screen('main screen').ids.userscreen_manager.transition.direction = 'right'
 
     def homescreenchanger(self, screen_name):
         match screen_name:
@@ -165,6 +197,15 @@ class MainApp(MDApp):
                 self.screen_manager.get_screen('main screen').ids.homescreen_manager.current = 'home screen'
                 self.screen_manager.get_screen('main screen').ids.homescreen_manager.transition.direction = 'up'
 
+    # Button handler
+    def button_handler(self, work, objs):
+        match work:
+            case 'edit-details':
+                for x in objs[1:]:
+                    x.disabled = False
+                objs[1].focus = True
+                
+
     # Input validation when button is clicked
     def validate(self, type, obj):
         match type:
@@ -183,7 +224,7 @@ class MainApp(MDApp):
                     # self.show_alert_dialog('loading', '')
                     self.show_alert_dialog('pnr', x)
             case 'forgot password':
-                x = Forgot.ForgotPass().validateCode(obj[0], obj[1], self.otp)
+                x = Forgot.ForgotPass().validateCode(obj, self.otp)
                 if (x == True) or (x == False):
                     self.show_alert_dialog('forgot password', x)
                 else: 

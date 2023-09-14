@@ -1,0 +1,192 @@
+MDScreen:
+    name: 'user details screen'
+
+    MDScrollView:
+        do_scroll_y: True
+        do_scroll_x: False
+        bar_color: 'blue'
+        bar_width: 5
+        MDBoxLayout:
+            orientation: 'vertical'
+            adaptive_height: True
+            spacing: 50
+            padding: 30
+            MDRectangleFlatButton:
+                text: 'Go back to Home'
+                ripple_scale: .8
+                line_color: 'black'
+                text_color: 'black'
+                pos_hint: {'x': .1}
+                size_hint_x: .2
+                adaptive_height: True
+                on_release: app.userscreenchanger('details - home')
+
+            # Outer Box
+            MDBoxLayout:
+                pos_hint: {'center_x':.5}
+                orientation: 'vertical'
+                size_hint_x: .5
+                padding: 30
+                spacing: 20
+                adaptive_height: True
+                line_color: 'black'
+                line_width: 1
+
+                # Edit button
+                MDBoxLayout:
+                    orientation: 'vertical'
+                    adaptive_height: True
+                    MDRoundFlatIconButton:
+                        id : user_details_edit_button
+                        text: 'Edit'
+                        icon: 'pencil'
+                        font_size: 20
+                        adaptive_height: True
+                        pos_hint: {'center_x': 0.5}
+                        line_color: 'orange'
+                        text_color: 'orange'
+                        icon_color: 'orange'
+                        on_release: app.button_handler('edit-details', [self, user_details_fname, user_details_lname, user_details_username, user_details_phone, user_details_gender, user_details_address, user_details_email_button, user_details_password_button])
+                    
+                # Profile Pic
+                MDBoxLayout:
+                    orientation: 'vertical'
+                    adaptive_height: True
+                    MDIcon:
+                        id: user_details_profile
+                        icon: './assets/profile.png'
+                        pos_hint: {'center_x': .5}
+                        font_size: 100
+                # Name
+                MDTextField:
+                    id: user_details_fname
+                    disabled: True
+                    icon_left: 'alphabetical-variant'
+                    hint_text: 'First Name'
+                    helper_text_mode: 'on_error'
+                    mode: 'rectangle'
+                    line_color_normal: 'lightblue'
+                    line_color_focus: 'blue'
+                    pos_hint: {'x': .2}
+                    adaptive_height: True
+                    size_hint_x: .6
+                    padding: 10, 0
+                    text_color_focus: 'black'
+                MDTextField:
+                    id: user_details_lname
+                    disabled: True
+                    icon_left: 'alphabetical-variant'
+                    hint_text: 'Last Name'
+                    helper_text_mode: 'on_error'
+                    mode: 'rectangle'
+                    line_color_normal: 'lightblue'
+                    line_color_focus: 'blue'
+                    pos_hint: {'x': .2}
+                    adaptive_height: True
+                    size_hint_x: .6
+                    padding: 10, 0
+                    text_color_focus: 'black'
+                # Username
+                MDTextField:
+                    id: user_details_username
+                    disabled: True
+                    icon_left: 'account'
+                    hint_text: 'Username'
+                    helper_text_mode: 'on_error'
+                    mode: 'rectangle'
+                    line_color_normal: 'lightblue'
+                    line_color_focus: 'blue'
+                    pos_hint: {'x': .2}
+                    adaptive_height: True
+                    size_hint_x: .6
+                    padding: 10, 0
+                    text_color_focus: 'black'
+                MDTextField:
+                    id: user_details_email
+                    disabled: True
+                    icon_left: 'email'
+                    hint_text: 'Email'
+                    helper_text_mode: 'on_error'
+                    mode: 'rectangle'
+                    line_color_normal: 'lightblue'
+                    line_color_focus: 'blue'
+                    pos_hint: {'x': .2}
+                    adaptive_height: True
+                    size_hint_x: .6
+                    padding: 10, 0
+                    text_color_focus: 'black'
+                # Phone number
+                MDTextField:
+                    id: user_details_phone
+                    disabled: True
+                    icon_left: 'phone'
+                    hint_text: 'Phone Number'
+                    helper_text_mode: 'on_error'
+                    mode: 'rectangle'
+                    line_color_normal: 'lightblue'
+                    line_color_focus: 'blue'
+                    pos_hint: {'x': .2}
+                    adaptive_height: True
+                    size_hint_x: .6
+                    padding: 10, 0
+                    text_color_focus: 'black'
+                # Gender
+                MDTextField:
+                    id: user_details_gender
+                    disabled: True
+                    icon_left: 'gender-male-female'
+                    hint_text: 'Gender - M | F | O'
+                    helper_text_mode: 'on_error'
+                    mode: 'rectangle'
+                    line_color_normal: 'lightblue'
+                    line_color_focus: 'blue'
+                    pos_hint: {'x': .2}
+                    adaptive_height: True
+                    size_hint_x: .6
+                    padding: 10, 0
+                    text_color_focus: 'black'
+                # Address
+                MDTextField:
+                    id: user_details_address
+                    disabled: True
+                    icon_left: 'map-marker'
+                    hint_text: 'Address'
+                    helper_text_mode: 'on_error'
+                    mode: 'rectangle'
+                    line_color_normal: 'lightblue'
+                    line_color_focus: 'blue'
+                    pos_hint: {'x': .2}
+                    adaptive_height: True
+                    size_hint_x: .6
+                    padding: 10, 0
+                    text_color_focus: 'black'
+                # Email
+                MDRectangleFlatIconButton:
+                    id: user_details_email_button
+                    text: 'Change Email'
+                    icon: 'email'
+                    disabled: True
+                    pos_hint: {'center_x': .5}
+                    adaptive_height: True
+                    md_bg_color: 'blue'
+                    text_color: 'white'
+                    icon_color: 'white'
+                # Password
+                MDRectangleFlatIconButton:
+                    id: user_details_password_button
+                    text: 'Change Password'
+                    icon: 'key'
+                    disabled: True
+                    pos_hint: {'center_x': .5}
+                    adaptive_height: True
+                    md_bg_color: 'blue'
+                    text_color: 'white'
+                    icon_color: 'white'
+                # Save 
+                MDRoundFlatButton:
+                    id : user_details_save_button
+                    text : 'Save'
+                    disabled: True
+                    pos_hint: {'center_x': .5}
+                    
+                

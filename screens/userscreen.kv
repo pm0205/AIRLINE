@@ -1,0 +1,52 @@
+MDScreen:
+    name: 'user home screen'
+
+    MDScrollView:
+        # Outer Box
+        MDBoxLayout:
+            pos_hint: {'center_x':.5, 'top': 1}
+            orientation: 'vertical'
+            adaptive_height: True
+            padding: 30
+            spacing: 20
+            # Profile Pic
+            MDIcon:
+                id: user_homescreen_profile
+                icon: './assets/profile.png'
+                pos_hint: {'center_x': .5}
+                font_size: 100
+            # Name
+            MDLabel:
+                id: user_homescreen_name
+                text: 'Name'
+                font_size: 30
+                pos_hint: {'center_x': .5}
+                adaptive_size: True
+                md_bg_color: 'lightblue'
+            # User Accessibility
+            MDBoxLayout:
+                orientation: 'vertical'
+                adaptive_height: True
+                size_hint_x: .6
+                pos_hint: {'center_x': .5}
+                line_color: 'black'
+                line_width: 1
+                # User Details
+                TwoLineAvatarIconListItem:
+                    text: 'My Details'
+                    secondary_text: 'Access or Edit Name, Phone Number, etc...'
+                    on_touch_up: app.userscreenchanger('home - details')
+                    IconLeftWidget:
+                        icon: 'account-circle'
+                # Wallet
+                TwoLineAvatarIconListItem:
+                    text: 'My Wallet'
+                    secondary_text: 'Access your wallet '
+                    IconLeftWidget:
+                        icon: 'wallet'
+                # Bookings
+                TwoLineAvatarIconListItem:
+                    text: 'My Bookings'
+                    secondary_text: 'Access your latest bookings'
+                    IconLeftWidget:
+                        icon: 'ticket-account'

@@ -51,12 +51,12 @@ class ForgotPass():
         return Email.Sender().send_email('sanjiv.samal39@gmail.com')
 
     # Starting of validation for code sent
-    def validateCode(self, code, confirm_btn, otp):
-        code.required = True
-        strvalidator = self.validatetext('code', [code, confirm_btn])
+    def validateCode(self, obj, otp):
+        obj[0].required = True
+        strvalidator = self.validatetext('code', obj)
         if ( strvalidator == True ):
             x = False
-            if otp == int(code.text.strip()):
+            if otp == int(obj[0].text.strip()):
                 x = True
             return x
         else:
@@ -93,8 +93,9 @@ class ForgotPass():
 
             # For code 
             case 'code':
-                objs[1].disabled = True
-                if(len(obj.text)==0):
+                # print(objs[1].text)
+                objs[2].disabled = True
+                if(len(obj.text.strip())==0):
                     obj.error = True
                     obj.helper_text = 'Required'
                     x = False
@@ -108,7 +109,7 @@ class ForgotPass():
                     x = False
                 else: 
                     obj.error = False
-                    objs[1].disabled = False
+                    objs[2].disabled = False
                     x = True
             
             # For password
@@ -127,21 +128,24 @@ class ForgotPass():
                     x = True
                 
 
-        if type == 'username' and x == True:
-            y = self.check_username(username_text)
-            # If the username exists in database, send code button is enabled
-            if y == True:
-                objs[1].disabled = False
+        if type == 'username' :
+            if x == True:
+                y = self.check_username(username_text)
+                # If the username exists in database, send code button is enabled
+                if y == True:
+                    objs[1].disabled = False
+                else:
+                    objs[1].disabled = True
             else:
                 objs[1].disabled = True
-        else:
-            objs[1].disabled = True
         
+        # if type == 'password':
+        #     objs[1].disabled = False
         # if the new password and confirm new password matches create new password button is enabled
         if type == 'password' and x == True and objs[0].text == objs[1].text:
             objs[2].disabled = False
 
         return x
 
-if __name__ == "__main__":
-    ForgotPass().check_password('aayan123','Ayaan@123')
+# if __name__ == "__main__":
+#     ForgotPass().check_password('aayan123','Ayaan@123')
