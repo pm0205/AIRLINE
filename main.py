@@ -1,6 +1,8 @@
 from kivymd.app import MDApp
 from kivy.clock import Clock
 from kivy.lang import Builder
+from kivy.core.window import Window
+from kivy.uix.widget import Widget
 from kivy.uix.screenmanager import ScreenManager
 from kivymd.uix.dialog import MDDialog
 from kivy.animation import Animation
@@ -23,6 +25,7 @@ import handlers.forgot as Forgot
 import handlers.signup as Signup
 import handlers.searchflight as SearchFlight
 import handlers.userdetails as UserDetails
+# Python modules
 import json, time, datetime
 from functools import partial
 
@@ -30,13 +33,31 @@ def check_saved_data():
     f = open('./data/userdata.json')
     data = json.load(f)
     f.close()
-    return data['saved']
+    if len(data['username'].strip())>0 :
+        return data['saved']
+    else:
+        return False
 
 def load_user_data():
     f = open('./data/userdata.json')
     data = json.load(f)
     f.close()
-    return data
+    if len(data['username'].strip())>0 :
+        return data
+    else:
+        return None
+
+def update_user_data(username):
+    f = open('./data/userdata.json')
+    data = json.load(f)
+    f.close()
+    obj = {
+        'username': username,
+        'saved': data['saved']
+    }
+    w = open('./data/userdata.json', 'w')
+    w.write(json.dumps(obj))
+    w.close()
 
 def load_airports_data():
     f = open('./data/airports.json')
@@ -49,6 +70,9 @@ def remove_children(obj):
     children = [child for child in obj.children]
     for child in children:
         obj.remove_widget(child)
+
+key_pressed = None
+key_modifier = None
 
 # Build components
 class DialogContent(MDFloatLayout):
@@ -64,7 +88,40 @@ class Box3d(FakeRectangularElevationBehavior,
 class ElevButton(FakeRectangularElevationBehavior, MDFillRoundFlatButton):
     pass
 
-# Main APP code starts here ................
+class MyKeyboardListener(Widget):
+    def __init__(self, **kwargs):
+        super(MyKeyboardListener, self).__init__(**kwargs)
+        self._keyboard = Window.request_keyboard(
+            self._keyboard_closed, self, 'text')
+        if self._keyboard.widget:
+            # If it exists, this widget is a VKeyboard object which you can use
+            # to change the keyboard layout.
+            pass
+        self._keyboard.bind(on_key_down=self._on_keyboard_down)
+
+    def _keyboard_closed(self):
+        print('My keyboard have been closed!')
+        self._keyboard.unbind(on_key_down=self._on_keyboard_down)
+        self._keyboard = None
+
+    def _on_keyboard_down(self, keyboard, keycode, text, modifiers):
+        global key_pressed, key_modifier
+        key_pressed = keycode[1]
+        key_modifiers = modifiers
+        print('The key', keycode[1], 'have been pressed')
+        print(' - text is %r' % text)
+        print(' - modifiers are %r' % modifiers)
+
+        # Keycode is composed of an integer + a string
+        # If we hit escape, release the keyboard
+        # if keycode[1] == 'escape':
+        #     keyboard.release()
+
+        # Return True to accept the key. Otherwise, it will be used by
+        # the system.
+        return True
+
+# Main APP code starts here ................................................................................
 class MainApp(MDApp):
     dialog = None
     menu = None
@@ -83,6 +140,7 @@ class MainApp(MDApp):
         # USER TAB
         self.screen_manager.get_screen('main screen').ids.userscreen_manager.add_widget(Builder.load_file('./screens/userscreen.kv'))
         self.screen_manager.get_screen('main screen').ids.userscreen_manager.add_widget(Builder.load_file('./screens/userdetailsscreen.kv'))
+        self.screen_manager.get_screen('main screen').ids.userscreen_manager.add_widget(Builder.load_file('./screens/changeemailscreen.kv'))
 
         # Check if login was details were saved to auto-login
         userdata = load_user_data()
@@ -104,6 +162,7 @@ class MainApp(MDApp):
         return self.screen_manager
     
     def on_start(self):
+
         self.title = "Eagle Airline | Ticket Booking System"
         self.show_alert_dialog('loading', '')
         # self.homescreenchanger('new password screen')
@@ -112,31 +171,60 @@ class MainApp(MDApp):
         # Shortnaming screens 
         self.userscreen_home = self.screen_manager.get_screen('main screen').ids.userscreen_manager.get_screen('user home screen')
         self.userscreen_details = self.screen_manager.get_screen('main screen').ids.userscreen_manager.get_screen('user details screen')
-
+        self.userscreen_email = self.screen_manager.get_screen('main screen').ids.userscreen_manager.get_screen('user email screen')
         # Pre load user data if available
         self.fill_user_data()
     
-    def fill_user_data(self):
+    # Fill user details 
+    def fill_user_data(self, *args, **kwargs):
         user_data = load_user_data()
-        data = UserDetails.UserDetails().check_user_details(user_data['username'])
-        UserDetails.UserDetails().fill_details([self.userscreen_details.ids.user_details_fname, self.userscreen_details.ids.user_details_lname, self.userscreen_details.ids.user_details_username, self.userscreen_details.ids.user_details_phone, self.userscreen_details.ids.user_details_gender, self.userscreen_details.ids.user_details_address, self.userscreen_details.ids.user_details_email], data)
-        
+        if user_data:
+            data = UserDetails.UserDetails().check_user_details(user_data['username'])
+            UserDetails.UserDetails().fill_details([self.userscreen_details.ids.user_details_fname, self.userscreen_details.ids.user_details_lname, self.userscreen_details.ids.user_details_username, self.userscreen_details.ids.user_details_phone, self.userscreen_details.ids.user_details_gender, self.userscreen_details.ids.user_details_address, self.userscreen_details.ids.user_details_email], data)
     
+    # Reset a screen elements back to default
+    def reset_screen(self, screen_name, objs, *args, **kwargs):
+        match screen_name:
+            case 'login':
+                pass
+            case 'signup':
+                pass
+            case 'forgot password':
+                pass
+            case 'new email':
+                objs[2].text = ''
+                objs[3].disabled = True
+                objs[2].disabled = False
+                objs[1].disabled = True
+                objs[0].disabled = True
+                objs[0].text = ''
+
+    # Change tabs
     def tab_changer(self, obj):
         user = load_user_data()
-        if user['saved'] == False:
-            self.show_notification('Please login first to access')
+        if user:
+            if user['saved'] == False:
+                self.show_notification('Please login first to access')
+                self.screen_manager.get_screen('main screen').ids.tab_navigator.switch_tab('home')
+            elif user['saved'] == True:
+                self.screen_manager.get_screen('main screen').ids.tab_navigator.switch_tab('account')
+        # else:
+            # self.show_notification('Please login first to access')
             # self.screen_manager.get_screen('main screen').ids.tab_navigator.switch_tab('home')
-        elif user['saved'] == True:
-            self.screen_manager.get_screen('main screen').ids.tab_navigator.switch_tab('account')
     
     # Screen Changers
-    def userscreenchanger(self, screen_name):
+    def userscreenchanger(self, screen_name, *args, **kwargs):
         match screen_name:
             case 'home - details':
                 self.screen_manager.get_screen('main screen').ids.userscreen_manager.current = 'user details screen'
                 self.screen_manager.get_screen('main screen').ids.userscreen_manager.transition.direction = 'left'
             case 'details - home':
+                self.screen_manager.get_screen('main screen').ids.userscreen_manager.current = 'user home screen'
+                self.screen_manager.get_screen('main screen').ids.userscreen_manager.transition.direction = 'right'
+            case 'details - email':
+                self.screen_manager.get_screen('main screen').ids.userscreen_manager.current = 'user email screen'
+                self.screen_manager.get_screen('main screen').ids.userscreen_manager.transition.direction = 'up'
+            case 'email - home':
                 self.screen_manager.get_screen('main screen').ids.userscreen_manager.current = 'user home screen'
                 self.screen_manager.get_screen('main screen').ids.userscreen_manager.transition.direction = 'right'
 
@@ -204,6 +292,22 @@ class MainApp(MDApp):
                 for x in objs[1:]:
                     x.disabled = False
                 objs[1].focus = True
+            case 'newemail-send-code':
+                x = UserDetails.UserDetails().check_email(objs[1].text.strip())
+                # if email already exists
+                if x == True:
+                    self.show_notification(text = 'Email already exists', notifier=[self.userscreen_email.ids.new_email_notification_box, self.userscreen_email.ids.new_email_notification_text])
+                else: 
+                    objs[1].disabled = True
+                    # stores username in the class so as to use it to push the new password created to the particular record
+                    self.username = objs[1].text.strip()[0].upper() + objs[1].text.strip()[1:].lower()
+                    self.otp = UserDetails.UserDetails().send_email(objs[1:])
+                    revrange = list(range(0, 11))
+                    revrange.reverse()
+                    # print(revrange)
+                    for i in revrange:
+                        Clock.schedule_once(partial(self.codebutton_timer, objs[0], i), float(10 - i + .5))
+
                 
 
     # Input validation when button is clicked
@@ -238,9 +342,30 @@ class MainApp(MDApp):
                     pass
                 elif x != None:
                     self.show_notification(x, 'home-tab-home', notifier=[obj[5], obj[6]])
+            case 'user details':
+                self.username = load_user_data()['username'].strip()
+                x = UserDetails.UserDetails().validate(obj[1:], obj[0], self.username)
+                if x != None:
+                    self.show_alert_dialog('user details', x)
+                    if x == True:
+                        update_user_data(f'{obj[3].text.strip()[0].upper()}{obj[3].text.strip()[1:].lower()}')
+                        Clock.schedule_once(self.fill_user_data, 5)
+            case 'new email':
+                self.username = load_user_data()['username'].strip()
+                x = UserDetails.UserDetails().validateCode(obj, self.otp)
+                if x == True:
+                    UserDetails.UserDetails().update_email(self.username, obj[2])
+                    self.show_alert_dialog('new email', x)
+                    self.fill_user_data()
+                    Clock.schedule_once(partial(self.userscreenchanger, 'email - home'), 5.5)
+                    Clock.schedule_once(partial(self.reset_screen, 'new email', obj), 5.5)
+                elif x == False:
+                    self.show_notification('Incorrect Code\nRetry', notifier = [self.userscreen_email.ids.new_email_notification_box, self.userscreen_email.ids.new_email_notification_text])
+                
     
     # Input text validation
     def strvalidator(self, form, type, field):
+        global key_pressed, key_modifier
         if form == 'login':
             Login.LoginApp().validatetext(type, field)
         elif form == 'signup':
@@ -256,8 +381,10 @@ class MainApp(MDApp):
             Forgot.ForgotPass().validatetext(type, field)
         elif form == 'search flights':
             SearchFlight.Search().validate_text(field)
+        elif form == 'user details':
+            UserDetails.UserDetails().validateText(type, field)
     
-    
+     
     # Text input updater
     def check_input(self, obj, form):
         if form == 'search flights':
@@ -279,7 +406,7 @@ class MainApp(MDApp):
         Clock.unschedule(self.dialogtitle)
     
     # Dialog box show
-    def show_alert_dialog(self, type, arg):
+    def show_alert_dialog(self, type = 'loading', arg = ''):
         self.dialog = MDDialog(title = 'Loading')
         self.dialog.add_widget(Builder.load_file('./screens/loadingscreen.kv'))
         self.dialog.open()
@@ -336,6 +463,16 @@ class MainApp(MDApp):
                     self.homescreenchanger('new password - home')
                 else:
                     self.show_notification('Password already exists')
+            
+            case 'user details':
+                if arg == True:
+                    Clock.schedule_once(partial(self.show_notification, 'Details updated successfully', notifier = [self.userscreen_details.ids.user_details_notification_box, self.userscreen_details.ids.user_details_notification_text]), 2.5)
+                else:
+                    Clock.schedule_once(partial(self.show_notification, arg, notifier = [self.userscreen_details.ids.user_details_notification_box, self.userscreen_details.ids.user_details_notification_text]), 2.5)
+            
+            case 'new email':
+                if arg == True:
+                    Clock.schedule_once(partial(self.show_notification, 'Email address updated successfully', notifier = [self.userscreen_email.ids.new_email_notification_box, self.userscreen_email.ids.new_email_notification_text]), 2.5)
 
             case 'loading':
                 pass
@@ -343,15 +480,15 @@ class MainApp(MDApp):
         self.dialog.open()
     
     # Status message notifier
-    def show_notification(self, text, screen = '', notifier = None):
-        if screen == '':
+    def show_notification(self, text, screen = '', notifier = None, *args, **kwargs):
+        if notifier == None:
             self.notification_text.text = text
             anim = Animation(duration=.2)
             anim += Animation(duration=.1, pos_hint = {'center_x':.5, 'y': .8}, opacity = 1)
             anim += Animation(duration=3)
             anim += Animation(duration=.5, pos_hint = {'center_x':.5, 'y': 2}, opacity = 0)
             anim.start(self.notification_box)
-        elif screen == 'home-tab-home':
+        else:
             self.notification_box = notifier[0]
             self.notification_text = notifier[1]
             self.notification_text.text = text
@@ -360,6 +497,7 @@ class MainApp(MDApp):
             anim += Animation(duration=3)
             anim += Animation(duration=.5, pos_hint = {'center_x':.5, 'y': 2}, opacity = 0)
             anim.start(self.notification_box)
+        
     
     # Date dialog
     def check_valid_date(self, instance, date, *args, **kwargs):
@@ -465,7 +603,7 @@ class MainApp(MDApp):
     def codebutton(self, btn, objs):
         objs[0].disabled = True
         # stores username in the class so as to use it to push the new password created to the particular record
-        self.username = objs[0].text.strip()
+        self.username = objs[0].text.strip()[0].upper() + objs[0].text.strip()[1:].lower()
         self.otp = Forgot.ForgotPass().send_email(objs)
         revrange = list(range(0, 11))
         revrange.reverse()
@@ -482,6 +620,7 @@ class MainApp(MDApp):
             obj.text = f'Wait {time}s'
 
             
+
 
 if __name__ == '__main__':
     MainApp().run()

@@ -22,7 +22,7 @@ MDScreen:
                 on_release: app.userscreenchanger('details - home')
 
             # Outer Box
-            MDBoxLayout:
+            Box3d:
                 pos_hint: {'center_x':.5}
                 orientation: 'vertical'
                 size_hint_x: .5
@@ -46,7 +46,7 @@ MDScreen:
                         line_color: 'orange'
                         text_color: 'orange'
                         icon_color: 'orange'
-                        on_release: app.button_handler('edit-details', [self, user_details_fname, user_details_lname, user_details_username, user_details_phone, user_details_gender, user_details_address, user_details_email_button, user_details_password_button])
+                        on_release: app.button_handler('edit-details', [self, user_details_fname, user_details_lname, user_details_username, user_details_phone, user_details_gender, user_details_address, user_details_email_button, user_details_password_button, user_details_save_button])
                     
                 # Profile Pic
                 MDBoxLayout:
@@ -57,7 +57,7 @@ MDScreen:
                         icon: './assets/profile.png'
                         pos_hint: {'center_x': .5}
                         font_size: 100
-                # Name
+                # First Name
                 MDTextField:
                     id: user_details_fname
                     disabled: True
@@ -72,6 +72,9 @@ MDScreen:
                     size_hint_x: .6
                     padding: 10, 0
                     text_color_focus: 'black'
+                    on_text : app.strvalidator('user details', 'fname', self)
+                
+                # Last Name
                 MDTextField:
                     id: user_details_lname
                     disabled: True
@@ -86,6 +89,8 @@ MDScreen:
                     size_hint_x: .6
                     padding: 10, 0
                     text_color_focus: 'black'
+                    on_text : app.strvalidator('user details', 'lname', self)
+
                 # Username
                 MDTextField:
                     id: user_details_username
@@ -101,6 +106,9 @@ MDScreen:
                     size_hint_x: .6
                     padding: 10, 0
                     text_color_focus: 'black'
+                    on_text : app.strvalidator('user details', 'username', self)
+
+                # Email
                 MDTextField:
                     id: user_details_email
                     disabled: True
@@ -115,6 +123,7 @@ MDScreen:
                     size_hint_x: .6
                     padding: 10, 0
                     text_color_focus: 'black'
+
                 # Phone number
                 MDTextField:
                     id: user_details_phone
@@ -130,6 +139,8 @@ MDScreen:
                     size_hint_x: .6
                     padding: 10, 0
                     text_color_focus: 'black'
+                    on_text : app.strvalidator('user details', 'phone', self)
+
                 # Gender
                 MDTextField:
                     id: user_details_gender
@@ -145,6 +156,8 @@ MDScreen:
                     size_hint_x: .6
                     padding: 10, 0
                     text_color_focus: 'black'
+                    on_text : app.strvalidator('user details', 'gender', self)
+
                 # Address
                 MDTextField:
                     id: user_details_address
@@ -160,7 +173,9 @@ MDScreen:
                     size_hint_x: .6
                     padding: 10, 0
                     text_color_focus: 'black'
-                # Email
+                    on_text : app.strvalidator('user details', 'address', self)
+
+                # Email - button
                 MDRectangleFlatIconButton:
                     id: user_details_email_button
                     text: 'Change Email'
@@ -171,7 +186,9 @@ MDScreen:
                     md_bg_color: 'blue'
                     text_color: 'white'
                     icon_color: 'white'
-                # Password
+                    on_release: app.userscreenchanger('details - email')
+
+                # Password - button
                 MDRectangleFlatIconButton:
                     id: user_details_password_button
                     text: 'Change Password'
@@ -182,11 +199,25 @@ MDScreen:
                     md_bg_color: 'blue'
                     text_color: 'white'
                     icon_color: 'white'
-                # Save 
-                MDRoundFlatButton:
+
+                # Save - button
+                MDFillRoundFlatButton:
                     id : user_details_save_button
                     text : 'Save'
+                    font_size : 30
                     disabled: True
                     pos_hint: {'center_x': .5}
-                    
+                    on_release: app.validate('user details', [self, user_details_fname, user_details_lname, user_details_username, user_details_phone, user_details_gender, user_details_address])
                 
+
+    # Notification Box
+    NotificationBox:
+        id: user_details_notification_box
+        MDLabel:
+            id: user_details_notification_text
+            text: ''
+            color: 'white'
+            halign: 'center'
+            adaptive_height: True
+            opacity: 1
+            elevation: 100

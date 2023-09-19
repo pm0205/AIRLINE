@@ -8,8 +8,7 @@
 <DialogContent>:
     md_bg_color: 'white'
     size_hint: (.5, None)
-<Notification>:
-    id: notification_box
+<NotificationBox>:
     orientation: 'horizontal'
     adaptive_height: True
     size_hint_x: .2
@@ -21,11 +20,18 @@
     md_bg_color: 'black'
     padding: 10
     opacity: 0
+<NotificationText@MDLabel>:
+    text: ''
+    color: 'white'
+    halign: 'center'
+    adaptive_height: True
+    opacity: 1
+    elevation: 100
                 
 
 MDScreen:
     name: "main screen"
-
+    
     MDBottomNavigation:
         panel_color: 0,0.5,0.5,0.4
         text_color_active: 1, 0, 0, 1
@@ -40,7 +46,7 @@ MDScreen:
             FitImage:
                 id: home_gradient
                 source: './assets/blue-grad.jpg'
-                elevation: 10
+                # elevation: 10
             # on_tab_press: app.show()
 
             # Notification Box
@@ -76,5 +82,9 @@ MDScreen:
             text: 'Account'
             icon: 'account'
             on_tab_release: app.tab_changer(self)
+            FitImage:
+                id: user_gradient
+                source: './assets/blue-grad.jpg'
+                # elevation: 10
             ScreenManager:
                 id: userscreen_manager

@@ -1,7 +1,7 @@
-# Forgot Password
+# Change Email
 
 MDScreen:
-    name: 'forgotpassword screen'
+    name: 'user email screen'
     spacing: 20
     # adaptive_height: True
 
@@ -17,7 +17,7 @@ MDScreen:
                 line_color: 'black'
                 text_color: 'black'
                 pos_hint: {'x': .15}
-                on_release: app.homescreenchanger('home screen') 
+                on_release: app.userscreenchanger('email - home') 
 
             # Outer Box 
             Box3d: 
@@ -36,11 +36,11 @@ MDScreen:
                     adaptive_height: True
                     halign: 'center'
 
-                # Username
+                # Email
                 MDTextField:
-                    id: forgotusername
-                    icon_left: 'account'
-                    hint_text: 'Enter your username'
+                    id: new_email
+                    icon_left: 'email'
+                    hint_text: 'Enter new email address'
                     helper_text_mode: 'on_error'
                     mode: 'rectangle'
                     line_color_normal: 'lightblue'
@@ -50,9 +50,9 @@ MDScreen:
                     size_hint_x: .6
                     padding: 10, 0
                     text_color_focus: 'black'
-                    on_text: app.strvalidator('forgot', 'username', [self, sendcode_button, code_field, confirmcode_btn])
+                    on_text: app.strvalidator('user details', 'email', [self, new_email_sendcode_button, new_email_code_field, new_email_confirmcode_btn])
 
-                # Email code button
+                # Email code and button
                 MDBoxLayout:
                     orientation: 'horizontal'
                     padding: 10, 0
@@ -64,7 +64,7 @@ MDScreen:
                     # line_color: 'black'
 
                     MDTextField:
-                        id: code_field
+                        id: new_email_code_field
                         size_hint_x: .3
                         number: True
                         hint_text: 'Code'
@@ -73,10 +73,10 @@ MDScreen:
                         line_color_focus: 'blue'
                         pos_hint: {'y': 0}
                         disabled : True
-                        on_text: app.strvalidator('forgot', 'code', [self, forgotusername, confirmcode_btn])
+                        on_text: app.strvalidator('user details', 'code', [self, new_email_confirmcode_btn])
                     
                     MDFillRoundFlatButton:
-                        id: sendcode_button
+                        id: new_email_sendcode_button
                         text: 'Send Code'
                         theme_text_color: "Custom"
                         md_bg_color: 'green'
@@ -85,12 +85,12 @@ MDScreen:
                         pos_hint: {'center_y': .5}
                         adaptive_height: True
                         disabled: True
-                        on_release: app.codebutton(self, [forgotusername, code_field, confirmcode_btn])
+                        on_release: app.button_handler('newemail-send-code', [self, new_email, new_email_code_field, new_email_confirmcode_btn])
 
                 # Confirm button
                 MDFillRoundFlatButton:
-                    id: confirmcode_btn
-                    text: 'Confirm'
+                    id: new_email_confirmcode_btn
+                    text: 'Confirm Email'
                     disabled: True
                     # radius: [10,]
                     theme_text_color: "Custom"
@@ -104,4 +104,10 @@ MDScreen:
                     line_color: 'lightblue'
                     line_width: 1.5
                     shadow_color: 'lightgrey'
-                    on_release: app.validate('forgot password', [code_field, forgotusername, self])
+                    on_release: app.validate('new email', [new_email_code_field, self, new_email, new_email_sendcode_button])
+
+
+    NotificationBox:
+        id: new_email_notification_box
+        NotificationText:
+            id: new_email_notification_text
