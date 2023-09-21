@@ -19,7 +19,7 @@ MDScreen:
                 pos_hint: {'x': .1}
                 size_hint_x: .2
                 adaptive_height: True
-                on_release: app.userscreenchanger('details - home')
+                on_release: app.userscreenchanger('back - home')
 
             # Outer Box
             Box3d:
@@ -199,6 +199,7 @@ MDScreen:
                     md_bg_color: 'blue'
                     text_color: 'white'
                     icon_color: 'white'
+                    on_release: app.userscreenchanger('details - password')
 
                 # Save - button
                 MDFillRoundFlatButton:

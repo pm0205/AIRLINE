@@ -29,8 +29,8 @@ MDScreen:
                 adaptive_height: True
                 size_hint_x: .6
                 pos_hint: {'center_x': .5}
-                line_color: 'black'
-                line_width: 1
+                # line_color: 'black'
+                # line_width: 1
                 # User Details
                 TwoLineAvatarIconListItem:
                     text: 'My Details'
@@ -38,12 +38,14 @@ MDScreen:
                     on_touch_up: app.userscreenchanger('home - details')
                     IconLeftWidget:
                         icon: 'account-circle'
+
                 # Wallet
                 TwoLineAvatarIconListItem:
                     text: 'My Wallet'
                     secondary_text: 'Access your wallet '
                     IconLeftWidget:
                         icon: 'wallet'
+
                 # Bookings
                 TwoLineAvatarIconListItem:
                     text: 'My Bookings'

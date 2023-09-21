@@ -17,7 +17,17 @@ class UserDetails():
         # fetch records
         record = c.fetchall()
         print(record[0])
+        # (6, 'Admin Admin', 'Admin', 'Admin@1234', 'admin@gmail.com', '1234567890', None, None)
         return record[0]
+    
+    def get_user_details(self, getter, username):
+        data = self.check_user_details(username)
+        match getter:
+            case 'email':
+                return data[4].text.strip()
+            case 'username':
+                return data[2].text.strip()[0].upper() + data[2].text.strip()[1:].upper()
+
     
     def check_username(self, username):
         conn = sqlite3.connect("./data/database.db")
@@ -65,7 +75,7 @@ class UserDetails():
         c = conn.cursor()
         c.execute('UPDATE users SET mail = (:email) WHERE username = (:username);', {
             'username': f'{username.strip()[0].upper()}{username.strip()[1:].lower()}',
-            'email': email.text.strip(),
+            'email': email.text.strip().lower(),
         })
         conn.commit()
         conn.close()

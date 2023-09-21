@@ -140,7 +140,8 @@ class MainApp(MDApp):
         # USER TAB
         self.screen_manager.get_screen('main screen').ids.userscreen_manager.add_widget(Builder.load_file('./screens/userscreen.kv'))
         self.screen_manager.get_screen('main screen').ids.userscreen_manager.add_widget(Builder.load_file('./screens/userdetailsscreen.kv'))
-        self.screen_manager.get_screen('main screen').ids.userscreen_manager.add_widget(Builder.load_file('./screens/changeemailscreen.kv'))
+        self.screen_manager.get_screen('main screen').ids.userscreen_manager.add_widget(Builder.load_file('./screens/updateemailscreen.kv'))
+        self.screen_manager.get_screen('main screen').ids.userscreen_manager.add_widget(Builder.load_file('./screens/updatepasswordscreen.kv'))
 
         # Check if login was details were saved to auto-login
         userdata = load_user_data()
@@ -172,6 +173,7 @@ class MainApp(MDApp):
         self.userscreen_home = self.screen_manager.get_screen('main screen').ids.userscreen_manager.get_screen('user home screen')
         self.userscreen_details = self.screen_manager.get_screen('main screen').ids.userscreen_manager.get_screen('user details screen')
         self.userscreen_email = self.screen_manager.get_screen('main screen').ids.userscreen_manager.get_screen('user email screen')
+        self.userscreen_password = self.screen_manager.get_screen('main screen').ids.userscreen_manager.get_screen('user password screen')
         # Pre load user data if available
         self.fill_user_data()
     
@@ -180,6 +182,8 @@ class MainApp(MDApp):
         user_data = load_user_data()
         if user_data:
             data = UserDetails.UserDetails().check_user_details(user_data['username'])
+            self.username = data[2].strip()[0].upper() + data[2].strip()[1:].lower()
+            self.email = data[4].strip().lower()
             UserDetails.UserDetails().fill_details([self.userscreen_details.ids.user_details_fname, self.userscreen_details.ids.user_details_lname, self.userscreen_details.ids.user_details_username, self.userscreen_details.ids.user_details_phone, self.userscreen_details.ids.user_details_gender, self.userscreen_details.ids.user_details_address, self.userscreen_details.ids.user_details_email], data)
     
     # Reset a screen elements back to default
@@ -224,9 +228,13 @@ class MainApp(MDApp):
             case 'details - email':
                 self.screen_manager.get_screen('main screen').ids.userscreen_manager.current = 'user email screen'
                 self.screen_manager.get_screen('main screen').ids.userscreen_manager.transition.direction = 'up'
-            case 'email - home':
+            case 'details - password':
+                self.screen_manager.get_screen('main screen').ids.userscreen_manager.current = 'user password screen'
+                self.screen_manager.get_screen('main screen').ids.userscreen_manager.transition.direction = 'up'
+            case 'back - home':
                 self.screen_manager.get_screen('main screen').ids.userscreen_manager.current = 'user home screen'
                 self.screen_manager.get_screen('main screen').ids.userscreen_manager.transition.direction = 'right'
+
 
     def homescreenchanger(self, screen_name):
         match screen_name:
@@ -307,6 +315,15 @@ class MainApp(MDApp):
                     # print(revrange)
                     for i in revrange:
                         Clock.schedule_once(partial(self.codebutton_timer, objs[0], i), float(10 - i + .5))
+            case 'update-password-send-code':
+                email = self.email
+                self.otp = UserDetails.UserDetails().send_email(objs)
+                revrange = list(range(0, 11))
+                revrange.reverse()
+                # print(revrange)
+                Clock.schedule_once(partial(self.text_anim, 'update password email'), 4)
+                for i in revrange:
+                    Clock.schedule_once(partial(self.codebutton_timer, objs[0], i), float(10 - i + .5))
 
                 
 
@@ -361,6 +378,19 @@ class MainApp(MDApp):
                     Clock.schedule_once(partial(self.reset_screen, 'new email', obj), 5.5)
                 elif x == False:
                     self.show_notification('Incorrect Code\nRetry', notifier = [self.userscreen_email.ids.new_email_notification_box, self.userscreen_email.ids.new_email_notification_text])
+            case 'update password code':
+                self.username = load_user_data()['username'].strip()
+                x = UserDetails.UserDetails().validateCode(obj[1:], self.otp)
+                if x == True:
+                    obj[0].disabled = True
+                    obj[1].disabled = True
+                    obj[1].text = ''
+                    obj[2].disabled = True
+                    obj[3].text = 'Code has been verified....Now you can update with your new password'
+                    for one in obj[4:]:
+                        one.disabled = False
+                elif x == False:
+                    self.show_notification('Incorrect Code\nRetry', notifier = [self.userscreen_password.ids.update_password_notification_box, self.userscreen_password.ids.update_password_notification_text])
                 
     
     # Input text validation
@@ -598,6 +628,12 @@ class MainApp(MDApp):
                 self.screen_manager.get_screen('main screen').ids.homescreen_manager.get_screen('login screen').ids.login_head.text = string
             case 'signup':
                 self.screen_manager.get_screen('main screen').ids.homescreen_manager.get_screen('signup screen').ids.signup_head.text = string
+            case 'update password email':
+                if len(self.email.split('@')[0])>8:
+                    self.userscreen_password.ids.update_password_email.text = f"Code sent to {self.email.split('@')[0][0:2]}XXX{self.email.split('@')[0][-2:]}@{self.email.split('@')[1]}"
+                else:
+                    self.userscreen_password.ids.update_password_email.text = f"Code sent to {self.email.split('@')[0][0]}XXX{self.email.split('@')[0][-1]}@{self.email.split('@')[1]}"
+
     
     # Send code button
     def codebutton(self, btn, objs):
