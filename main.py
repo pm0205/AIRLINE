@@ -208,11 +208,11 @@ class MainApp(MDApp):
                 self.userscreen_password.ids.update_password_code_field.disabled = True
                 self.userscreen_password.ids.update_password_code_field.error = False
                 self.userscreen_password.ids.update_password_confirmcode_btn.disabled = True
-                self.userscreen_password.ids.update_password_update_password_btn.disabled = True
-                self.uuserscreen_password.ids.update_password1.text = ''
-                self.uuserscreen_password.ids.update_password1.error = False
-                self.uuserscreen_password.ids.update_password2.text = ''
-                self.uuserscreen_password.ids.update_password2.error = False
+                self.userscreen_password.ids.update_password_btn.disabled = True
+                self.userscreen_password.ids.update_password1.text = ''
+                self.userscreen_password.ids.update_password1.error = False
+                self.userscreen_password.ids.update_password2.text = ''
+                self.userscreen_password.ids.update_password2.error = False
 
                 
     # Change tabs
@@ -527,8 +527,8 @@ class MainApp(MDApp):
             case 'update password':
                 if arg == False:
                     Clock.schedule_once(partial(self.show_notification, 'New Password has been updated', notifier = [self.userscreen_password.ids.update_password_notification_box, self.userscreen_password.ids.update_password_notification_text]), 2.5)
-                    Clock.schedule_once(partial(self.userscreenchanger('back - home')), 5.5)
-                    # Clock.schedule_once(partial(self.userscreenchanger('back - home')), 5.5)
+                    Clock.schedule_once(partial(self.userscreenchanger, 'back - home'), 5.5)
+                    Clock.schedule_once(partial(self.reset_screen, 'update password'), 5.7)
                 else:
                     Clock.schedule_once(partial(self.show_notification, 'Password already exists', notifier = [self.userscreen_password.ids.update_password_notification_box, self.userscreen_password.ids.update_password_notification_text]), 2.5)
 
