@@ -187,7 +187,7 @@ class MainApp(MDApp):
             UserDetails.UserDetails().fill_details([self.userscreen_details.ids.user_details_fname, self.userscreen_details.ids.user_details_lname, self.userscreen_details.ids.user_details_username, self.userscreen_details.ids.user_details_phone, self.userscreen_details.ids.user_details_gender, self.userscreen_details.ids.user_details_address, self.userscreen_details.ids.user_details_email], data)
     
     # Reset a screen elements back to default
-    def reset_screen(self, screen_name, objs, *args, **kwargs):
+    def reset_screen(self, screen_name, objs=None, *args, **kwargs):
         match screen_name:
             case 'login':
                 pass
@@ -202,7 +202,19 @@ class MainApp(MDApp):
                 objs[1].disabled = True
                 objs[0].disabled = True
                 objs[0].text = ''
+            case 'update password':
+                self.userscreen_password.ids.update_password_email.text = 'Click on Send Code to receive code on your email and then Verify the code Sent'
+                self.userscreen_password.ids.update_password_code_field.text = ''
+                self.userscreen_password.ids.update_password_code_field.disabled = True
+                self.userscreen_password.ids.update_password_code_field.error = False
+                self.userscreen_password.ids.update_password_confirmcode_btn.disabled = True
+                self.userscreen_password.ids.update_password_update_password_btn.disabled = True
+                self.uuserscreen_password.ids.update_password1.text = ''
+                self.uuserscreen_password.ids.update_password1.error = False
+                self.uuserscreen_password.ids.update_password2.text = ''
+                self.uuserscreen_password.ids.update_password2.error = False
 
+                
     # Change tabs
     def tab_changer(self, obj):
         user = load_user_data()
@@ -378,6 +390,7 @@ class MainApp(MDApp):
                     Clock.schedule_once(partial(self.reset_screen, 'new email', obj), 5.5)
                 elif x == False:
                     self.show_notification('Incorrect Code\nRetry', notifier = [self.userscreen_email.ids.new_email_notification_box, self.userscreen_email.ids.new_email_notification_text])
+
             case 'update password code':
                 self.username = load_user_data()['username'].strip()
                 x = UserDetails.UserDetails().validateCode(obj[1:], self.otp)
@@ -385,12 +398,19 @@ class MainApp(MDApp):
                     obj[0].disabled = True
                     obj[1].disabled = True
                     obj[1].text = ''
+                    obj[1].error = False
                     obj[2].disabled = True
                     obj[3].text = 'Code has been verified....Now you can update with your new password'
                     for one in obj[4:]:
                         one.disabled = False
                 elif x == False:
                     self.show_notification('Incorrect Code\nRetry', notifier = [self.userscreen_password.ids.update_password_notification_box, self.userscreen_password.ids.update_password_notification_text])
+
+            case 'update password':
+                self.username = load_user_data()['username'].strip()
+                x =  UserDetails.UserDetails().check_password(self.username, obj[1].text)
+                self.show_alert_dialog('update password', x)
+
                 
     
     # Input text validation
@@ -503,6 +523,14 @@ class MainApp(MDApp):
             case 'new email':
                 if arg == True:
                     Clock.schedule_once(partial(self.show_notification, 'Email address updated successfully', notifier = [self.userscreen_email.ids.new_email_notification_box, self.userscreen_email.ids.new_email_notification_text]), 2.5)
+            
+            case 'update password':
+                if arg == False:
+                    Clock.schedule_once(partial(self.show_notification, 'New Password has been updated', notifier = [self.userscreen_password.ids.update_password_notification_box, self.userscreen_password.ids.update_password_notification_text]), 2.5)
+                    Clock.schedule_once(partial(self.userscreenchanger('back - home')), 5.5)
+                    # Clock.schedule_once(partial(self.userscreenchanger('back - home')), 5.5)
+                else:
+                    Clock.schedule_once(partial(self.show_notification, 'Password already exists', notifier = [self.userscreen_password.ids.update_password_notification_box, self.userscreen_password.ids.update_password_notification_text]), 2.5)
 
             case 'loading':
                 pass

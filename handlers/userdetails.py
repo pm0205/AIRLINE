@@ -28,7 +28,6 @@ class UserDetails():
             case 'username':
                 return data[2].text.strip()[0].upper() + data[2].text.strip()[1:].upper()
 
-    
     def check_username(self, username):
         conn = sqlite3.connect("./data/database.db")
         c = conn.cursor()
@@ -50,6 +49,27 @@ class UserDetails():
             return False
         else:
             return True
+    
+    def check_password(self, username, password):
+        conn = sqlite3.connect("./data/database.db")
+        # conn = sqlite3.connect("../data/database.db")
+        c = conn.cursor()
+        c.execute("SELECT password FROM users where username = (:username)", {
+            'username': username.strip()[0].upper() + username.strip()[1:].lower()
+        })
+        record = c.fetchall()
+        print (record, type(record))
+        if record[0][0] == password:
+            return True
+        else:
+            c = conn.cursor()
+            c.execute("UPDATE users SET password = (:new) where username = (:username);", {
+                'username' : username.strip()[0].upper() + username.strip()[1:].lower(), 
+                'new' : password
+            })
+            conn.commit()
+            conn.close()
+            return False
 
     def send_email(self, objs):
         objs[0].disabled = True
