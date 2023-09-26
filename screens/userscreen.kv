@@ -21,8 +21,11 @@ MDScreen:
                 text: 'Name'
                 font_size: 30
                 pos_hint: {'center_x': .5}
-                adaptive_size: True
-                md_bg_color: 'lightblue'
+                adaptive_height: True
+                # size_hint_x: .3
+                # md_bg_color: 'lightblue'
+                halign: 'center'
+                valign: 'center'
             # User Accessibility
             Box3d:
                 orientation: 'vertical'
@@ -35,7 +38,7 @@ MDScreen:
                 TwoLineAvatarIconListItem:
                     text: 'My Details'
                     secondary_text: 'Access or Edit Name, Phone Number, etc...'
-                    on_touch_up: app.userscreenchanger('home - details')
+                    on_release: app.userscreenchanger('home - details')
                     IconLeftWidget:
                         icon: 'account-circle'
 
@@ -43,6 +46,7 @@ MDScreen:
                 TwoLineAvatarIconListItem:
                     text: 'My Wallet'
                     secondary_text: 'Access your wallet '
+                    on_release: app.userscreenchanger('home - wallet')
                     IconLeftWidget:
                         icon: 'wallet'
 

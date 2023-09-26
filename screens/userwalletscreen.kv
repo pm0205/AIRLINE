@@ -1,0 +1,85 @@
+# Wallet Screen
+
+MDScreen:
+    name: 'user wallet screen'
+    spacing: 20
+    # adaptive_height: True
+
+    MDScrollView:
+        MDBoxLayout:
+            orientation: 'vertical'
+            adaptive_height: True
+            padding: 0, 30
+            spacing: 30
+            MDRectangleFlatButton:
+                text: 'Go back to Home'
+                ripple_scale: .8
+                line_color: 'black'
+                text_color: 'black'
+                pos_hint: {'x': .15}
+                on_release: 
+                    app.userscreenchanger('back - home') 
+                    # app.reset_screen('update password')
+
+            # Outer Box 
+            Box3d: 
+                orientation: 'vertical'
+                pos_hint: {'center_x':.5}
+                adaptive_height: True
+                size_hint_x: .6
+                md_bg_color: '#ECFFFD'
+                padding: 20
+                spacing: 20
+
+                # Title
+                MDLabel:
+                    text: 'Your Balance is'
+                    font_style : 'H3'
+                    adaptive_height: True
+                    halign: 'center'
+                
+                # Wallet Balance 
+                MDBoxLayout:
+                    orientation: 'vertical'
+                    spacing: 30
+                    pos_hint: {'center_x': .5}
+                    adaptive_height: True
+                    padding: 20
+                    size_hint_x: .8
+                    line_color: 'black'
+                    line_width: 2
+                    MDIcon: 
+                        icon: 'wallet'
+                        pos_hint: {'center_x': .5}
+                        font_size: 40
+                    MDLabel:
+                        id: update_wallet
+                        text: 'Rs 2000'
+                        font_size: 25
+                        color: 'blue'
+                        adaptive_height: True
+                        size_hint_x: .5
+                        pos_hint: {'center_x': .5}
+                        halign: 'center'
+                        valign: 'center'
+                        md_bg_color: 'lightblue'
+                    
+                # Wallet - button
+                MDRectangleFlatIconButton:
+                    id: user_wallet_button
+                    icon: 'currency-usd'
+                    text: 'Add Money'
+                    font_size: 16
+                    pos_hint: {'center_x': .5}
+                    adaptive_height: True
+                    md_bg_color: 'blue'
+                    text_color: 'white'
+                    icon_color: 'white'
+                    on_release: app.userscreenchanger('wallet - update wallet')
+
+                
+
+    NotificationBox:
+        id: user_wallet_notification_box
+        NotificationText:
+            id: user_wallet_notification_text

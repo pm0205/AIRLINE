@@ -25,6 +25,7 @@ import handlers.forgot as Forgot
 import handlers.signup as Signup
 import handlers.searchflight as SearchFlight
 import handlers.userdetails as UserDetails
+import handlers.userwallet as UserWallet
 # Python modules
 import json, time, datetime
 from functools import partial
@@ -142,6 +143,8 @@ class MainApp(MDApp):
         self.screen_manager.get_screen('main screen').ids.userscreen_manager.add_widget(Builder.load_file('./screens/userdetailsscreen.kv'))
         self.screen_manager.get_screen('main screen').ids.userscreen_manager.add_widget(Builder.load_file('./screens/updateemailscreen.kv'))
         self.screen_manager.get_screen('main screen').ids.userscreen_manager.add_widget(Builder.load_file('./screens/updatepasswordscreen.kv'))
+        self.screen_manager.get_screen('main screen').ids.userscreen_manager.add_widget(Builder.load_file('./screens/userwalletscreen.kv'))
+        self.screen_manager.get_screen('main screen').ids.userscreen_manager.add_widget(Builder.load_file('./screens/updatewalletscreen.kv'))
 
         # Check if login was details were saved to auto-login
         userdata = load_user_data()
@@ -174,6 +177,9 @@ class MainApp(MDApp):
         self.userscreen_details = self.screen_manager.get_screen('main screen').ids.userscreen_manager.get_screen('user details screen')
         self.userscreen_email = self.screen_manager.get_screen('main screen').ids.userscreen_manager.get_screen('user email screen')
         self.userscreen_password = self.screen_manager.get_screen('main screen').ids.userscreen_manager.get_screen('user password screen')
+        self.userscreen_wallet = self.screen_manager.get_screen('main screen').ids.userscreen_manager.get_screen('user wallet screen')
+        self.userscreen_update_wallet = self.screen_manager.get_screen('main screen').ids.userscreen_manager.get_screen('update wallet screen')
+
         # Pre load user data if available
         self.fill_user_data()
     
@@ -184,6 +190,7 @@ class MainApp(MDApp):
             data = UserDetails.UserDetails().check_user_details(user_data['username'])
             self.username = data[2].strip()[0].upper() + data[2].strip()[1:].lower()
             self.email = data[4].strip().lower()
+            self.userscreen_home.ids.user_homescreen_name.text = data[1].split(' ')[0]
             UserDetails.UserDetails().fill_details([self.userscreen_details.ids.user_details_fname, self.userscreen_details.ids.user_details_lname, self.userscreen_details.ids.user_details_username, self.userscreen_details.ids.user_details_phone, self.userscreen_details.ids.user_details_gender, self.userscreen_details.ids.user_details_address, self.userscreen_details.ids.user_details_email], data)
     
     # Reset a screen elements back to default
@@ -243,6 +250,13 @@ class MainApp(MDApp):
             case 'details - password':
                 self.screen_manager.get_screen('main screen').ids.userscreen_manager.current = 'user password screen'
                 self.screen_manager.get_screen('main screen').ids.userscreen_manager.transition.direction = 'up'
+            case 'home - wallet':
+                self.screen_manager.get_screen('main screen').ids.userscreen_manager.current = 'user wallet screen'
+                self.screen_manager.get_screen('main screen').ids.userscreen_manager.transition.direction = 'left'
+            case 'wallet - update wallet':
+                self.screen_manager.get_screen('main screen').ids.userscreen_manager.current = 'update wallet screen'
+                self.screen_manager.get_screen('main screen').ids.userscreen_manager.transition.direction = 'up'
+                
             case 'back - home':
                 self.screen_manager.get_screen('main screen').ids.userscreen_manager.current = 'user home screen'
                 self.screen_manager.get_screen('main screen').ids.userscreen_manager.transition.direction = 'right'
@@ -433,6 +447,8 @@ class MainApp(MDApp):
             SearchFlight.Search().validate_text(field)
         elif form == 'user details':
             UserDetails.UserDetails().validateText(type, field)
+        elif form == 'user wallet':
+            UserWallet.UserWallet().textvalidator(type, field)
     
      
     # Text input updater
@@ -682,8 +698,6 @@ class MainApp(MDApp):
         else: 
             obj.disabled = True
             obj.text = f'Wait {time}s'
-
-            
 
 
 if __name__ == '__main__':
