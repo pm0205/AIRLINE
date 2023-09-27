@@ -145,6 +145,7 @@ class MainApp(MDApp):
         self.screen_manager.get_screen('main screen').ids.userscreen_manager.add_widget(Builder.load_file('./screens/updatepasswordscreen.kv'))
         self.screen_manager.get_screen('main screen').ids.userscreen_manager.add_widget(Builder.load_file('./screens/userwalletscreen.kv'))
         self.screen_manager.get_screen('main screen').ids.userscreen_manager.add_widget(Builder.load_file('./screens/updatewalletscreen.kv'))
+        self.screen_manager.get_screen('main screen').ids.userscreen_manager.add_widget(Builder.load_file('./screens/upiscreen.kv'))
 
         # Check if login was details were saved to auto-login
         userdata = load_user_data()
@@ -255,6 +256,9 @@ class MainApp(MDApp):
                 self.screen_manager.get_screen('main screen').ids.userscreen_manager.transition.direction = 'left'
             case 'wallet - update wallet':
                 self.screen_manager.get_screen('main screen').ids.userscreen_manager.current = 'update wallet screen'
+                self.screen_manager.get_screen('main screen').ids.userscreen_manager.transition.direction = 'up'
+            case 'update wallet - upi':
+                self.screen_manager.get_screen('main screen').ids.userscreen_manager.current = 'upi screen'
                 self.screen_manager.get_screen('main screen').ids.userscreen_manager.transition.direction = 'up'
                 
             case 'back - home':
