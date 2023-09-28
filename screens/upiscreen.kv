@@ -1,7 +1,11 @@
 #UPI SCREEN
 MDScreen:
-    name: 'upi screen'
+    name: 'update wallet upi screen'
     md_bg_color: 'white'
+    on_pre_enter: app.text_anim(type='update wallet upi')
+    on_leave: 
+        update_wallet_upi_amount.text = 'Rs 0'
+        app.reset_screen('update wallet upi')
 
     MDScrollView:
         MDBoxLayout:
@@ -18,7 +22,9 @@ MDScreen:
                 MDIconButton:
                     icon: 'arrow-left'
                     pos_hint: {'x': .03, 'center_y': .5}
-                    on_release: app.userscreenchanger('back - home')
+                    on_release: 
+                        app.userscreenchanger('back - home') 
+                        app.reset_screen('update wallet upi')
                 MDIcon:
                     icon: './assets/upi-icon.png'
                     font_size: 100
@@ -29,7 +35,7 @@ MDScreen:
                 md_bg_color: 'blue'
                 MDLabel:
                     id: update_wallet_upi_amount
-                    text: 'Rs 2000'
+                    text: ''
                     adaptive_height: True
                     size_hint_x: .3
                     font_size: 25
@@ -74,6 +80,7 @@ MDScreen:
                     md_bg_color: 'blue'
                     text_color: 'white'
                     icon_color: 'white'
+                    on_release: app.validate('update wallet upi', [self, update_wallet_upi_pin, update_wallet_upi_amount])
 
 
     

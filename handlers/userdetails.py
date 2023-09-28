@@ -17,7 +17,7 @@ class UserDetails():
         # fetch records
         record = c.fetchall()
         print(record[0])
-        # (6, 'Admin Admin', 'Admin', 'Admin@1234', 'admin@gmail.com', '1234567890', None, None)
+        # (6, 'Admin Admin', 'Admin', 'Admin@12345', 'admin@gmail.com', '1234567890', None, None, 100)
         return record[0]
     
     def get_user_details(self, getter, username):
@@ -101,7 +101,7 @@ class UserDetails():
         conn.close()
 
     def fill_details(self, objs, values):
-        # (6, 'Admin Admin', 'Admin', 'Admin@1234', 'admin@gmail.com', '1234567890', None, None)
+        # (6, 'Admin Admin', 'Admin', 'Admin@12345', 'admin@gmail.com', '1234567890', None, None, 100)
         objs[0].text = values[1].split()[0].strip()
         objs[1].text = values[1].split()[1].strip()
         objs[2].text = values[2].strip()

@@ -180,6 +180,7 @@ class MainApp(MDApp):
         self.userscreen_password = self.screen_manager.get_screen('main screen').ids.userscreen_manager.get_screen('user password screen')
         self.userscreen_wallet = self.screen_manager.get_screen('main screen').ids.userscreen_manager.get_screen('user wallet screen')
         self.userscreen_update_wallet = self.screen_manager.get_screen('main screen').ids.userscreen_manager.get_screen('update wallet screen')
+        self.userscreen_update_wallet_upi = self.screen_manager.get_screen('main screen').ids.userscreen_manager.get_screen('update wallet upi screen')
 
         # Pre load user data if available
         self.fill_user_data()
@@ -191,6 +192,9 @@ class MainApp(MDApp):
             data = UserDetails.UserDetails().check_user_details(user_data['username'])
             self.username = data[2].strip()[0].upper() + data[2].strip()[1:].lower()
             self.email = data[4].strip().lower()
+            self.wallet = str(data[8])
+            print(self.wallet)
+            self.userscreen_wallet.ids.user_wallet_amount.text = 'Rs ' + self.wallet
             self.userscreen_home.ids.user_homescreen_name.text = data[1].split(' ')[0]
             UserDetails.UserDetails().fill_details([self.userscreen_details.ids.user_details_fname, self.userscreen_details.ids.user_details_lname, self.userscreen_details.ids.user_details_username, self.userscreen_details.ids.user_details_phone, self.userscreen_details.ids.user_details_gender, self.userscreen_details.ids.user_details_address, self.userscreen_details.ids.user_details_email], data)
     
@@ -221,6 +225,11 @@ class MainApp(MDApp):
                 self.userscreen_password.ids.update_password1.error = False
                 self.userscreen_password.ids.update_password2.text = ''
                 self.userscreen_password.ids.update_password2.error = False
+            case 'update wallet upi':
+                self.userscreen_update_wallet_upi.ids.update_wallet_upi_pin.text = ''
+                self.userscreen_update_wallet_upi.ids.update_wallet_upi_amount.text = 'Rs '
+                self.userscreen_update_wallet_upi.ids.update_wallet_upi_pin.error = False
+                self.userscreen_update_wallet_upi.ids.update_wallet_upi_paybtn.disabled = True
 
                 
     # Change tabs
@@ -258,7 +267,7 @@ class MainApp(MDApp):
                 self.screen_manager.get_screen('main screen').ids.userscreen_manager.current = 'update wallet screen'
                 self.screen_manager.get_screen('main screen').ids.userscreen_manager.transition.direction = 'up'
             case 'update wallet - upi':
-                self.screen_manager.get_screen('main screen').ids.userscreen_manager.current = 'upi screen'
+                self.screen_manager.get_screen('main screen').ids.userscreen_manager.current = 'update wallet upi screen'
                 self.screen_manager.get_screen('main screen').ids.userscreen_manager.transition.direction = 'up'
                 
             case 'back - home':
@@ -428,7 +437,17 @@ class MainApp(MDApp):
                 self.username = load_user_data()['username'].strip()
                 x =  UserDetails.UserDetails().check_password(self.username, obj[1].text)
                 self.show_alert_dialog('update password', x)
-
+            
+            case 'update wallet upi':
+                x = UserWallet.UserWallet().validatePin(obj)
+                if x == True:
+                    UserWallet.UserWallet().update_amount(self.username,obj[2].text.split('Rs ')[1])
+                    self.fill_user_data()
+                    self.show_alert_dialog()
+                    Clock.schedule_once(partial(self.show_notification, 'Payment Successful', notifier = [self.userscreen_update_wallet_upi.ids.update_wallet_upi_notification_box, self.userscreen_update_wallet_upi.ids.update_wallet_upi_notification_text]), 3)
+                    Clock.schedule_once(partial(self.userscreenchanger, 'back - home'), 5.3)
+                else:
+                    Clock.schedule_once(partial(self.show_notification, 'UPI Pin is incorrect', notifier = [self.userscreen_update_wallet_upi.ids.update_wallet_upi_notification_box, self.userscreen_update_wallet_upi.ids.update_wallet_upi_notification_text]), 1)
                 
     
     # Input text validation
@@ -670,7 +689,7 @@ class MainApp(MDApp):
 
     # ------------------------------------------------------------------------------------------------------
     # Header-text animation for screens
-    def text_anim(self, type, string, *args, **kwargs):
+    def text_anim(self, type, string='', *args, **kwargs):
         match type:
             case 'login':
                 self.screen_manager.get_screen('main screen').ids.homescreen_manager.get_screen('login screen').ids.login_head.text = string
@@ -681,6 +700,8 @@ class MainApp(MDApp):
                     self.userscreen_password.ids.update_password_email.text = f"Code sent to {self.email.split('@')[0][0:2]}XXX{self.email.split('@')[0][-2:]}@{self.email.split('@')[1]}"
                 else:
                     self.userscreen_password.ids.update_password_email.text = f"Code sent to {self.email.split('@')[0][0]}XXX{self.email.split('@')[0][-1]}@{self.email.split('@')[1]}"
+            case 'update wallet upi':
+                self.userscreen_update_wallet_upi.ids.update_wallet_upi_amount.text = 'Rs ' + self.userscreen_update_wallet.ids.update_wallet_amount.text
 
     
     # Send code button
