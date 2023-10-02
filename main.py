@@ -145,7 +145,7 @@ class MainApp(MDApp):
         self.screen_manager.get_screen('main screen').ids.userscreen_manager.add_widget(Builder.load_file('./screens/updatepasswordscreen.kv'))
         self.screen_manager.get_screen('main screen').ids.userscreen_manager.add_widget(Builder.load_file('./screens/userwalletscreen.kv'))
         self.screen_manager.get_screen('main screen').ids.userscreen_manager.add_widget(Builder.load_file('./screens/updatewalletscreen.kv'))
-        self.screen_manager.get_screen('main screen').ids.userscreen_manager.add_widget(Builder.load_file('./screens/upiscreen.kv'))
+        self.screen_manager.get_screen('main screen').ids.userscreen_manager.add_widget(Builder.load_file('./screens/updatewalletupiscreen.kv'))
 
         # Check if login was details were saved to auto-login
         userdata = load_user_data()
