@@ -30,6 +30,7 @@ import handlers.userwallet as UserWallet
 import json, time, datetime
 from functools import partial
 
+# 
 def check_saved_data():
     f = open('./data/userdata.json')
     data = json.load(f)
@@ -137,6 +138,7 @@ class MainApp(MDApp):
         # self.screen_manager.get_screen('main screen').ids.homescreen_manager.add_widget(Builder.load_file('./screens/loadingscreen.kv'))
         self.screen_manager.get_screen('main screen').ids.homescreen_manager.add_widget(Builder.load_file('./screens/forgotpasswordscreen.kv'))
         self.screen_manager.get_screen('main screen').ids.homescreen_manager.add_widget(Builder.load_file('./screens/newpasswordscreen.kv'))
+        self.screen_manager.get_screen('main screen').ids.homescreen_manager.add_widget(Builder.load_file('./screens/getflightsscreen.kv'))
 
         # USER TAB
         self.screen_manager.get_screen('main screen').ids.userscreen_manager.add_widget(Builder.load_file('./screens/userscreen.kv'))
@@ -331,6 +333,10 @@ class MainApp(MDApp):
                 # screen transition
                 self.screen_manager.get_screen('main screen').ids.homescreen_manager.current = 'home screen'
                 self.screen_manager.get_screen('main screen').ids.homescreen_manager.transition.direction = 'up'
+            case 'home - flights':
+                self.screen_manager.get_screen('main screen').ids.homescreen_manager.current = 'get flights screen'
+                self.screen_manager.get_screen('main screen').ids.homescreen_manager.transition.direction = 'left'
+
 
     # Button handler
     def button_handler(self, work, objs):
@@ -369,6 +375,7 @@ class MainApp(MDApp):
     # Input validation when button is clicked
     def validate(self, type, obj):
         match type:
+            # Home screen
             case 'login':
                 x = Login.LoginApp().validateLogin(obj[0], obj[1], obj[2])
                 if (x == True) or (x == False):
@@ -395,9 +402,11 @@ class MainApp(MDApp):
             case 'search flights':
                 x = SearchFlight.Search().validate(obj)
                 if x == True:
-                    pass
+                    self.text_anim(type = 'flights', string = f'{obj[1].text} : {obj[2].text}')
+                    self.homescreenchanger('home - flights')
                 elif x != None:
                     self.show_notification(x, 'home-tab-home', notifier=[obj[5], obj[6]])
+            # User screen
             case 'user details':
                 self.username = load_user_data()['username'].strip()
                 x = UserDetails.UserDetails().validate(obj[1:], obj[0], self.username)
@@ -635,6 +644,7 @@ class MainApp(MDApp):
             self.menu.dismiss()
         else: 
             if self.menu!=None:
+                self.menu.dismiss()
                 remove_children(self.menu)
             text = obj.text.strip()
             menu_items = self.get_menu_items(obj)
@@ -671,12 +681,16 @@ class MainApp(MDApp):
                     "on_release": lambda x = x['iata'] : self.set_input_text(obj, x) ,
                 })
             
-        print(menu_items)
+        # print(menu_items)
         return menu_items
     
     def set_input_text(self, obj, text):
         self.menu.dismiss()
         obj.text = text
+        obj.focus = True
+        self.menu.dismiss()
+        remove_children(self.menu)
+        obj.focus = True
 
     # Count updater
     def update_count(self, worker, obj, scaler):
@@ -695,6 +709,8 @@ class MainApp(MDApp):
                 self.screen_manager.get_screen('main screen').ids.homescreen_manager.get_screen('login screen').ids.login_head.text = string
             case 'signup':
                 self.screen_manager.get_screen('main screen').ids.homescreen_manager.get_screen('signup screen').ids.signup_head.text = string
+            case 'flights':
+                self.screen_manager.get_screen('main screen').ids.homescreen_manager.get_screen('get flights screen').ids.get_flights_query.text = 'FLIGHTS FOR : ' + string
             case 'update password email':
                 if len(self.email.split('@')[0])>8:
                     self.userscreen_password.ids.update_password_email.text = f"Code sent to {self.email.split('@')[0][0:2]}XXX{self.email.split('@')[0][-2:]}@{self.email.split('@')[1]}"
