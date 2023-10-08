@@ -15,7 +15,7 @@ from kivymd.uix.list import OneLineListItem, TwoLineListItem
 from kivymd.uix.button import MDRectangleFlatButton, MDFlatButton, MDRaisedButton, MDTextButton, MDFillRoundFlatButton
 from kivy.uix.button import Button
 from kivymd.uix.behaviors import (RectangularRippleBehavior,
-    FakeRectangularElevationBehavior,
+    FakeRectangularElevationBehavior, CommonElevationBehavior,
     BackgroundColorBehavior)
 from kivy.uix.behaviors import ButtonBehavior
 # All handler scripts 
@@ -26,6 +26,7 @@ import handlers.signup as Signup
 import handlers.searchflight as SearchFlight
 import handlers.userdetails as UserDetails
 import handlers.userwallet as UserWallet
+import handlers.getflights as GetFlights
 # Python modules
 import json, time, datetime
 from functools import partial
@@ -70,8 +71,20 @@ def load_airports_data():
 
 def remove_children(obj):
     children = [child for child in obj.children]
-    for child in children:
-        obj.remove_widget(child)
+    if children:
+        for child in children:
+            obj.remove_widget(child)
+
+def adjust_height(obj):
+    padding = obj.padding[1]
+    spacing = obj.spacing
+    obj.height = 2*padding
+    children = [child for child in obj.children]
+    if children:
+        for child in children:
+            obj.height += child.height
+            obj.height += spacing
+    obj.height = f'{obj.height}sp'
 
 key_pressed = None
 key_modifier = None
@@ -83,8 +96,7 @@ class DialogContent(MDFloatLayout):
 class NotificationBox(FakeRectangularElevationBehavior, MDBoxLayout):
     pass
 
-class Box3d(FakeRectangularElevationBehavior,
-    MDBoxLayout):
+class Box3d(CommonElevationBehavior, MDBoxLayout):
     pass
 
 class ElevButton(FakeRectangularElevationBehavior, MDFillRoundFlatButton):
@@ -172,7 +184,7 @@ class MainApp(MDApp):
 
         self.title = "Eagle Airline | Ticket Booking System"
         self.show_alert_dialog('loading', '')
-        # self.homescreenchanger('new password screen')
+        # self.homescreenchanger('home - flights')
         # self.userscreenchanger('home - details')
 
         # Shortnaming screens 
@@ -401,11 +413,23 @@ class MainApp(MDApp):
                 self.show_alert_dialog('new password', x)
             case 'search flights':
                 x = SearchFlight.Search().validate(obj)
+                box = self.screen_manager.get_screen('main screen').ids.homescreen_manager.get_screen('get flights screen').ids.get_flights_main_box
+                remove_children(box)
                 if x == True:
-                    self.text_anim(type = 'flights', string = f'{obj[1].text} : {obj[2].text}')
+                    datas = GetFlights.GetFlights().get_results(obj[1].text, obj[2].text, obj[3].text, obj[4].text)
+                    self.text_anim(type = 'flights', string = f'{obj[1].text} >> {obj[2].text}')
+                    for data in datas:
+                        box.add_widget(Builder.load_string(data))
+                        box.add_widget(Builder.load_string(data))
+                        box.add_widget(Builder.load_string(data))
+                        box.add_widget(Builder.load_string(data))
+                        box.add_widget(Builder.load_string(data))
+                        adjust_height(box)
+                        adjust_height(self.screen_manager.get_screen('main screen').ids.homescreen_manager.get_screen('get flights screen').ids.get_flights_outer_box)
                     self.homescreenchanger('home - flights')
                 elif x != None:
                     self.show_notification(x, 'home-tab-home', notifier=[obj[5], obj[6]])
+
             # User screen
             case 'user details':
                 self.username = load_user_data()['username'].strip()
@@ -619,8 +643,12 @@ class MainApp(MDApp):
             self.date_dialog.open()
 
     def save_date(self, date):
-        string = date.strftime("%d / %m / %y")
+        day = ('0' + date.strftime("%d"))[-2:]
+        mon = ('0' + date.strftime("%m"))[-2:]
+        yr = date.strftime("%Y")
+        string = f'{day} / {mon} / {yr}'
         self.screen_manager.get_screen('main screen').ids.homescreen_manager.get_screen('home screen').ids.search_date_button.text = string
+        self.screen_manager.get_screen('main screen').ids.homescreen_manager.get_screen('get flights screen').ids.get_flights_date.text = 'ON : ' + string
 
     def open_date_dialog(self, obj):
         self.date_dialog = MDDatePicker(
@@ -691,6 +719,7 @@ class MainApp(MDApp):
         self.menu.dismiss()
         remove_children(self.menu)
         obj.focus = True
+        self.menu.dismiss()
 
     # Count updater
     def update_count(self, worker, obj, scaler):
@@ -710,7 +739,7 @@ class MainApp(MDApp):
             case 'signup':
                 self.screen_manager.get_screen('main screen').ids.homescreen_manager.get_screen('signup screen').ids.signup_head.text = string
             case 'flights':
-                self.screen_manager.get_screen('main screen').ids.homescreen_manager.get_screen('get flights screen').ids.get_flights_query.text = 'FLIGHTS FOR : ' + string
+                self.screen_manager.get_screen('main screen').ids.homescreen_manager.get_screen('get flights screen').ids.get_flights_query.text = 'FLIGHTS FOR : ' + string.upper()
             case 'update password email':
                 if len(self.email.split('@')[0])>8:
                     self.userscreen_password.ids.update_password_email.text = f"Code sent to {self.email.split('@')[0][0:2]}XXX{self.email.split('@')[0][-2:]}@{self.email.split('@')[1]}"
