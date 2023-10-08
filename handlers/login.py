@@ -4,7 +4,8 @@ import json
 def update_userdata(username, saved):
     x = {
         "username": username,
-        "saved": saved
+        "saved": saved,
+        'islogin': True
         }
     f = open('./data/userdata.json', 'w')
     data = json.dumps(x)

@@ -50,13 +50,14 @@ def load_user_data():
     else:
         return None
 
-def update_user_data(username):
+def update_user_data(username, islogin = False):
     f = open('./data/userdata.json')
     data = json.load(f)
     f.close()
     obj = {
         'username': username,
-        'saved': data['saved']
+        'saved': data['saved'],
+        'islogin' : False
     }
     w = open('./data/userdata.json', 'w')
     w.write(json.dumps(obj))
@@ -188,6 +189,7 @@ class MainApp(MDApp):
         # self.userscreenchanger('home - details')
 
         # Shortnaming screens 
+        self.homescreen_get_flights = self.screen_manager.get_screen('main screen').ids.homescreen_manager.get_screen('get flights screen')
         self.userscreen_home = self.screen_manager.get_screen('main screen').ids.userscreen_manager.get_screen('user home screen')
         self.userscreen_details = self.screen_manager.get_screen('main screen').ids.userscreen_manager.get_screen('user details screen')
         self.userscreen_email = self.screen_manager.get_screen('main screen').ids.userscreen_manager.get_screen('user email screen')
@@ -203,7 +205,12 @@ class MainApp(MDApp):
     def fill_user_data(self, *args, **kwargs):
         user_data = load_user_data()
         if user_data:
-            data = UserDetails.UserDetails().check_user_details(user_data['username'])
+            if user_data['saved'] == True:
+                update_user_data(user_data['username'], islogin=True)
+            elif user_data['saved'] == False:
+                update_user_data(user_data['username'], islogin=False)
+
+            data = UserDetails.UserDetails().check_user_details(user_data['username'].strip()[0].upper() + user_data['username'].strip()[1:].lower())
             self.username = data[2].strip()[0].upper() + data[2].strip()[1:].lower()
             self.email = data[4].strip().lower()
             self.wallet = str(data[8])
@@ -353,6 +360,12 @@ class MainApp(MDApp):
     # Button handler
     def button_handler(self, work, objs):
         match work:
+            case 'book-flights':
+                print("Book flight")
+                if load_user_data()['islogin'] == True:
+                    pass
+                else:
+                    self.show_notification(notification = [self.homescreen_get_flights.ids.get_flights_notification_box, elf.homescreen_get_flights.ids.get_flights_notification_text])
             case 'edit-details':
                 for x in objs[1:]:
                     x.disabled = False
