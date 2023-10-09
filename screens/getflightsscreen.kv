@@ -1,75 +1,71 @@
-<Box3d>:
-    elevation: 3
-    shadow_pos: 5
-    shadow_color: 'lightgrey'
-    md_bg_color: 'white'
-    line_color: 'white'
-    radius: [10,]
 MDScreen:
     name: 'get flights screen'
-    size_hint_x: 1
-    size_hint_y: 1
-    MDBoxLayout:
-        orientation: 'vertical'
-        size_hint_y: 1
-        MDScrollView:
-            do_scroll_y : True
-            MDBoxLayout:
-                id: get_flights_outer_box
-                orientation: 'vertical'
-                height: 200
-                padding: 0
-                spacing: 20
+    MDScrollView:
+        # do_scroll_y : True
+        MDBoxLayout:
+            id: get_flights_outer_box
+            orientation: 'vertical'
+            height: 200
+            padding: 0
+            spacing: 20
+            size_hint_y: None
+            # adaptive_height: True
+            # size_hint_x : 1
+            # size_hint_y : 1
+            # adaptive_height: True
+            # TOP Container
+            MDFloatLayout:
+                md_bg_color: 'lightblue'
+                pos_hint: {'top': 1}
                 size_hint_y: None
+                height: 150
                 # adaptive_height: True
-                # size_hint_x : 1
-                # size_hint_y : 1
-                # adaptive_height: True
-                # TOP Container
-                MDFloatLayout:
-                    md_bg_color: 'lightblue'
-                    pos_hint: {'top': 1}
-                    size_hint_y: None
-                    height: 150
-                    # adaptive_height: True
-                    MDIconButton:
-                        icon: 'arrow-left'
-                        pos_hint: {'x': .03, 'top': .97}
-                        # elevation: 4
-                        on_release: 
-                            app.homescreenchanger('home screen')
-                            # app.reset_screen('update wallet upi')
-                    MDBoxLayout:
-                        orientation: 'vertical'
-                        pos_hint: {'top': 1}
-                        adaptive_height: True
-                        spacing: 20
-                        padding: 0, 20
-                        MDLabel:
-                            id: get_flights_query
-                            text: 'FLIGHTS FOR : '
-                            font_style: 'H4'
-                            halign: 'center'
-                            adaptive_height: True
-                        MDLabel:
-                            id: get_flights_date
-                            text: 'ON : '
-                            font_style: 'H4'
-                            halign: 'center'
-                            adaptive_height: True
-
-                # Flights container
+                MDIconButton:
+                    icon: 'arrow-left'
+                    pos_hint: {'x': .03, 'top': .97}
+                    # elevation: 4
+                    on_release: 
+                        app.homescreenchanger('home screen')
+                        # app.reset_screen('update wallet upi')
                 MDBoxLayout:
-                    id: get_flights_main_box
-                    padding: 10
-                    spacing: 10
                     orientation: 'vertical'
-                    size_hint: 1, None
-                    line_color: 'black'
-                    line_width: 2
-                    # adaptive_height: True
+                    pos_hint: {'top': 1}
+                    adaptive_height: True
+                    spacing: 20
+                    padding: 0, 20
+                    MDLabel:
+                        id: get_flights_query
+                        text: 'FLIGHTS FOR : '
+                        font_style: 'H4'
+                        halign: 'center'
+                        adaptive_height: True
+                    MDLabel:
+                        id: get_flights_date
+                        text: 'ON : '
+                        font_style: 'H4'
+                        halign: 'center'
+                        adaptive_height: True
+
+            # Flights container
+            MDBoxLayout:
+                id: get_flights_main_box
+                padding: 10
+                spacing: 10
+                orientation: 'vertical'
+                size_hint: 1, None
+                line_color: 'black'
+                line_width: 2
+                # adaptive_height: True
+
+            # NotificationBox:
+            #     id: get_flights_notification_box
+            #     elevation: 100
+            #     NotificationText:
+            #         id: get_flights_notification_text
+            #         text: ''
     NotificationBox:
         id: get_flights_notification_box
-        MDLabel:
+        elevation: 100
+        NotificationText:
             id: get_flights_notification_text
-            text: 'Login first to book a flight'
+            text: ''

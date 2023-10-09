@@ -120,7 +120,7 @@ class GetFlights():
         theme_text_color : 'Custom'
         text_color : 'white'
         pos_hint : {{'center_x':.5}}
-        on_release: app.button_handler('book flights', None)
+        on_release: app.button_handler('book-flights', None)
 ''')
         else:
             # flights.append(Box3d(

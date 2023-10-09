@@ -18,6 +18,7 @@ from kivymd.uix.behaviors import (RectangularRippleBehavior,
     FakeRectangularElevationBehavior, CommonElevationBehavior,
     BackgroundColorBehavior)
 from kivy.uix.behaviors import ButtonBehavior
+
 # All handler scripts 
 import handlers.login as Login
 import handlers.pnrChecker as PnrChecker
@@ -27,6 +28,7 @@ import handlers.searchflight as SearchFlight
 import handlers.userdetails as UserDetails
 import handlers.userwallet as UserWallet
 import handlers.getflights as GetFlights
+
 # Python modules
 import json, time, datetime
 from functools import partial
@@ -57,7 +59,7 @@ def update_user_data(username, islogin = False):
     obj = {
         'username': username,
         'saved': data['saved'],
-        'islogin' : False
+        'islogin' : islogin
     }
     w = open('./data/userdata.json', 'w')
     w.write(json.dumps(obj))
@@ -94,7 +96,7 @@ key_modifier = None
 class DialogContent(MDFloatLayout):
     pass
 
-class NotificationBox(FakeRectangularElevationBehavior, MDBoxLayout):
+class NotificationBox(CommonElevationBehavior, MDBoxLayout):
     pass
 
 class Box3d(CommonElevationBehavior, MDBoxLayout):
@@ -359,13 +361,13 @@ class MainApp(MDApp):
 
     # Button handler
     def button_handler(self, work, objs):
+        print("Book flight")
         match work:
             case 'book-flights':
-                print("Book flight")
                 if load_user_data()['islogin'] == True:
                     pass
                 else:
-                    self.show_notification(notification = [self.homescreen_get_flights.ids.get_flights_notification_box, elf.homescreen_get_flights.ids.get_flights_notification_text])
+                    self.show_notification(text = 'Login first to book a flight', notification = [self.homescreen_get_flights.ids.get_flights_notification_box, self.homescreen_get_flights.ids.get_flights_notification_text])
             case 'edit-details':
                 for x in objs[1:]:
                     x.disabled = False
@@ -552,6 +554,7 @@ class MainApp(MDApp):
         match type:
             case 'login':
                 if arg == True:
+                    self.fill_user_data()
                     right_box = self.screen_manager.get_screen('main screen').ids.homescreen_manager.get_screen('home screen').ids.home_top_right_box
                     userdata = load_user_data()
                     remove_children(right_box)
