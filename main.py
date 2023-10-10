@@ -367,7 +367,8 @@ class MainApp(MDApp):
                 if load_user_data()['islogin'] == True:
                     pass
                 else:
-                    self.show_notification(text = 'Login first to book a flight', notification = [self.homescreen_get_flights.ids.get_flights_notification_box, self.homescreen_get_flights.ids.get_flights_notification_text])
+                    Clock.schedule_once(partial(self.show_notification, 'Login first to book a flight', notifier = [self.homescreen_get_flights.ids.get_flights_notification_box, self.homescreen_get_flights.ids.get_flights_notification_text]), .5)
+                    # self.show_alert_dialog()
             case 'edit-details':
                 for x in objs[1:]:
                     x.disabled = False
@@ -442,6 +443,7 @@ class MainApp(MDApp):
                         adjust_height(box)
                         adjust_height(self.screen_manager.get_screen('main screen').ids.homescreen_manager.get_screen('get flights screen').ids.get_flights_outer_box)
                     self.homescreenchanger('home - flights')
+                    # Clock.schedule_once(partial(self.show_notification, 'Login first to book a flight', notification = [self.homescreen_get_flights.ids.get_flights_notification_box, self.homescreen_get_flights.ids.get_flights_notification_text]), 1)
                 elif x != None:
                     self.show_notification(x, 'home-tab-home', notifier=[obj[5], obj[6]])
 

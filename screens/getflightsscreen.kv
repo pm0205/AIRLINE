@@ -1,5 +1,7 @@
 MDScreen:
     name: 'get flights screen'
+    # md_bg_color: 'white'
+    spacing: 20
     MDScrollView:
         # do_scroll_y : True
         MDBoxLayout:
@@ -55,6 +57,7 @@ MDScreen:
                 size_hint: 1, None
                 line_color: 'black'
                 line_width: 2
+                height: 10
                 # adaptive_height: True
 
             # NotificationBox:
@@ -65,7 +68,12 @@ MDScreen:
             #         text: ''
     NotificationBox:
         id: get_flights_notification_box
-        elevation: 100
+        # elevation: 100
         NotificationText:
             id: get_flights_notification_text
             text: ''
+            color: 'white'
+            halign: 'center'
+            adaptive_height: True
+            opacity: 1
+            elevation: 100
