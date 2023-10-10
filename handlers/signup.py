@@ -31,7 +31,7 @@ class Signup():
         s.execute("SELECT * FROM users")
         record = s.fetchall()
         new_id = len(record) + 1
-        c.execute("INSERT INTO users (user_id, name, username, password, mail, phone) VALUES ((:id), (:name), (:username), (:password), (:email), (:phone))", {'name': f'{objs[6].text.strip()} {objs[7].text.strip()}', 'username' : objs[1].text.strip(), 'password' : objs[2].text, 'email': objs[4].text.strip(), 'phone': objs[5].text.strip(), 'id': int(new_id)})
+        c.execute("INSERT INTO users (user_id, name, username, password, mail, phone, wallet) VALUES ((:id), (:name), (:username), (:password), (:email), (:phone), 0)", {'name': f'{objs[6].text.strip()} {objs[7].text.strip()}', 'username' : objs[1].text.strip(), 'password' : objs[2].text, 'email': objs[4].text.strip(), 'phone': objs[5].text.strip(), 'id': int(new_id)})
         conn.commit()
         conn.close()
 
