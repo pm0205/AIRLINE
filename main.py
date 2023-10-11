@@ -482,8 +482,7 @@ class MainApp(MDApp):
                 x = UserDetails.UserDetails().check_email(objs[1].text.strip())
                 # if email already exists
                 if x == True:
-                    self.show_notification(text='Email already exists', notifier=[
-                                           self.userscreen_email.ids.new_email_notification_box, self.userscreen_email.ids.new_email_notification_text])
+                    self.show_notification(text='Email already exists', notifier=[self.userscreen_email.ids.new_email_notification_box, self.userscreen_email.ids.new_email_notification_text])
                 else:
                     objs[1].disabled = True
                     # stores username in the class so as to use it to push the new password created to the particular record
