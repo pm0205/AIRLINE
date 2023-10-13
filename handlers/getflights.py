@@ -41,8 +41,8 @@ class GetFlights():
         dep = dep.strip().upper()
         arv = arv.strip().upper()
         date = date.split(' / ')
-        date = reversed(date)
-        date = '-'.join(date)
+        # date = reversed(date)
+        date = '/'.join(date)
         print(date)
         passengers = int(passengers)
         data = self.get_flights(dep, arv, date)
@@ -50,17 +50,6 @@ class GetFlights():
         if data != []:
             print(data)
             for x in data:
-                # flights.append(Box3d(
-                #     MDLabel(text = x[2].strip(), font_size = '30', halign = 'center', valign = 'center', height = 30, line_color = 'black', line_width = 1),
-                #     MDFloatLayout(
-                #         MDLabel(text=x[3].strip(), pos_hint = {'x': .03, 'center_y': .5}, adaptive_size = True), 
-                #         MDLabel(text=f'{x[4].strip()}', pos_hint = {'right': .97, 'center_y': .5}, adaptive_size = True), height = 30, size_hint_x = 1, line_color = 'black', line_width = 1),
-                #     MDFloatLayout(
-                #         MDLabel(text=x[5].strip(), pos_hint = {'x': .03, 'center_y': .5}, adaptive_size = True), 
-                #         MDLabel(text=f'{x[6].strip()} ', pos_hint = {'right': .97, 'center_y': .5}, adaptive_size = True), height = 30, size_hint_x = 1, line_color = 'black', line_width = 1),
-                #     MDLabel(text = f'Rs. {passengers*int(x[9])}', halign = 'center', font_size = '28',  pos_hint = {'center_x':.5}, size_hint_x = 1, line_color = 'black', line_width = 1),
-                #     MDFlatButton(text = 'Book Now', font_size = 28, pos_hint = {'center_x':.5}),
-                #     height=200, orientation = 'vertical', spacing = 10))
                 flights.append(f'''Box3d:
     padding : 5, 10
     size_hint_y : None
@@ -123,8 +112,6 @@ class GetFlights():
         on_release: app.button_handler('book-flights', None)
 ''')
         else:
-            # flights.append(Box3d(
-            #     MDLabel(text = 'No Flights Available', halign = 'center', pos_hint = {'center_x': .5, 'center_y': .5})))
             flights.append(f'''Box3d:
     height : 50
     padding : 5, 10
