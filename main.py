@@ -25,9 +25,10 @@ import handlers.pnrChecker as PnrChecker
 import handlers.forgot as Forgot
 import handlers.signup as Signup
 import handlers.searchflight as SearchFlight
+import handlers.getflights as GetFlights
 import handlers.userdetails as UserDetails
 import handlers.userwallet as UserWallet
-import handlers.getflights as GetFlights
+import handlers.userbookings as UserBookings
 
 # Python modules
 import json
@@ -183,18 +184,23 @@ class MainApp(MDApp):
         # USER TAB
         self.screen_manager.get_screen('main screen').ids.userscreen_manager.add_widget(
             Builder.load_file('./screens/userscreen.kv'))
+        # details
         self.screen_manager.get_screen('main screen').ids.userscreen_manager.add_widget(
             Builder.load_file('./screens/userdetailsscreen.kv'))
         self.screen_manager.get_screen('main screen').ids.userscreen_manager.add_widget(
             Builder.load_file('./screens/updateemailscreen.kv'))
         self.screen_manager.get_screen('main screen').ids.userscreen_manager.add_widget(
             Builder.load_file('./screens/updatepasswordscreen.kv'))
+        # wallet
         self.screen_manager.get_screen('main screen').ids.userscreen_manager.add_widget(
             Builder.load_file('./screens/userwalletscreen.kv'))
         self.screen_manager.get_screen('main screen').ids.userscreen_manager.add_widget(
             Builder.load_file('./screens/updatewalletscreen.kv'))
         self.screen_manager.get_screen('main screen').ids.userscreen_manager.add_widget(
             Builder.load_file('./screens/updatewalletupiscreen.kv'))
+        # bookings
+        self.screen_manager.get_screen('main screen').ids.userscreen_manager.add_widget(
+            Builder.load_file('./screens/userbookingsscreen.kv'))
 
         # Check if login was details were saved to auto-login
         userdata = load_user_data()
@@ -229,8 +235,11 @@ class MainApp(MDApp):
         # self.userscreenchanger('home - details')
 
         # Shortnaming screens
+        # Homescreens
         self.homescreen_get_flights = self.screen_manager.get_screen(
             'main screen').ids.homescreen_manager.get_screen('get flights screen')
+        
+        # Userscreens
         self.userscreen_home = self.screen_manager.get_screen(
             'main screen').ids.userscreen_manager.get_screen('user home screen')
         self.userscreen_details = self.screen_manager.get_screen(
@@ -245,6 +254,8 @@ class MainApp(MDApp):
             'main screen').ids.userscreen_manager.get_screen('update wallet screen')
         self.userscreen_update_wallet_upi = self.screen_manager.get_screen(
             'main screen').ids.userscreen_manager.get_screen('update wallet upi screen')
+        self.userscreen_bookings = self.screen_manager.get_screen(
+            'main screen').ids.userscreen_manager.get_screen('user bookings screen')
 
         # Pre load user data if available
         self.fill_user_data()
@@ -270,6 +281,17 @@ class MainApp(MDApp):
                 0]
             UserDetails.UserDetails().fill_details([self.userscreen_details.ids.user_details_fname, self.userscreen_details.ids.user_details_lname, self.userscreen_details.ids.user_details_username,
                                                     self.userscreen_details.ids.user_details_phone, self.userscreen_details.ids.user_details_gender, self.userscreen_details.ids.user_details_address, self.userscreen_details.ids.user_details_email], data)
+            
+            # User Bookings
+            bookings = UserBookings.UserBookings().get_bookings(user_data['username'])
+            box = self.screen_manager.get_screen('main screen').ids.userscreen_manager.get_screen(
+                'user bookings screen').ids.user_bookings_main_box
+            remove_children(box)
+            for booking in bookings:
+                box.add_widget(Builder.load_string(booking))
+                adjust_height(box)
+                adjust_height(self.userscreen_bookings.ids.user_bookings_outer_box)
+            # self.userscreenchanger('home - bookings')
 
     # Reset a screen elements back to default
     def reset_screen(self, screen_name, objs=None, *args, **kwargs):
@@ -321,6 +343,7 @@ class MainApp(MDApp):
             # self.screen_manager.get_screen('main screen').ids.tab_navigator.switch_tab('home')
 
     # Screen Changers
+    # USER SCREEN
     def userscreenchanger(self, screen_name, *args, **kwargs):
         match screen_name:
             case 'home - details':
@@ -358,6 +381,11 @@ class MainApp(MDApp):
                     'main screen').ids.userscreen_manager.current = 'update wallet upi screen'
                 self.screen_manager.get_screen(
                     'main screen').ids.userscreen_manager.transition.direction = 'up'
+            case 'home - bookings':
+                self.screen_manager.get_screen(
+                    'main screen').ids.userscreen_manager.current = 'user bookings screen'
+                self.screen_manager.get_screen(
+                    'main screen').ids.userscreen_manager.transition.direction = 'left'
 
             case 'back - home':
                 self.screen_manager.get_screen(
@@ -365,6 +393,7 @@ class MainApp(MDApp):
                 self.screen_manager.get_screen(
                     'main screen').ids.userscreen_manager.transition.direction = 'right'
 
+    # HOME SCREEN
     def homescreenchanger(self, screen_name):
         match screen_name:
             case 'pnr screen':
@@ -548,15 +577,10 @@ class MainApp(MDApp):
                         type='flights', string=f'{obj[1].text} >> {obj[2].text}')
                     for data in datas:
                         box.add_widget(Builder.load_string(data))
-                        # box.add_widget(Builder.load_string(data))
-                        # box.add_widget(Builder.load_string(data))
-                        # box.add_widget(Builder.load_string(data))
-                        # box.add_widget(Builder.load_string(data))
                         adjust_height(box)
                         adjust_height(self.screen_manager.get_screen('main screen').ids.homescreen_manager.get_screen(
                             'get flights screen').ids.get_flights_outer_box)
                     self.homescreenchanger('home - flights')
-                    # Clock.schedule_once(partial(self.show_notification, 'Login first to book a flight', notification = [self.homescreen_get_flights.ids.get_flights_notification_box, self.homescreen_get_flights.ids.get_flights_notification_text]), 1)
                 elif x != None:
                     self.show_notification(
                         x, 'home-tab-home', notifier=[obj[5], obj[6]])

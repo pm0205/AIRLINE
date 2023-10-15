@@ -1,0 +1,53 @@
+MDScreen:
+    name: 'user bookings screen'
+    MDScrollView:
+        MDBoxLayout:
+            id: user_bookings_outer_box
+            orientation: 'vertical'
+            height: 100
+            padding: 0
+            # spacing: 20
+            size_hint_y: None
+            # TOP Container
+            MDFloatLayout:
+                md_bg_color: 'lightblue'
+                pos_hint: {'top': 1}
+                size_hint_y: None
+                height: 100
+                # adaptive_height: True
+                MDIconButton:
+                    icon: 'arrow-left'
+                    pos_hint: {'x': .03, 'top': .97}
+                    # elevation: 4
+                    on_release: 
+                        app.userscreenchanger('back - home')
+                MDLabel:
+                    text: 'Your Bookings'
+                    font_size: 45
+                    halign: 'center'
+                    adaptive_height: True
+                    pos_hint: {'center_y' : .5, 'center_x' : .5}
+
+
+
+            # Flights container
+            MDBoxLayout:
+                id: user_bookings_main_box
+                padding: 40, 20
+                spacing: 30
+                orientation: 'vertical'
+                size_hint: 1, None
+                line_color: 'black'
+                line_width: 2
+                height: 10
+
+    NotificationBox:
+        id: user_bookings_notification_box
+        NotificationText:
+            id: user_bookings_notification_text
+            text: ''
+            color: 'white'
+            halign: 'center'
+            adaptive_height: True
+            opacity: 1
+            elevation: 100
