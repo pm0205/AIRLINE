@@ -160,7 +160,7 @@ class UserBookings():
         theme_text_color : 'Custom'
         text_color : 'white'
         pos_hint : {{'center_x':.5}}
-        # on_release: app.button_handler('get-booking-details',{booking})
+        on_release: app.button_handler('cancel-booking',{booking})
     ''')
         else:
             details.append(f'''Box3d:
@@ -185,7 +185,7 @@ class UserBookings():
         theme_text_color : 'Custom'
         text_color : 'white'
         pos_hint : {{'center_x':.5}}
-        # on_release: app.button_handler('get-booking-details',{booking})
+        on_release: app.button_handler('cancel-booking',{booking})
     ''')
         return details
 

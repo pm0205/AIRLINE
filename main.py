@@ -203,6 +203,8 @@ class MainApp(MDApp):
             Builder.load_file('./screens/userbookingsscreen.kv'))
         self.screen_manager.get_screen('main screen').ids.userscreen_manager.add_widget(
             Builder.load_file('./screens/userbookingdetailsscreen.kv'))
+        self.screen_manager.get_screen('main screen').ids.userscreen_manager.add_widget(
+            Builder.load_file('./screens/userbookingcancelscreen.kv'))
 
         # Check if login was details were saved to auto-login
         userdata = load_user_data()
@@ -260,6 +262,8 @@ class MainApp(MDApp):
             'main screen').ids.userscreen_manager.get_screen('user bookings screen')
         self.userscreen_bookings_details = self.screen_manager.get_screen(
             'main screen').ids.userscreen_manager.get_screen('user booking details screen')
+        self.userscreen_bookings_cancel = self.screen_manager.get_screen(
+            'main screen').ids.userscreen_manager.get_screen('user booking cancel screen')
 
         # Pre load user data if available
         self.fill_user_data()
@@ -394,6 +398,11 @@ class MainApp(MDApp):
             case 'bookings - details':
                 self.screen_manager.get_screen(
                     'main screen').ids.userscreen_manager.current = 'user booking details screen'
+                self.screen_manager.get_screen(
+                    'main screen').ids.userscreen_manager.transition.direction = 'left'
+            case 'bookings - cancel':
+                self.screen_manager.get_screen(
+                    'main screen').ids.userscreen_manager.current = 'user booking cancel screen'
                 self.screen_manager.get_screen(
                     'main screen').ids.userscreen_manager.transition.direction = 'left'
 
@@ -558,6 +567,11 @@ class MainApp(MDApp):
                     adjust_height(box)
                     adjust_height(self.userscreen_bookings_details.ids.user_booking_details_outer_box)
                 self.userscreenchanger('bookings - details')
+
+            case 'cancel-booking':
+                self.booking = objs
+                self.userscreenchanger('bookings - cancel')
+                self.userscreen_bookings_cancel.ids.user_booking_cancel_heading.text = 'Cancel Booking : ID => ' + str(self.booking['id'])
 
     # Input validation when button is clicked
     def validate(self, type, obj):
