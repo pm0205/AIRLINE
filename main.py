@@ -201,6 +201,8 @@ class MainApp(MDApp):
         # bookings
         self.screen_manager.get_screen('main screen').ids.userscreen_manager.add_widget(
             Builder.load_file('./screens/userbookingsscreen.kv'))
+        self.screen_manager.get_screen('main screen').ids.userscreen_manager.add_widget(
+            Builder.load_file('./screens/userbookingdetailsscreen.kv'))
 
         # Check if login was details were saved to auto-login
         userdata = load_user_data()
@@ -256,6 +258,8 @@ class MainApp(MDApp):
             'main screen').ids.userscreen_manager.get_screen('update wallet upi screen')
         self.userscreen_bookings = self.screen_manager.get_screen(
             'main screen').ids.userscreen_manager.get_screen('user bookings screen')
+        self.userscreen_bookings_details = self.screen_manager.get_screen(
+            'main screen').ids.userscreen_manager.get_screen('user booking details screen')
 
         # Pre load user data if available
         self.fill_user_data()
@@ -269,6 +273,7 @@ class MainApp(MDApp):
             elif user_data['saved'] == False:
                 update_user_data(user_data['username'], islogin=False)
 
+            # User details
             data = UserDetails.UserDetails().check_user_details(user_data['username'].strip()[
                 0].upper() + user_data['username'].strip()[1:].lower())
             self.username = data[2].strip()[0].upper() + \
@@ -386,6 +391,11 @@ class MainApp(MDApp):
                     'main screen').ids.userscreen_manager.current = 'user bookings screen'
                 self.screen_manager.get_screen(
                     'main screen').ids.userscreen_manager.transition.direction = 'left'
+            case 'bookings - details':
+                self.screen_manager.get_screen(
+                    'main screen').ids.userscreen_manager.current = 'user booking details screen'
+                self.screen_manager.get_screen(
+                    'main screen').ids.userscreen_manager.transition.direction = 'left'
 
             case 'back - home':
                 self.screen_manager.get_screen(
@@ -495,14 +505,16 @@ class MainApp(MDApp):
 
     # Button handler
     def button_handler(self, work, objs):
-        print("Book flight")
         match work:
             case 'book-flights':
+                print("Book flight")
                 if load_user_data()['islogin'] == True:
                     pass
                 else:
                     Clock.schedule_once(partial(self.show_notification, 'Login first to book a flight', notifier=[self.homescreen_get_flights.ids.get_flights_notification_box, self.homescreen_get_flights.ids.get_flights_notification_text]), .2)
                     # self.show_alert_dialog()
+            
+            # User Screen
             case 'edit-details':
                 for x in objs[1:]:
                     x.disabled = False
@@ -536,8 +548,18 @@ class MainApp(MDApp):
                     Clock.schedule_once(
                         partial(self.codebutton_timer, objs[0], i), float(10 - i + .5))
 
-    # Input validation when button is clicked
+            case 'get-booking-details':
+                details = UserBookings.UserBookings().get_full_details(objs)
+                remove_children(self.userscreen_bookings_details.ids.user_booking_details_main_box)
+                self.userscreen_bookings_details.ids.user_booking_details_heading.text = 'BOOKING DETAILS FOR : ' + objs['pnr']
+                box = self.userscreen_bookings_details.ids.user_booking_details_main_box
+                for detail in details:
+                    box.add_widget(Builder.load_string(detail))
+                    adjust_height(box)
+                    adjust_height(self.userscreen_bookings_details.ids.user_booking_details_outer_box)
+                self.userscreenchanger('bookings - details')
 
+    # Input validation when button is clicked
     def validate(self, type, obj):
         match type:
             # Home screen

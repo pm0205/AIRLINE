@@ -16,6 +16,181 @@ class UserBookings():
         else: 
             return None
 
+    def check_passengers(self, passengers):
+        passengers_details = []
+        conn = sqlite3.connect('./data/database.db')
+        c = conn.cursor()
+        for x in passengers:
+            c.execute('SELECT * FROM tickets WHERE ticket_id = (:id)', {
+                'id': x
+            })
+            record = c.fetchone()
+            # print(record)
+            passengers_details.append(record)
+        if passengers_details != []:
+            print(passengers_details)
+            return passengers_details
+        else: 
+            return None
+
+    def get_full_details(self, booking):
+        print('Get full details')
+        print(booking)
+        details = []
+        i = 1
+        total = 0
+        passengers_details = self.check_passengers(booking['passengers'])
+        # major details
+        details.append(f'''Box3d:
+    padding : 5, 20
+    size_hint_y : None
+    height : 350
+    orientation : 'vertical'
+    spacing : 10
+    MDLabel:
+        text : 'PNR : {booking['pnr']}'
+        font_size: 35
+        halign : "center"
+        valign : "middle"
+        height : 40
+        size_hint_y : None
+    MDLabel:
+        text : 'FROM : {booking['source']}'
+        font_size: 35
+        halign : "center"
+        valign : "middle"
+        height : 40
+        size_hint_y : None
+    MDLabel:
+        text : 'DEPARTURE ON : {booking['departure'].split(' ')[0]} AT {booking['departure'].split(' ')[1]}'
+        font_size: 35
+        halign : "center"
+        valign : "middle"
+        height : 40
+        size_hint_y : None
+    MDLabel:
+        text : 'TO : {booking['destination']}'
+        font_size: 35
+        halign : "center"
+        valign : "middle"
+        height : 40
+        size_hint_y : None
+    MDLabel:
+        text : 'ARRIVAL ON : {booking['arrival'].split(' ')[0]} AT {booking['arrival'].split(' ')[1]}'
+        font_size: 35
+        halign : "center"
+        valign : "middle"
+        height : 40
+        size_hint_y : None
+    MDLabel:
+        text : 'DURATION : {int(booking['duration']) if booking['duration']*10 == int(booking['duration'])*10 else booking['duration']}HRS'
+        font_size: 35
+        halign : "center"
+        valign : "middle"
+        height : 40
+        size_hint_y : None
+            ''')
+
+        # each passenger details
+        for x in passengers_details:
+            total += x[5]
+            details.append(f'''Box3d:
+    padding : 5, 20
+    size_hint_y : None
+    height : 240
+    orientation : 'vertical'
+    spacing : 10
+    MDLabel:
+        text : 'PASSENGER {i}'
+        font_size: 28
+        halign : "center"
+        valign : "middle"
+        height : 30
+        size_hint_y : None
+    MDLabel:
+        text : 'Ticket ID : {x[0]}'
+        font_size: 28
+        halign : "center"
+        valign : "middle"
+        height : 30
+        size_hint_y : None
+    MDLabel:
+        text : 'Name : {x[3]}'
+        font_size: 28
+        halign : "center"
+        valign : "middle"
+        height : 30
+        size_hint_y : None
+    MDLabel:
+        text : 'Seat No : {x[4]}'
+        font_size: 28
+        halign : "center"
+        valign : "middle"
+        height : 30
+        size_hint_y : None
+    MDLabel:
+        text : 'Ticket Price : Rs. {x[5]}'
+        font_size: 28
+        halign : "center"
+        valign : "middle"
+        height : 30
+        size_hint_y : None
+''') 
+            i+=1
+        # End box
+        if booking['cancelled'] == False:
+            details.append(f'''Box3d:
+    padding : 5, 20
+    size_hint_y : None
+    height : 150
+    orientation : 'vertical'
+    spacing : 10
+    MDLabel:
+        text : 'TOTAL PRICE : RS. {total}'
+        font_size: 35
+        halign : "center"
+        valign : "middle"
+        height : 40
+        size_hint_y : None
+    MDFlatButton:
+        text : 'Cancel Booking'
+        font_size : 35
+        height : 40
+        md_bg_color : 'blue'
+        theme_text_color : 'Custom'
+        text_color : 'white'
+        pos_hint : {{'center_x':.5}}
+        # on_release: app.button_handler('get-booking-details',{booking})
+    ''')
+        else:
+            details.append(f'''Box3d:
+    padding : 5, 20
+    size_hint_y : None
+    height : 150
+    orientation : 'vertical'
+    spacing : 10
+    MDLabel:
+        text : 'TOTAL PRICE : RS. {total}'
+        font_size: 35
+        halign : "center"
+        valign : "middle"
+        height : 40
+        size_hint_y : None
+    MDFlatButton:
+        text : 'Cancelled Booking'
+        disabled : True
+        font_size : 35
+        height : 40
+        md_bg_color : 'blue'
+        theme_text_color : 'Custom'
+        text_color : 'white'
+        pos_hint : {{'center_x':.5}}
+        # on_release: app.button_handler('get-booking-details',{booking})
+    ''')
+        return details
+
+
+    # GET EVERY BOOKING MADE BY THE USER
     def get_bookings(self, username):
         bookings = self.check_bookings(username)
         tickets = []
@@ -98,7 +273,7 @@ class UserBookings():
         theme_text_color : 'Custom'
         text_color : 'white'
         pos_hint : {{'center_x':.5}}
-        # on_release: app.button_handler('book-flights', None)
+        on_release: app.button_handler('get-booking-details',{booking})
 ''')
                 else:
                    tickets.append(f'''Box3d:
@@ -177,7 +352,7 @@ class UserBookings():
         theme_text_color : 'Custom'
         text_color : 'white'
         pos_hint : {{'center_x':.5}}
-        # on_release: app.button_handler('book-flights', None)
+        on_release: app.button_handler('get-booking-details',{booking})
 ''')
         else:
             tickets.append(f'''Box3d:
