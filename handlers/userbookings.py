@@ -1,6 +1,28 @@
 import sqlite3, json, re, datetime
 
 class UserBookings():
+    def update_flight_seats(self, id):
+        conn = sqlite3.connect('./data/database.db')
+        c = conn.cursor()
+        c.execute('SELECT available_seats FROM flights WHERE flight_id = (:id)', {
+            'id':id
+        })
+        seat = c.fetchone()[0]
+        c.execute('UPDATE flights SET available_seats = (:seats) WHERE flight_id = (:id)', {
+            'id':id, 'seats': seat + 1
+        })
+        conn.commit()
+        conn.close()
+    
+    def update_bookings(self, bookings, username):
+        conn = sqlite3.connect('./data/database.db')
+        c = conn.cursor()
+        c.execute('UPDATE users SET bookings = (:bookings) WHERE username = (:username)', {
+            'bookings': json.dumps(bookings), 'username': username.strip()[0].upper() + username.strip()[1:].lower()
+        })
+        conn.commit()
+        conn.close()
+
     def check_bookings(self, username):
         conn = sqlite3.connect('./data/database.db')
         c = conn.cursor()
@@ -25,7 +47,7 @@ class UserBookings():
                 'id': x
             })
             record = c.fetchone()
-            # print(record)
+            # print('passenger:',record)
             passengers_details.append(record)
         if passengers_details != []:
             print(passengers_details)
@@ -382,7 +404,7 @@ class UserBookings():
     
     def validate(self, objs, id, username):
         if objs[1].text == '123456':
-
+            self.cancel_booking(id, username)
             return True
         else:
             return False
@@ -391,12 +413,18 @@ class UserBookings():
         bookings = self.check_bookings(username)
         temp = []
         for booking in bookings:
-            if booking[id] == id:
+            if booking['id'] == id:
+                ticket_id = booking['passengers'][0]
                 obj = booking
                 obj['cancelled'] = True
                 temp.append(obj)
             else:
                 temp.append(booking)
+        flight_id = self.check_passengers([ticket_id])[0][2]
+        print(self.check_passengers([ticket_id])[0][2])
+        self.update_flight_seats(flight_id)
+        self.update_bookings(temp, username)
+        
 
 # print(UserBookings().get_bookings('admin'))
 # d1 = datetime.datetime(2023, 10, 15, hour = 20, minute = 30)
