@@ -684,6 +684,19 @@ class MainApp(MDApp):
                 else:
                     Clock.schedule_once(partial(self.show_notification, 'UPI Pin is incorrect', notifier=[
                                         self.userscreen_update_wallet_upi.ids.update_wallet_upi_notification_box, self.userscreen_update_wallet_upi.ids.update_wallet_upi_notification_text]), 1)
+            
+            case 'cancel booking':
+                x = UserBookings.UserBookings().validate(obj, self.booking['id'], self.username)
+                if x == True:
+                    self.fill_user_data()
+                    self.show_alert_dialog()
+                    Clock.schedule_once(partial(self.show_notification, 'Cancellation Successful', notifier=[
+                                        self.userscreen_bookings_cancel.ids.user_booking_cancel_notification_box, self.userscreen_bookings_cancel.ids.user_booking_cancel_notification_text]), 3)
+                    Clock.schedule_once(
+                        partial(self.userscreenchanger, 'back - home'), 5.3)
+                else:
+                    Clock.schedule_once(partial(self.show_notification, 'Pin is incorrect', notifier=[
+                                        self.userscreen_bookings_cancel.ids.user_booking_cancel_notification_box, self.userscreen_bookings_cancel.ids.user_booking_cancel_notification_text]), 1)
 
     # Input text validation
 
@@ -708,6 +721,8 @@ class MainApp(MDApp):
             UserDetails.UserDetails().validateText(type, field)
         elif form == 'user wallet':
             UserWallet.UserWallet().textvalidator(type, field)
+        elif form == 'cancel booking':
+            UserBookings.UserBookings().textvalidator(type, field)
 
     # Text input updater
 

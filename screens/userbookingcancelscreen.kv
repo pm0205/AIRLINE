@@ -45,7 +45,7 @@ MDScreen:
                     size_hint_x: .6
                     padding: 10, 0
                     text_color_focus: 'black'
-                    # on_text : app.strvalidator('user wallet', 'pin', [self, update_wallet_upi_paybtn])
+                    on_text : app.strvalidator('cancel booking', 'pin', [self, user_booking_cancel_button])
                 MDRectangleFlatIconButton:
                     id: user_booking_cancel_button
                     text: 'Confirm and Cancel'
@@ -57,7 +57,7 @@ MDScreen:
                     md_bg_color: 'blue'
                     text_color: 'white'
                     icon_color: 'white'
-                    # on_release: app.validate('update wallet upi', [self, update_wallet_upi_pin, update_wallet_upi_amount])
+                    on_release: app.validate('cancel booking', [self, user_booking_cancel_pin])
 
     NotificationBox:
         id: user_booking_cancel_notification_box

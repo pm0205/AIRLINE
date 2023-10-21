@@ -366,6 +366,38 @@ class UserBookings():
 ''')
         return tickets
 
+    def textvalidator(self, type, objs):
+        numreg = '[^0-9]'
+        match type:     
+            case 'pin':
+                objs[0].text = re.sub(numreg, '', objs[0].text)
+                if objs[0].text.strip() == '':
+                    objs[1].disabled = True
+                elif len(objs[0].text.strip()) < 6 :
+                    objs[1].disabled = True
+                elif len(objs[0].text.strip()) == 6 :
+                    objs[1].disabled = False
+                elif len(objs[0].text.strip()) > 6 :
+                    objs[0].text = objs[0].text.strip()[0:-1]
+    
+    def validate(self, objs, id, username):
+        if objs[1].text == '123456':
+
+            return True
+        else:
+            return False
+
+    def cancel_booking(self, id, username):
+        bookings = self.check_bookings(username)
+        temp = []
+        for booking in bookings:
+            if booking[id] == id:
+                obj = booking
+                obj['cancelled'] = True
+                temp.append(obj)
+            else:
+                temp.append(booking)
+
 # print(UserBookings().get_bookings('admin'))
 # d1 = datetime.datetime(2023, 10, 15, hour = 20, minute = 30)
 # d2 = datetime.datetime(2023, 10, 15, hour = 23, minute = 0)
