@@ -2,3 +2,4 @@ kivymd
 kivy
 datetime
 functools
+reportlab
