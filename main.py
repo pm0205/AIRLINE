@@ -30,6 +30,7 @@ import handlers.booking as Booking
 import handlers.userdetails as UserDetails
 import handlers.userwallet as UserWallet
 import handlers.userbookings as UserBookings
+import handlers.ticketdetailscollector as TicketDetailsCollector
 
 # Python modules
 import json
@@ -628,6 +629,10 @@ class MainApp(MDApp):
                 self.booking = objs
                 self.userscreenchanger('bookings - cancel')
                 self.userscreen_bookings_cancel.ids.user_booking_cancel_heading.text = 'Cancel Booking : ID => ' + str(self.booking['id'])
+            
+            case 'generate-pdf':
+                self.booking = objs
+                TicketDetailsCollector.fetch_ticket_data_for_pdf(self.booking)
 
     # Input validation when button is clicked
     def validate(self, type, obj):

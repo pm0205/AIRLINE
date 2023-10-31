@@ -164,7 +164,7 @@ class UserBookings():
             details.append(f'''Box3d:
     padding : 5, 20
     size_hint_y : None
-    height : 150
+    height : 220
     orientation : 'vertical'
     spacing : 10
     MDLabel:
@@ -174,6 +174,15 @@ class UserBookings():
         valign : "middle"
         height : 40
         size_hint_y : None
+    MDFlatButton:
+        text : 'Download Ticket'
+        font_size : 35
+        height : 40
+        md_bg_color : 'blue'
+        theme_text_color : 'Custom'
+        text_color : 'white'
+        pos_hint : {{'center_x':.5}}
+        on_release: app.button_handler('generate-pdf',{booking})
     MDFlatButton:
         text : 'Cancel Booking'
         font_size : 35
