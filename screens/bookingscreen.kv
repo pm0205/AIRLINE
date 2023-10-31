@@ -1,0 +1,104 @@
+MDScreen:
+    name: 'booking screen'
+    MDScrollView:
+        # do_scroll_y : True
+        MDBoxLayout:
+            id: booking_outer_box
+            orientation: 'vertical'
+            height: 350
+            padding: 0
+            spacing: 20
+            size_hint_y: None
+
+            # TOP Container
+            MDFloatLayout:
+                md_bg_color: 'lightblue'
+                pos_hint: {'top': 1}
+                size_hint_y: None
+                height: 100
+                # adaptive_height: True
+                MDIconButton:
+                    icon: 'arrow-left'
+                    pos_hint: {'x': .03, 'top': .97}
+                    # elevation: 4
+                    on_release: 
+                        app.homescreenchanger('home screen')
+                        # app.reset_screen('update wallet upi')
+                MDBoxLayout:
+                    orientation: 'vertical'
+                    pos_hint: {'top': 1}
+                    adaptive_height: True
+                    spacing: 20
+                    padding: 0, 20
+                    MDLabel:
+                        text: 'NEW BOOKING FOR '
+                        font_style: 'H4'
+                        halign: 'center'
+                        theme_text_color: 'Custom'
+                        text_color: 'grey'
+                        adaptive_height: True
+
+            # Flight details : 
+            Box3d:
+                id: booking_flight_box
+                padding: 10
+                spacing: 10
+                orientation: 'vertical'
+                size_hint: 1, None
+                # line_color: 'black'
+                # line_width: 2
+                height: 200
+                MDLabel:
+                    halign: 'center'
+                    id: booking_flight_number
+                    text: ''
+                    pos_hint: {'center_x': .5}
+                    font_size: 20
+                MDLabel:
+                    halign: 'center'
+                    id: booking_flight_company
+                    text: ''
+                    pos_hint: {'center_x': .5}
+                    font_size: 20
+                MDLabel:
+                    halign: 'center'
+                    id: booking_flight_date
+                    text: ''
+                    pos_hint: {'center_x': .5}
+                    font_size: 20
+                MDLabel:
+                    halign: 'center'
+                    id: booking_flight_time
+                    text: ''
+                    pos_hint: {'center_x': .5}
+                    font_size: 20
+                MDLabel:
+                    halign: 'center'
+                    id: booking_flight_route
+                    text: ''
+                    pos_hint: {'center_x': .5}
+                    font_size: 20
+
+
+            # Detail filling container
+            MDBoxLayout:
+                id: booking_main_box
+                padding: 10
+                spacing: 10
+                orientation: 'vertical'
+                size_hint: 1, None
+                line_color: 'black'
+                line_width: 2
+                height: 60
+                
+    NotificationBox:
+        id: booking_notification_box
+        # elevation: 100
+        NotificationText:
+            id: booking_notification_text
+            text: ''
+            color: 'white'
+            halign: 'center'
+            adaptive_height: True
+            opacity: 1
+            elevation: 100

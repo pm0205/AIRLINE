@@ -26,6 +26,7 @@ import handlers.forgot as Forgot
 import handlers.signup as Signup
 import handlers.searchflight as SearchFlight
 import handlers.getflights as GetFlights
+import handlers.booking as Booking
 import handlers.userdetails as UserDetails
 import handlers.userwallet as UserWallet
 import handlers.userbookings as UserBookings
@@ -180,6 +181,8 @@ class MainApp(MDApp):
             Builder.load_file('./screens/newpasswordscreen.kv'))
         self.screen_manager.get_screen('main screen').ids.homescreen_manager.add_widget(
             Builder.load_file('./screens/getflightsscreen.kv'))
+        self.screen_manager.get_screen('main screen').ids.homescreen_manager.add_widget(
+            Builder.load_file('./screens/bookingscreen.kv'))
 
         # USER TAB
         self.screen_manager.get_screen('main screen').ids.userscreen_manager.add_widget(
@@ -235,6 +238,7 @@ class MainApp(MDApp):
 
         self.title = "Eagle Airline | Ticket Booking System"
         self.show_alert_dialog('loading', '')
+        self.form = {'seats': []}
         # self.homescreenchanger('home - flights')
         # self.userscreenchanger('home - details')
 
@@ -242,6 +246,8 @@ class MainApp(MDApp):
         # Homescreens
         self.homescreen_get_flights = self.screen_manager.get_screen(
             'main screen').ids.homescreen_manager.get_screen('get flights screen')
+        self.homescreen_booking = self.screen_manager.get_screen(
+            'main screen').ids.homescreen_manager.get_screen('booking screen')
         
         # Userscreens
         self.userscreen_home = self.screen_manager.get_screen(
@@ -511,14 +517,64 @@ class MainApp(MDApp):
                     'main screen').ids.homescreen_manager.current = 'get flights screen'
                 self.screen_manager.get_screen(
                     'main screen').ids.homescreen_manager.transition.direction = 'left'
+            case 'flights - booking':
+                self.screen_manager.get_screen(
+                    'main screen').ids.homescreen_manager.current = 'booking screen'
+                self.screen_manager.get_screen(
+                    'main screen').ids.homescreen_manager.transition.direction = 'left'
+
+    # Save booking form data temporarily
+    def checkbox_handler(self, checkbox, value, seat, obj):
+        if value:
+            self.form['seats'].append(seat.strip())
+        else:
+            self.form['seats'].remove(seat.strip())
+        print(self.selected)
+
+    def update_formdetails(self, type, id, obj):
+        if len(obj.text.strip())>0:
+            match type:
+                case 'fname':
+                    self.form[f'{id}']['fname'] = obj.text.strip()[0].upper() + obj.text.strip()[1:].lower()
+                case 'lname':
+                    self.form[f'{id}']['lname'] = obj.text.strip()[0].upper() + obj.text.strip()[1:].lower()
+                case 'age':
+                    self.form[f'{id}']['age'] = int(obj.text.strip())
+        else:
+            match type:
+                case 'fname':
+                    self.form[f'{id}']['fname'] = ''
+                case 'lname':
+                    self.form[f'{id}']['lname'] = ''
+                case 'age':
+                    self.form[f'{id}']['age'] = 0
+            
+        print(self.form)
 
     # Button handler
     def button_handler(self, work, objs):
         match work:
             case 'book-flights':
                 print("Book flight")
+                print(objs[0])
+                flight_id = objs[0][0]
                 if load_user_data()['islogin'] == True:
-                    pass
+                    self.homescreenchanger('flights - booking')
+                    self.homescreen_booking.ids.booking_flight_number.text = f'FLIGHT NO : {objs[0][2]}'
+                    self.homescreen_booking.ids.booking_flight_company.text = f'FLIGHT COMPANY : {objs[0][1]}'
+                    self.homescreen_booking.ids.booking_flight_date.text = f"DATE : {objs[0][5].split(' ')[0].strip()}"
+                    self.homescreen_booking.ids.booking_flight_time.text = f"TIME : {objs[0][5].split(' ')[1].strip()}"
+                    self.homescreen_booking.ids.booking_flight_route.text = f"{objs[0][3]} TO {objs[0][4]}"
+                    
+                    mainbox = self.homescreen_booking.ids.booking_main_box
+                    outerbox = self.homescreen_booking.ids.booking_outer_box
+                    datas = Booking.Booking().create_inputs(self.passengers, flight_id)
+                    remove_children(mainbox)
+                    for data in datas:
+                        mainbox.add_widget(Builder.load_string(data))
+                        adjust_height(mainbox)
+                        adjust_height(outerbox)
+
                 else:
                     Clock.schedule_once(partial(self.show_notification, 'Login first to book a flight', notifier=[self.homescreen_get_flights.ids.get_flights_notification_box, self.homescreen_get_flights.ids.get_flights_notification_text]), .2)
                     # self.show_alert_dialog()
@@ -607,6 +663,11 @@ class MainApp(MDApp):
                     'get flights screen').ids.get_flights_main_box
                 remove_children(box)
                 if x == True:
+                    self.passengers = int(obj[4].text)
+                    self.form = {'seats':[]}
+                    self.selected = 0
+                    for i in range(self.passengers):
+                        self.form[f'{i}'] = {'fname': '', 'lname': '', 'age' : 0}
                     datas = GetFlights.GetFlights().get_results(
                         obj[1].text, obj[2].text, obj[3].text, obj[4].text)
                     self.text_anim(
@@ -620,6 +681,9 @@ class MainApp(MDApp):
                 elif x != None:
                     self.show_notification(
                         x, 'home-tab-home', notifier=[obj[5], obj[6]])
+            case 'book-flight':
+                x = Booking.Booking().validate(self.form, self.passengers)
+
 
             # User screen
             case 'user details':
@@ -717,6 +781,8 @@ class MainApp(MDApp):
             Forgot.ForgotPass().validatetext(type, field)
         elif form == 'search flights':
             SearchFlight.Search().validate_text(field)
+        elif form == 'booking':
+            Booking.Booking().validatetext(type, field)
         elif form == 'user details':
             UserDetails.UserDetails().validateText(type, field)
         elif form == 'user wallet':

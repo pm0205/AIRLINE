@@ -12,6 +12,7 @@ c = conn.cursor()
 # f = open('./data/airports.json')
 # c.execute('UPDATE users SET username = "Admin1" WHERE password = "Admin123"')
 # c.execute('UPDATE users SET wallet = 0 WHERE wallet < 1 OR wallet IS null')
+c.execute('UPDATE flights SET available_seats = 50')
 
 # FOR FLIGHTS--------------------------------------------------------------------------
 # fromdate = datetime.datetime(year = 2023, month = 11, day = 12, hour = 7)
@@ -31,25 +32,25 @@ c = conn.cursor()
 # print(amount[0])
 
 # BOOKINGS-------------------------------------------------------------------------------
-c.execute('SELECT bookings from users WHERE username = (:username)', {
-            'username': 'Admin'
-        })
-record= c.fetchone()
-bookings = json.loads(record[0])
-fromdate = datetime.datetime(year = 2023, month = 11, day = 5, hour = 23)
-todate = datetime.datetime(year = 2023, month = 11, day = 6, hour = 1)
-duration = ((todate - fromdate).days*24) + ((todate - fromdate).seconds/3600)
+# c.execute('SELECT bookings from users WHERE username = (:username)', {
+#             'username': 'Admin'
+#         })
+# record= c.fetchone()
+# bookings = json.loads(record[0])
+# fromdate = datetime.datetime(year = 2023, month = 11, day = 5, hour = 23)
+# todate = datetime.datetime(year = 2023, month = 11, day = 6, hour = 1)
+# duration = ((todate - fromdate).days*24) + ((todate - fromdate).seconds/3600)
 
-bookings = [{"id": 20, "source": "DEL", "destination": "BOM",  "departure": fromdate.strftime('%d/%m/%Y %H:%M:%S'), "arrival": todate.strftime('%d/%m/%Y %H:%M:%S'), "duration": duration , "pnr": "SHA128", "passengers": [1, 4], "cancelled": False}, 
-{"id": 28, "source": "HYD", "destination": "CCU",  "departure": "23/10/2023 09:00:00", "arrival": "23/10/2023 12:00:00", "duration": 3 , "pnr": "FGJ098", "passengers": [3], "cancelled": False}]
+# bookings = [{"id": 20, "source": "DEL", "destination": "BOM",  "departure": fromdate.strftime('%d/%m/%Y %H:%M:%S'), "arrival": todate.strftime('%d/%m/%Y %H:%M:%S'), "duration": duration , "pnr": "SHA128", "passengers": [1, 4], "cancelled": False}, 
+# {"id": 28, "source": "HYD", "destination": "CCU",  "departure": "23/10/2023 09:00:00", "arrival": "23/10/2023 12:00:00", "duration": 3 , "pnr": "FGJ098", "passengers": [3], "cancelled": False}]
 
-booking = {"id": 34, "source": "CCU", "destination": "DEL",  "departure": fromdate.strftime('%d/%m/%Y %H:%M:%S'), "arrival": todate.strftime('%d/%m/%Y %H:%M:%S'), "duration": duration , "pnr": "SCJ294", "passengers": [5], "cancelled": False}
-bookings.append(booking)
-c.execute('UPDATE users SET bookings = (:bookings) WHERE username = "Admin"', {
-            'bookings': json.dumps(bookings)
-        })
-for booking in bookings:
-    print(booking)
+# booking = {"id": 34, "source": "CCU", "destination": "DEL",  "departure": fromdate.strftime('%d/%m/%Y %H:%M:%S'), "arrival": todate.strftime('%d/%m/%Y %H:%M:%S'), "duration": duration , "pnr": "SCJ294", "passengers": [5], "cancelled": False}
+# bookings.append(booking)
+# c.execute('UPDATE users SET bookings = (:bookings) WHERE username = "Admin"', {
+#             'bookings': json.dumps(bookings)
+#         })
+# for booking in bookings:
+#     print(booking)
 
 
 conn.commit()
