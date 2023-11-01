@@ -53,7 +53,7 @@ class GetFlights():
                 flights.append(f'''Box3d:
     padding : 5, 10
     size_hint_y : None
-    height : 250
+    height : 290
     orientation : 'vertical'
     spacing : 10
     MDLabel:
@@ -102,6 +102,13 @@ class GetFlights():
         height : 30
         # line_color : 'black'
         # line_width : 1
+    MDLabel:
+        text : 'Rs. {int(x[9])}/per person'
+        halign : 'center'
+        font_size : 20
+        pos_hint : {{'center_x':.5}}
+        size_hint : 1, None
+        height : 30
     MDFlatButton:
         text : 'Book Now'
         font_size : 28
