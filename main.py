@@ -184,6 +184,8 @@ class MainApp(MDApp):
             Builder.load_file('./screens/getflightsscreen.kv'))
         self.screen_manager.get_screen('main screen').ids.homescreen_manager.add_widget(
             Builder.load_file('./screens/bookingscreen.kv'))
+        self.screen_manager.get_screen('main screen').ids.homescreen_manager.add_widget(
+            Builder.load_file('./screens/bookingupiscreen.kv'))
 
         # USER TAB
         self.screen_manager.get_screen('main screen').ids.userscreen_manager.add_widget(
@@ -209,6 +211,7 @@ class MainApp(MDApp):
             Builder.load_file('./screens/userbookingdetailsscreen.kv'))
         self.screen_manager.get_screen('main screen').ids.userscreen_manager.add_widget(
             Builder.load_file('./screens/userbookingcancelscreen.kv'))
+    
 
         # Check if login was details were saved to auto-login
         userdata = load_user_data()
@@ -249,6 +252,8 @@ class MainApp(MDApp):
             'main screen').ids.homescreen_manager.get_screen('get flights screen')
         self.homescreen_booking = self.screen_manager.get_screen(
             'main screen').ids.homescreen_manager.get_screen('booking screen')
+        self.homescreen_booking_upi = self.screen_manager.get_screen(
+            'main screen').ids.homescreen_manager.get_screen('booking upi screen')
         
         # Userscreens
         self.userscreen_home = self.screen_manager.get_screen(
@@ -523,6 +528,12 @@ class MainApp(MDApp):
                     'main screen').ids.homescreen_manager.current = 'booking screen'
                 self.screen_manager.get_screen(
                     'main screen').ids.homescreen_manager.transition.direction = 'left'
+            case 'booking - upi':
+                self.screen_manager.get_screen(
+                    'main screen').ids.homescreen_manager.current = 'booking upi screen'
+                self.screen_manager.get_screen(
+                    'main screen').ids.homescreen_manager.transition.direction = 'left'
+
 
     # Save booking form data temporarily
     def checkbox_handler(self, checkbox, value, seat, obj):
