@@ -148,6 +148,12 @@ class Booking():
         else:
             return False  
 
+    def validatePin(self, objs):
+        if objs[1].text.strip()=='123456':
+            return True
+        else:
+            return False
+
     def validateform(self, type, text):
         special_char = re.compile('[^a-zA-Z\d\s:]')
         num_special = re.compile('[^a-zA-Z]')
@@ -250,4 +256,16 @@ class Booking():
                     x = False
                 else:
                    x = True
+            
+            # Pin
+            case 'pin':
+                objs[0].text = re.sub(numreg, '', objs[0].text)
+                if objs[0].text.strip() == '':
+                    objs[1].disabled = True
+                elif len(objs[0].text.strip()) < 6 :
+                    objs[1].disabled = True
+                elif len(objs[0].text.strip()) == 6 :
+                    objs[1].disabled = False
+                elif len(objs[0].text.strip()) > 6 :
+                    objs[0].text = objs[0].text.strip()[0:-1]
         return x
