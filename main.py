@@ -560,7 +560,9 @@ class MainApp(MDApp):
                 print(objs[0])
                 flight_id = objs[0][0]
                 self.flight_id = flight_id
+                self.price = objs[2]
                 if load_user_data()['islogin'] == True:
+                    self.show_alert_dialog(arg = '')
                     self.homescreenchanger('flights - booking')
                     self.homescreen_booking.ids.booking_flight_number.text = f'FLIGHT NO : {objs[0][2]}'
                     self.homescreen_booking.ids.booking_flight_company.text = f'FLIGHT COMPANY : {objs[0][1]}'
@@ -693,9 +695,12 @@ class MainApp(MDApp):
                 notifier = [self.homescreen_booking.ids.booking_notification_box, self.homescreen_booking.ids.booking_notification_text]
                 print(x)
                 if x == True:
-                    pass
+                    self.homescreenchanger('booking - upi')
+                    self.homescreen_booking_upi.ids.booking_upi_amount.text = f'Rs {self.price}'
                 else:
                     self.show_notification('Enter details correctly and select only required seats', notifier = notifier)
+            case 'booking-upi':
+                pass
 
 
             # User screen
