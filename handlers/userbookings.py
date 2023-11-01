@@ -30,7 +30,7 @@ class UserBookings():
             'username': username.strip()[0].upper() + username.strip()[1:].lower()
         })
         record = c.fetchone()
-        print(record[0])
+        # print(record[0])
         # for booking in json.loads(record[0]):
         #     print(booking)
         if record[0] != None:

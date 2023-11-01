@@ -20,10 +20,11 @@ class LoginApp():
 
         # create a cursor
         c = conn.cursor()
+        username_valid = username.strip()[0].upper() + username.strip()[1:].lower()
 
         # check details existence
         c.execute("SELECT * FROM users WHERE username = (:username) AND password = (:password)", {
-            "username": username,
+            "username": username_valid,
             "password": password
         })
 
