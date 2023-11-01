@@ -425,7 +425,7 @@ class MainApp(MDApp):
                     'main screen').ids.userscreen_manager.transition.direction = 'right'
 
     # HOME SCREEN
-    def homescreenchanger(self, screen_name):
+    def homescreenchanger(self, screen_name, *args, **kwargs):
         match screen_name:
             case 'pnr screen':
                 self.screen_manager.get_screen(

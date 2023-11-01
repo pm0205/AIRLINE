@@ -1,6 +1,15 @@
 import datetime, re, json, sqlite3
 
 class Booking():
+    def store_booking(self, form, flight_id, username):
+        conn = sqlite3.connect('./data/database.db')
+        c = conn.cursor()
+        # get no of tickets
+        c.execute('SELECT * FROM tickets',{
+        })
+        record = c.fetchall()
+        # ticket_id = 
+
     def get_total_seats(self, flight_id):
         conn = sqlite3.connect('./data/database.db')
         c = conn.cursor()
