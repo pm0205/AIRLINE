@@ -11,8 +11,9 @@ class UserDetails():
     def check_user_details(self, username):
         conn = sqlite3.connect("./data/database.db")
         c = conn.cursor()
+        username_valid = username.strip()[0].upper() + username.strip()[1:].lower()
         c.execute("SELECT * FROM users WHERE username = (:username)", {
-            "username": username
+            "username": username_valid
         })
         # fetch records
         record = c.fetchall()
