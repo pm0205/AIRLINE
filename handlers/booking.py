@@ -14,7 +14,7 @@ class Booking():
     def store_booking(self, form, flight_id, price, username):
         pnr = self.generate_pnr()
         date = datetime.datetime.now()
-        username = username.strip()[0].upper() + username.strip()[1:].upper()
+        username = username.strip()[0].upper() + username.strip()[1:].lower()
         conn = sqlite3.connect('./data/database.db')
         c = conn.cursor()
 
@@ -25,7 +25,7 @@ class Booking():
         ticket_id = len(record)+1
         tickets = []
         # insert data into tickets table
-        for i in len(form.keys())-1:
+        for i in range(len(form.keys())-1):
             c.execute('INSERT INTO tickets values (:ticket, :pnr, :flight, :name, :seat, :price, :date)',{
                 'ticket':int(ticket_id),
                 'pnr': pnr,
@@ -41,21 +41,22 @@ class Booking():
         # insert booking into user details
         # first get previous bookings
         c.execute('SELECT bookings FROM users WHERE username = (:username)',{
-            'username': username.strip()[0].upper() + username.strip()[1:].upper()
+            'username': username.strip()[0].upper() + username.strip()[1:].lower()
         })
-        record = json.loads(c.fetchone()[0])
+        record = c.fetchone()[0]
         print(record)
+        record = json.loads(record)
         # get the flight details
-        c.execute('SELECT * FROM bookings WHERE flight_id = (:id)',{
+        c.execute('SELECT * FROM flights WHERE flight_id = (:id)',{
             'id': int(flight_id)
         })
         flight = c.fetchone()
-        duration = ((flight[4].strptime() - flight[3].strptime()).days*24) + ((flight[4].strptime() - flight[3].strptime()).seconds/3600)
+        duration = 2
         booking = {"id": len(record)+1, "source": flight[3], "destination": flight[4],  "departure": flight[5], "arrival": flight[6], "duration": duration , "pnr": pnr, "passengers": tickets, "cancelled": False}
         record.append(booking)
         # update to user bookings
-        c.execute('UPDATE users SET bookings = (:bookings)', {
-            'bookings': json.dumps(record)
+        c.execute('UPDATE users SET bookings = (:bookings) WHERE username = (:username)', {
+            'bookings': json.dumps(record), 'username': username
         })
         conn.commit()
 

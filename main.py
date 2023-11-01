@@ -359,9 +359,9 @@ class MainApp(MDApp):
             elif user['saved'] == True:
                 self.screen_manager.get_screen(
                     'main screen').ids.tab_navigator.switch_tab('account')
-        # else:
-            # self.show_notification('Please login first to access')
-            # self.screen_manager.get_screen('main screen').ids.tab_navigator.switch_tab('home')
+        else:
+            self.show_notification('Please login first to access')
+            self.screen_manager.get_screen('main screen').ids.tab_navigator.switch_tab('home')
 
     # Screen Changers
     # USER SCREEN
@@ -572,27 +572,28 @@ class MainApp(MDApp):
                 flight_id = objs[0][0]
                 self.flight_id = flight_id
                 self.price = objs[2]
-                if load_user_data()['islogin'] == True:
-                    # self.show_alert_dialog(arg = '')
-                    self.homescreenchanger('flights - booking')
-                    self.homescreen_booking.ids.booking_flight_number.text = f'FLIGHT NO : {objs[0][2]}'
-                    self.homescreen_booking.ids.booking_flight_company.text = f'FLIGHT COMPANY : {objs[0][1]}'
-                    self.homescreen_booking.ids.booking_flight_date.text = f"DATE : {objs[0][5].split(' ')[0].strip()}"
-                    self.homescreen_booking.ids.booking_flight_time.text = f"TIME : {objs[0][5].split(' ')[1].strip()}"
-                    self.homescreen_booking.ids.booking_flight_route.text = f"{objs[0][3]} TO {objs[0][4]}"
-                    
-                    mainbox = self.homescreen_booking.ids.booking_main_box
-                    outerbox = self.homescreen_booking.ids.booking_outer_box
-                    datas = Booking.Booking().create_inputs(self.passengers, flight_id)
-                    remove_children(mainbox)
-                    for data in datas:
-                        mainbox.add_widget(Builder.load_string(data))
-                        adjust_height(mainbox)
-                        adjust_height(outerbox, 10)
+                if load_user_data() != None:
+                    if load_user_data()['islogin'] == True:
+                        # self.show_alert_dialog(arg = '')
+                        self.homescreenchanger('flights - booking')
+                        self.homescreen_booking.ids.booking_flight_number.text = f'FLIGHT NO : {objs[0][2]}'
+                        self.homescreen_booking.ids.booking_flight_company.text = f'FLIGHT COMPANY : {objs[0][1]}'
+                        self.homescreen_booking.ids.booking_flight_date.text = f"DATE : {objs[0][5].split(' ')[0].strip()}"
+                        self.homescreen_booking.ids.booking_flight_time.text = f"TIME : {objs[0][5].split(' ')[1].strip()}"
+                        self.homescreen_booking.ids.booking_flight_route.text = f"{objs[0][3]} TO {objs[0][4]}"
+                        
+                        mainbox = self.homescreen_booking.ids.booking_main_box
+                        outerbox = self.homescreen_booking.ids.booking_outer_box
+                        datas = Booking.Booking().create_inputs(self.passengers, flight_id)
+                        remove_children(mainbox)
+                        for data in datas:
+                            mainbox.add_widget(Builder.load_string(data))
+                            adjust_height(mainbox)
+                            adjust_height(outerbox, 10)
 
-                else:
-                    Clock.schedule_once(partial(self.show_notification, 'Login first to book a flight', notifier=[self.homescreen_get_flights.ids.get_flights_notification_box, self.homescreen_get_flights.ids.get_flights_notification_text]), .2)
-                    # self.show_alert_dialog()
+                    else:
+                        Clock.schedule_once(partial(self.show_notification, 'Login first to book a flight', notifier=[self.homescreen_get_flights.ids.get_flights_notification_box, self.homescreen_get_flights.ids.get_flights_notification_text]), .2)
+                        # self.show_alert_dialog()
             
             # User Screen
             case 'edit-details':
@@ -719,6 +720,7 @@ class MainApp(MDApp):
                                         self.homescreen_booking_upi.ids.booking_upi_notification_box, self.homescreen_booking_upi.ids.booking_upi_notification_text]), 3)
                     Clock.schedule_once(
                         partial(self.homescreenchanger, 'home screen'), 5.3)
+                    self.fill_user_data()
                 else:
                     Clock.schedule_once(partial(self.show_notification, 'UPI Pin is incorrect', notifier=[
                                         self.homescreen_booking_upi.ids.booking_upi_notification_box, self.homescreen_booking_upi.ids.booking_upi_notification_text]), 1)

@@ -92,6 +92,7 @@ MDScreen:
                 padding: 20
                 MDLabel:
                     text: "Welcome to the Eagle Airline App"
+                    font_size: 30
                     adaptive_size: True
                     halign: 'center'
                     pos_hint: {'center_x':.5}
@@ -252,37 +253,7 @@ MDScreen:
                     adaptive_size: True
                     padding: 10
                     spacing: 10
-                    MDLabel:
-                        text: 'Your latest booking'
-                        adaptive_size: True
-                        halign: 'center'
-                    MDLabel:
-                        text: 'Flight : 2241HC - Indigo'
-                        adaptive_size: True
-                        halign: 'center'
-                    MDLabel:
-                        text: 'Your latest booking'
-                        adaptive_size: True
-                        halign: 'center'
                     
             
             # End box
-            MDBoxLayout: 
-                orientation: 'horizontal'
-                pos_hint: {'center_x':.5}
-                adaptive_size: True
-                # md_bg_color: 'lightgrey'
-                padding: 20
-                spacing: 20
-                MDFlatButton:
-                    text: 'My details'
-                    md_bg_color: 'lightblue'
-                    ripple_scale: .8
-                MDFlatButton:
-                    text: 'My bookings'
-                    md_bg_color: 'lightblue'
-                    ripple_scale: .8
-                MDFlatButton:
-                    text: 'Need support?'
-                    md_bg_color: 'lightblue'
-                    ripple_scale: .8
+            
