@@ -713,9 +713,7 @@ class MainApp(MDApp):
             case 'booking-upi':
                 x = Booking.Booking().validatePin(obj)
                 if x == True:
-                    # UserWallet.UserWallet().update_amount(
-                    #     self.username, obj[2].text.split('Rs ')[1])
-                    # self.fill_user_data()
+                    Booking.Booking().store_booking(self.form, self.flight_id, self.price, self.username)
                     self.show_alert_dialog()
                     Clock.schedule_once(partial(self.show_notification, 'Booking Successful', notifier=[
                                         self.homescreen_booking_upi.ids.booking_upi_notification_box, self.homescreen_booking_upi.ids.booking_upi_notification_text]), 3)
