@@ -38,7 +38,7 @@ import time
 import datetime
 from functools import partial
 
-#
+# Utils
 
 
 def check_saved_data():
@@ -90,7 +90,7 @@ def remove_children(obj):
             obj.remove_widget(child)
 
 
-def adjust_height(obj):
+def adjust_height(obj, extra = 0):
     padding = obj.padding[1]
     spacing = obj.spacing
     obj.height = 2*padding
@@ -99,7 +99,7 @@ def adjust_height(obj):
         for child in children:
             obj.height += child.height
             obj.height += spacing
-    obj.height = f'{obj.height}sp'
+    obj.height = f'{obj.height+extra}sp'
 
 
 key_pressed = None
@@ -559,6 +559,7 @@ class MainApp(MDApp):
                 print("Book flight")
                 print(objs[0])
                 flight_id = objs[0][0]
+                self.flight_id = flight_id
                 if load_user_data()['islogin'] == True:
                     self.homescreenchanger('flights - booking')
                     self.homescreen_booking.ids.booking_flight_number.text = f'FLIGHT NO : {objs[0][2]}'
@@ -574,7 +575,7 @@ class MainApp(MDApp):
                     for data in datas:
                         mainbox.add_widget(Builder.load_string(data))
                         adjust_height(mainbox)
-                        adjust_height(outerbox)
+                        adjust_height(outerbox, 10)
 
                 else:
                     Clock.schedule_once(partial(self.show_notification, 'Login first to book a flight', notifier=[self.homescreen_get_flights.ids.get_flights_notification_box, self.homescreen_get_flights.ids.get_flights_notification_text]), .2)
@@ -686,8 +687,15 @@ class MainApp(MDApp):
                 elif x != None:
                     self.show_notification(
                         x, 'home-tab-home', notifier=[obj[5], obj[6]])
+
             case 'book-flight':
                 x = Booking.Booking().validate(self.form, self.passengers)
+                notifier = [self.homescreen_booking.ids.booking_notification_box, self.homescreen_booking.ids.booking_notification_text]
+                print(x)
+                if x == True:
+                    pass
+                else:
+                    self.show_notification('Enter details correctly and select only required seats', notifier = notifier)
 
 
             # User screen

@@ -5,8 +5,8 @@ MDScreen:
         MDBoxLayout:
             id: booking_outer_box
             orientation: 'vertical'
-            height: 350
-            padding: 0
+            height: 430
+            padding: 5, 10
             spacing: 20
             size_hint_y: None
 
@@ -90,7 +90,17 @@ MDScreen:
                 line_color: 'black'
                 line_width: 2
                 height: 60
-                
+            
+            # Confirm button
+            MDFlatButton:
+                text : 'Confirm Details'
+                font_size : 28
+                md_bg_color : 'blue'
+                theme_text_color : 'Custom'
+                text_color : 'white'
+                pos_hint : {'center_x':.5}
+                on_release: app.validate('book-flight', None)
+
     NotificationBox:
         id: booking_notification_box
         # elevation: 100

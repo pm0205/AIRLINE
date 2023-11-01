@@ -48,7 +48,7 @@ class Booking():
             details.append(f'''Box3d:
     padding : 5, 10
     size_hint_y : None
-    height : 250
+    height : 300
     orientation : 'vertical'
     spacing : 10
     MDLabel:
@@ -61,14 +61,15 @@ class Booking():
         # line_color: "black"
         # line_width : 1
     MDBoxLayout:
-        height : 150
+        height : 230
         spacing: 10
+        padding: 0, 10
         orientation: 'vertical'
         size_hint : 1, None
-        # line_color : 'black'
-        # line_width : 1
+        line_color : 'black'
+        line_width : 1
         MDTextField:
-            width: 200
+            width: 250
             height: 30
             size_hint : None, None
             pos_hint : {{'center_x': .5}}
@@ -84,7 +85,7 @@ class Booking():
                 app.strvalidator('booking', 'fname', self)
                 app.update_formdetails('fname', {i}, self)
         MDTextField:
-            width: 200
+            width: 250
             height: 30
             size_hint : None, None
             pos_hint : {{'center_x': .5}}
@@ -100,7 +101,7 @@ class Booking():
                 app.strvalidator('booking', 'lname', self)
                 app.update_formdetails('lname', {i}, self)
         MDTextField:
-            width: 200
+            width: 250
             height: 30
             size_hint : None, None
             pos_hint : {{'center_x': .5}}
@@ -132,24 +133,15 @@ class Booking():
             # app.update_formdetails('checkbox', {-1}, [self, '{x}'])
 
 ''')
-        details.append(f'''MDFlatButton:
-    text : 'Confirm and Pay'
-    font_size : 28
-    md_bg_color : 'blue'
-    theme_text_color : 'Custom'
-    text_color : 'white'
-    pos_hint : {{'center_x':.5}}
-    on_release: app.validate('book-flight', None)
-''')
         return details
 
-
+    # Validations
     def validate(self, obj, passengers):
         checker = True
         for i in range(len(obj.keys())-1):
             checker = checker and self.validateform('fname', obj[f'{i}']['fname'])
             checker = checker and self.validateform('lname', obj[f'{i}']['lname'])
-            checker = checker and self.validateform('age', obj[f'{i}']['age'])
+            checker = checker and self.validateform('age', str(obj[f'{i}']['age']))
         print(checker) 
         if checker == True and len(obj['seats']) == passengers:
             return True
@@ -184,7 +176,6 @@ class Booking():
                 elif(len(text.strip()) < 4 and len(text.strip())>0):
                     x = False
                 else:
-                    obj.error = False
                     x = True
 
             # Age 
