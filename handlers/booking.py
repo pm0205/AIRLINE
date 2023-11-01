@@ -259,13 +259,13 @@ class Booking():
             
             # Pin
             case 'pin':
-                objs[0].text = re.sub(numreg, '', objs[0].text)
-                if objs[0].text.strip() == '':
-                    objs[1].disabled = True
-                elif len(objs[0].text.strip()) < 6 :
-                    objs[1].disabled = True
-                elif len(objs[0].text.strip()) == 6 :
-                    objs[1].disabled = False
-                elif len(objs[0].text.strip()) > 6 :
-                    objs[0].text = objs[0].text.strip()[0:-1]
+                obj[0].text = re.sub(numreg, '', obj[0].text)
+                if obj[0].text.strip() == '':
+                    obj[1].disabled = True
+                elif len(obj[0].text.strip()) < 6 :
+                    obj[1].disabled = True
+                elif len(obj[0].text.strip()) == 6 :
+                    obj[1].disabled = False
+                elif len(obj[0].text.strip()) > 6 :
+                    obj[0].text = obj[0].text.strip()[0:-1]
         return x

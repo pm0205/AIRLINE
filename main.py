@@ -573,7 +573,7 @@ class MainApp(MDApp):
                 self.flight_id = flight_id
                 self.price = objs[2]
                 if load_user_data()['islogin'] == True:
-                    self.show_alert_dialog(arg = '')
+                    # self.show_alert_dialog(arg = '')
                     self.homescreenchanger('flights - booking')
                     self.homescreen_booking.ids.booking_flight_number.text = f'FLIGHT NO : {objs[0][2]}'
                     self.homescreen_booking.ids.booking_flight_company.text = f'FLIGHT COMPANY : {objs[0][1]}'
@@ -711,8 +711,19 @@ class MainApp(MDApp):
                 else:
                     self.show_notification('Enter details correctly and select only required seats', notifier = notifier)
             case 'booking-upi':
-                pass
-
+                x = Booking.Booking().validatePin(obj)
+                if x == True:
+                    # UserWallet.UserWallet().update_amount(
+                    #     self.username, obj[2].text.split('Rs ')[1])
+                    # self.fill_user_data()
+                    self.show_alert_dialog()
+                    Clock.schedule_once(partial(self.show_notification, 'Booking Successful', notifier=[
+                                        self.homescreen_booking_upi.ids.booking_upi_notification_box, self.homescreen_booking_upi.ids.booking_upi_notification_text]), 3)
+                    Clock.schedule_once(
+                        partial(self.homescreenchanger, 'home screen'), 5.3)
+                else:
+                    Clock.schedule_once(partial(self.show_notification, 'UPI Pin is incorrect', notifier=[
+                                        self.homescreen_booking_upi.ids.booking_upi_notification_box, self.homescreen_booking_upi.ids.booking_upi_notification_text]), 1)
 
             # User screen
             case 'user details':

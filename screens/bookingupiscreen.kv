@@ -2,10 +2,10 @@
 MDScreen:
     name: 'booking upi screen'
     md_bg_color: 'white'
-    on_pre_enter: app.text_anim(type='booking upi')
-    on_leave: 
-        booking_upi_amount.text = 'Rs 0'
-        app.reset_screen('booking upi')
+    # on_pre_enter: app.text_anim(type='booking upi')
+    # on_leave: 
+    #     booking_upi_amount.text = 'Rs 0'
+    #     app.reset_screen('booking upi')
 
     MDScrollView:
         MDBoxLayout:
@@ -23,8 +23,8 @@ MDScreen:
                     icon: 'arrow-left'
                     pos_hint: {'x': .03, 'center_y': .5}
                     on_release: 
-                        app.userscreenchanger('back - home') 
-                        app.reset_screen('booking upi')
+                        app.homescreenchanger('home screen') 
+                        # app.reset_screen('booking upi')
                 MDIcon:
                     icon: './assets/upi-icon.png'
                     font_size: 100
@@ -68,7 +68,7 @@ MDScreen:
                     size_hint_x: .6
                     padding: 10, 0
                     text_color_focus: 'black'
-                    on_text : app.strvalidator('user wallet', 'pin', [self, booking_upi_paybtn])
+                    on_text : app.strvalidator('booking', 'pin', [self, booking_upi_paybtn])
 
                 MDRectangleFlatIconButton:
                     id: booking_upi_paybtn
@@ -81,7 +81,7 @@ MDScreen:
                     md_bg_color: 'blue'
                     text_color: 'white'
                     icon_color: 'white'
-                    on_release: app.validate('booking upi', [self, booking_upi_pin, booking_upi_amount])
+                    on_release: app.validate('booking-upi', [self, booking_upi_pin, booking_upi_amount])
 
 
     
