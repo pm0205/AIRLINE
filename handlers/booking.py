@@ -22,7 +22,7 @@ class Booking():
         c.execute('SELECT * FROM tickets',{
         })
         record = c.fetchall()
-        ticket_id = len(record)+1
+        ticket_id = len(record)+5
         tickets = []
         # insert data into tickets table
         for i in range(len(form.keys())-1):

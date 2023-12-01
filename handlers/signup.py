@@ -32,7 +32,7 @@ class Signup():
         record = s.fetchall()
         username_valid = objs[1].text.strip()[0].upper() + objs[1].text.strip()[1:].lower()
         new_id = len(record) + 1
-        c.execute("INSERT INTO users (user_id, name, username, password, mail, phone, wallet) VALUES ((:id), (:name), (:username), (:password), (:email), (:phone), 0)", {'name': f'{objs[6].text.strip()} {objs[7].text.strip()}', 'username' : username_valid, 'password' : objs[2].text, 'email': objs[4].text.strip(), 'phone': objs[5].text.strip(), 'id': int(new_id)})
+        c.execute("INSERT INTO users (user_id, name, username, password, mail, phone, wallet, bookings) VALUES ((:id), (:name), (:username), (:password), (:email), (:phone), 0, (:booking))", {'name': f'{objs[6].text.strip()} {objs[7].text.strip()}', 'username' : username_valid, 'password' : objs[2].text, 'email': objs[4].text.strip(), 'phone': objs[5].text.strip(), 'id': int(new_id), 'booking': "[]"})
         conn.commit()
         conn.close()
 
