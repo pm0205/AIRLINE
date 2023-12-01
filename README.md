@@ -84,7 +84,7 @@ Welcome to the Airline Reservation System, a desktop GUI application developed b
 
 ## Team Members
 
-- [Sanjiv Samal](https://github.com/Sanjiv39)
+- [Sanjiv Samal](https://github.com/Sanjiv39) (Leader)
 - [Ganesh Mourya](https://github.com/Alkaison)
 - [Amit Nare](https://github.com/Uzumaki4303)
 - [Ashwin Giri](https://github.com/Ashwin521)
@@ -92,7 +92,37 @@ Welcome to the Airline Reservation System, a desktop GUI application developed b
 
 ## Screenshots
 
+### Home Screen
+![Airline-1](https://github.com/Alkaison/Airline-Reservation-System/assets/98116504/2ceaba04-f9d9-4e3b-83e6-d68f9ce8bf16)
 
+### Login Screen
+![Airline-2](https://github.com/Alkaison/Airline-Reservation-System/assets/98116504/35cbc892-9a94-4d3e-858b-52605474f197)
+
+### Sign Up Screen
+![Airline-3](https://github.com/Alkaison/Airline-Reservation-System/assets/98116504/3f1fc3fb-ae88-490c-9761-0cd38559cedd)
+
+### Forgot Password
+![Airline-4](https://github.com/Alkaison/Airline-Reservation-System/assets/98116504/e5e55155-b50f-45f9-9226-30c200bae3b6)
+
+### Ticket Status / PNR Checking Screen
+![Airline-5](https://github.com/Alkaison/Airline-Reservation-System/assets/98116504/f05ce0cc-28d9-4d27-8c6c-4d369878ca07)
+
+### User Profile Screen
+![Airline-6](https://github.com/Alkaison/Airline-Reservation-System/assets/98116504/6232f137-e987-46d3-9535-9e6e926a3f3d)
+
+### User Details Screen
+![Airline-7](https://github.com/Alkaison/Airline-Reservation-System/assets/98116504/a863f890-e4fb-4912-978c-f74ad697badc)
+
+### User Wallet Screen
+![Airline-8](https://github.com/Alkaison/Airline-Reservation-System/assets/98116504/43096046-037e-4c71-a6b7-fa72022f1438)
+
+### Add Amount to Wallet Screen
+![Airline-9](https://github.com/Alkaison/Airline-Reservation-System/assets/98116504/a6ae5e9f-f64e-457a-929b-96bf45b586d0)
+
+### UPI Pin Screen
+![Airline-10](https://github.com/Alkaison/Airline-Reservation-System/assets/98116504/671a6fb4-51cf-4fe4-a074-6fa245d13115)
+
+> Download the files and run on your Desktop to explore more about the GUI app. Feel free to drop your feedbacks to us.
 
 ## License
 
